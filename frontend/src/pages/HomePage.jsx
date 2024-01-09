@@ -1,7 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import "../HomePage.css";
+import "../styles/HomePage.css";
 import ActionButton from "../components/ActionButton";
 import CardDisplay from "../components/CardDisplay";
 import Navbar from "../components/Navbar";
