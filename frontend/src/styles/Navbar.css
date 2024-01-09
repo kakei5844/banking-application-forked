@@ -1,0 +1,12 @@
+.container-fluid {
+    margin: 0;
+    padding: 0;
+}
+
+.nav-pills li a:hover {
+    background-color: rgb(79, 79, 235);
+}
+
+.sidemenubar {
+    background-color: rgb(0, 0, 73);
+}
