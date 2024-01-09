@@ -1,0 +1,73 @@
+/* TransactionHistory.css */
+
+.transaction-container {
+    padding: 20px;
+}
+
+.filter-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.date-filter,
+.card-filter {
+    margin-left: 10px;
+}
+
+.transaction-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-table th,
+.transaction-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.transaction-table th {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.transaction-list {
+    margin-top: 20px;
+}
+
+.transaction-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    padding: 12px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.transaction-item:hover {
+    background-color: #f9f9f9;
+}
+
+.button-container {
+    margin-left: 10px;
+}
+
+button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+    background-color: #267bbf;
+}
