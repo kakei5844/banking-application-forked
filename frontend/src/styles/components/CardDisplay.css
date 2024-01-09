@@ -16,7 +16,7 @@
 
 .card-container {
     position: relative;
-    background-image: url("../images/bg.png");
+    background-image: url("../../images/bg.png");
     background-size: cover;
     padding: 25px;
     border-radius: 28px;
