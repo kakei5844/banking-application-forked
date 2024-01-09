@@ -48,7 +48,7 @@ const Navbar = () => {
                         <div class="dropdown-menu" aria-labelledby="triggerId">
                             <a class="dropdown-item" href="#">Profile</a>
                             <a class="dropdown-item" href="#">Setting</a>
-                            <a class="dropdown-item" href="#">Logout</a>
+                            <a class="dropdown-item" href="/login">Logout</a>
                         </div>
                     </div>
                     

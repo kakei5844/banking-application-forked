@@ -17,16 +17,17 @@
     flex: 1.6;
 }
 
-.top {
+/* .top {
     display: flex;
     justify-content: center;
     padding-top: 20px;
-}
+} */
 
 .middle {
     display: flex;
     justify-content: space-between;
     padding-bottom: 40px;
+    margin-top: 0;
 }
 
 .card-display {

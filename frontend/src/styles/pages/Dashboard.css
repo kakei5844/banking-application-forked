@@ -4,7 +4,7 @@
     justify-content: space-between;
     align-items: flex-start;
     height: 100vh;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .left-column {
