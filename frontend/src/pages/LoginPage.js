@@ -29,7 +29,7 @@ function Login() {
 
     if (verifyCredentials()) {
       alert("Successfully loggin in!");
-      navigate("/dashboard");
+      navigate("/home");
     } else {
       alert("Wrong credentials. Please try again.");
     }

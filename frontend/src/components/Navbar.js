@@ -14,7 +14,7 @@ const Navbar = () => {
                         <hr className='text-secondary'/>
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item text-white fs-4 my-1">
-                                <a href="/dashboard" class="nav-link text-white fs-5" aria-current="page">
+                                <a href="/home" class="nav-link text-white fs-5" aria-current="page">
                                     <i className='bi bi-speedometer2'></i>
                                     <span className='ms-3'>Dashboard</span>
                                 </a>

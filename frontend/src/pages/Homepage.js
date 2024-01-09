@@ -1,4 +1,4 @@
-import '../styles/pages/Dashboard.css'
+import '../styles/pages/HomePage.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import ActionButton from '../components/ActionButton'
@@ -9,7 +9,7 @@ import TransactionHistory from '../components/TransactionHistory'
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom'
 
-const Dashboard = () => {
+const HomePage = () => {
 
     const bankAccountNumber = '1234 5678 9012 3456'
 
@@ -31,7 +31,7 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="Page">
+        <div className="HomePage">
             <div className='left-column'>
                 <Navbar />
             </div>
@@ -91,4 +91,4 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard;
+export default HomePage;
