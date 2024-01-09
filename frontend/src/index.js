@@ -5,8 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import "./index.css";
+import App from "./App";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
+<<<<<<< HEAD
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+=======
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
@@ -14,9 +22,5 @@ root.render(
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
+>>>>>>> testHakimMerge
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
