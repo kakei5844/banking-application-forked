@@ -97,7 +97,7 @@ function Login() {
                     className="btn btn-outline-secondary link-btn"
                     onClick={() => navigate("/registration")}
                   >
-                    Doesn't have an account? Register here.
+                    Don't have an account? Register here.
                   </button>
                 </div>
               </div>
