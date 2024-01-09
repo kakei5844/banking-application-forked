@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import '../styles/CardDisplay.css'
+import '../styles/components/CardDisplay.css'
 import logo from '../images/logo.png'
 import chip from '../images/chip.png'
 
