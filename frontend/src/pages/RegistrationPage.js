@@ -58,7 +58,7 @@ function Registration() {
       alert("Account created successfully!");
       navigate("/login");
     } else {
-      alert("User already existed. Please proceed to the login page!");
+      alert("User already exist. Please proceed to the login page!");
       return;
     }
   };

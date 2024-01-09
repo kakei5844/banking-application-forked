@@ -8,7 +8,7 @@ const Navbar = () => {
         <div className='container-fluid'>
                 <div className='bg-dark col-auto col-md-12 min-vh-100 d-flex justify-content-between flex-column'>
                     <div>
-                        <a href='#' className='text-decoration-none text-white d-flex align-itemcenter ms-3 mt-2'>
+                        <a href='/home' className='text-decoration-none text-white d-flex align-itemcenter ms-3 mt-2'>
                             <span className='ms-1 fs-4'>CreditConnect</span>
                         </a>
                         <hr className='text-secondary'/>
@@ -20,7 +20,7 @@ const Navbar = () => {
                                 </a>
                             </li>
                             <li class="nav-item text-white fs-4 my-1">
-                                <a href="#" class="nav-link text-white fs-5" aria-current="page">
+                                <a href="/home" class="nav-link text-white fs-5" aria-current="page">
                                     <i className='bi bi-house'></i>
                                     <span className='ms-3'>Home</span>
                                 </a>
@@ -34,8 +34,8 @@ const Navbar = () => {
                         </ul>
                     </div>
                     <div class="dropdown open">
-                        <a
-                            class="text-decoration-none text-white dropdown-toggle p-3"
+                        <button
+                            class="bg-dark text-white dropdown-toggle p-3"
                             type="button"
                             id="triggerId"
                             data-bs-toggle="dropdown"
@@ -44,10 +44,10 @@ const Navbar = () => {
                         >
                             <i className='bi bi-person-circle'></i>
                             <span className='ms-2'>User123</span>
-                        </a>
+                        </button>
                         <div class="dropdown-menu" aria-labelledby="triggerId">
-                            <a class="dropdown-item" href="#">Profile</a>
-                            <a class="dropdown-item" href="#">Setting</a>
+                            <a class="dropdown-item" href="/home">Profile</a>
+                            <a class="dropdown-item" href="/home">Setting</a>
                             <a class="dropdown-item" href="/login">Logout</a>
                         </div>
                     </div>

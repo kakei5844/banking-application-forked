@@ -5,40 +5,40 @@ import ActionButton from '../components/ActionButton'
 import CardScroll from '../components/CardScroll'
 import Navbar from '../components/Navbar'
 import TransactionHistory from '../components/TransactionHistory'
-import { useState } from 'react';
+// import { useState } from 'react';
 import { NavLink } from 'react-router-dom'
 
 const CreditCardFeature = () => {
 
-    const bankAccountNumber = '1234 5678 9012 3456'
+    // const bankAccountNumber = '1234 5678 9012 3456'
 
-    const creditCards = ['Card 1', 'Card 2', 'Card 3']; // Replace with your credit card data
+    // const creditCards = ['Card 1', 'Card 2', 'Card 3']; // Replace with your credit card data
 
-    // Dropdown
-    const initialSelectedCard = '1234 5678 9012 3456';
+    // // Dropdown
+    // const initialSelectedCard = '1234 5678 9012 3456';
 
-    const [selectedCard, setSelectedCard] = useState(initialSelectedCard);
+    // const [selectedCard, setSelectedCard] = useState(initialSelectedCard);
 
-    const cardList = [
-        { cardNumber: '1234 5678 9012 3456', cardHolder: 'John Doe', expiryDate: '12/23', cardType: 'Visa' },
-        { cardNumber: '9876 5432 1098 7654', cardHolder: 'Jane Doe', expiryDate: '11/22', cardType: 'MasterCard' },
-        // Add more cards as needed
-    ];
+    // const cardList = [
+    //     { cardNumber: '1234 5678 9012 3456', cardHolder: 'John Doe', expiryDate: '12/23', cardType: 'Visa' },
+    //     { cardNumber: '9876 5432 1098 7654', cardHolder: 'Jane Doe', expiryDate: '11/22', cardType: 'MasterCard' },
+    //     // Add more cards as needed
+    // ];
 
-    const handleCardSelect = (cardNumber) => {
-        setSelectedCard(cardNumber);
-    };
+    // const handleCardSelect = (cardNumber) => {
+    //     setSelectedCard(cardNumber);
+    // };
 
     return (
-        <div className="Page">
+        <div className="CreditCardPage">
             <div className='left-column'>
                 <Navbar />
             </div>
 
             <div className='right-column'>
-                {/* <div className='top'>
+                <div className='top'>
                 <h1>Credit Card</h1>
-                </div> */}
+                </div>
 
                 <div className='middle'>
                     <div className='card-display'>

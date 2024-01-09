@@ -6,29 +6,29 @@ import BankAccountCard from '../components/BankAccountCard'
 import CardDisplay from '../components/CardDisplay'
 import Navbar from '../components/Navbar'
 import TransactionHistory from '../components/TransactionHistory'
-import { useState } from 'react';
+// import { useState } from 'react';
 import { NavLink } from 'react-router-dom'
 
 const HomePage = () => {
 
-    const bankAccountNumber = '1234 5678 9012 3456'
+    // const bankAccountNumber = '1234 5678 9012 3456'
 
-    const creditCards = ['Card 1', 'Card 2', 'Card 3']; // Replace with your credit card data
+    // const creditCards = ['Card 1', 'Card 2', 'Card 3']; // Replace with your credit card data
 
-    // Dropdown
-    const initialSelectedCard = '1234 5678 9012 3456';
+    // // Dropdown
+    // const initialSelectedCard = '1234 5678 9012 3456';
 
-    const [selectedCard, setSelectedCard] = useState(initialSelectedCard);
+    // const [selectedCard, setSelectedCard] = useState(initialSelectedCard);
 
-    const cardList = [
-        { cardNumber: '1234 5678 9012 3456', cardHolder: 'John Doe', expiryDate: '12/23', cardType: 'Visa' },
-        { cardNumber: '9876 5432 1098 7654', cardHolder: 'Jane Doe', expiryDate: '11/22', cardType: 'MasterCard' },
-        // Add more cards as needed
-    ];
+    // const cardList = [
+    //     { cardNumber: '1234 5678 9012 3456', cardHolder: 'John Doe', expiryDate: '12/23', cardType: 'Visa' },
+    //     { cardNumber: '9876 5432 1098 7654', cardHolder: 'Jane Doe', expiryDate: '11/22', cardType: 'MasterCard' },
+    //     // Add more cards as needed
+    // ];
 
-    const handleCardSelect = (cardNumber) => {
-        setSelectedCard(cardNumber);
-    };
+    // const handleCardSelect = (cardNumber) => {
+    //     setSelectedCard(cardNumber);
+    // };
 
     return (
         <div className="HomePage">
@@ -38,7 +38,7 @@ const HomePage = () => {
 
             <div className='right-column'>
                 <div className='top'>
-                    <h1>Add apply to Credit Card Button Here</h1>
+                    <h1>Bank Account</h1>
                 </div>
 
                 <div className='middle'>
@@ -75,14 +75,28 @@ const HomePage = () => {
                         <div className='button-list'>
                             <NavLink to="/credit-cards">
                                 <ActionButton>
-                                    <i className='bi bi-credit-card' />
-                                    <span className='ms-2'>Cards</span>
+                                    <i className='bi bi-plus-circle' />
+                                    <span className='ms-2'>Deposit</span>
                                 </ActionButton>
                             </NavLink>
-                            <ActionButton>
-                                <i className='bi bi-gift' />
-                                <span className='ms-2'>Cashback</span>
-                            </ActionButton>
+                            <NavLink to="/credit-cards">
+                                <ActionButton>
+                                    <i className='bi bi-dash-circle' />
+                                    <span className='ms-2'>Withdraw</span>
+                                </ActionButton>
+                            </NavLink>
+                            <NavLink to="/credit-cards">
+                                <ActionButton>
+                                    <i className='bi bi-arrow-right-circle' />
+                                    <span className='ms-2'>Transfer</span>
+                                </ActionButton>
+                            </NavLink>
+                            <NavLink to="/credit-cards">
+                                <ActionButton>
+                                    <i className='bi bi-receipt' />
+                                    <span className='ms-2'>Payment</span>
+                                </ActionButton>
+                            </NavLink>
                         </div>
                     </div>
                 </div>

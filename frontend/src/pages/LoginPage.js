@@ -28,7 +28,7 @@ function Login() {
     if (!formValidation()) return;
 
     if (verifyCredentials()) {
-      alert("Successfully loggin in!");
+      alert("Successfully logged in!");
       navigate("/home");
     } else {
       alert("Wrong credentials. Please try again.");
