@@ -18,11 +18,11 @@
   flex: 1.6;
 }
 
-.top {
+/* .top {
     display: flex;
     justify-content: center;
     padding-top: 20px;
-}
+} */
 
 .middle {
   display: flex;
