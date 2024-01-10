@@ -9,6 +9,56 @@ import TransactionHistory from '../components/TransactionHistory'
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom'
 import CardScroll from '../components/CardScroll'
+import { TransactionCard } from "../components/TransactionCard";
+
+const transactionData = [
+  {
+    id: 1,
+    paymentType: "purchase",
+    amount: 100.0,
+    merchantCode: "M123",
+    status: "Completed",
+    datetime: "2022-01-01T12:30:00Z",
+    cardNumber: "**** **** **** 1234",
+  },
+  {
+    id: 2,
+    paymentType: "purchase",
+    amount: 50.0,
+    merchantCode: "M456",
+    status: "Pending",
+    datetime: "2022-01-02T14:45:00Z",
+    cardNumber: "**** **** **** 5678",
+  },
+  {
+    id: 3,
+    paymentType: "purchase",
+    amount: 75.0,
+    merchantCode: "M789",
+    status: "Completed",
+    datetime: "2022-01-03T10:15:00Z",
+    cardNumber: "**** **** **** 9012",
+  },
+  {
+    id: 4,
+    paymentType: "repayment",
+    amount: 120.0,
+    merchantCode: "M345",
+    status: "Failed",
+    datetime: "2022-01-04T18:20:00Z",
+    cardNumber: "**** **** **** 3456",
+  },
+  {
+    id: 5,
+    paymentType: "repayment",
+    amount: 30.0,
+    merchantCode: "M678",
+    status: "Completed",
+    datetime: "2022-01-05T09:00:00Z",
+    cardNumber: "**** **** **** 7890",
+  },
+  // Add more transactions as needed
+];
 
 const HomePage = () => {
   const bankAccountNumber = "1234 5678 9012 3456";
