@@ -52,6 +52,26 @@ const Navbar = () => {
                 <span className="ms-3">Withdraw/Deposit</span>
               </a>
             </li>
+            <li class="nav-item text-white fs-4 my-1">
+              <a
+                href="/transfer"
+                class="nav-link text-white fs-5"
+                aria-current="page"
+              >
+                <i className="bi bi-cash-coin"></i>
+                <span className="ms-3">Transfer</span>
+              </a>
+            </li>
+            <li class="nav-item text-white fs-4 my-1">
+              <a
+                href="/repayment"
+                class="nav-link text-white fs-5"
+                aria-current="page"
+              >
+                <i className="bi bi-cash-coin"></i>
+                <span className="ms-3">Pay</span>
+              </a>
+            </li>
           </ul>
         </div>
         <div class="dropdown open">
