@@ -70,6 +70,10 @@ const HomePage = () => {
   //     setSelectedCard(cardNumber);
   // };
 
+  //in here we need endpoint bla bla bla
+
+  // we need to store state which credit card is at use now.
+
   return (
     <div className="HomePage">
       <div className="left-column">
@@ -150,10 +154,10 @@ const HomePage = () => {
         </div>
 
         <div>
+          {/* // in here we pass endpoint bla bla bla */}
           {transactionData.map((transactionItem) => (
             <TransactionCard transactionData={transactionItem} />
           ))}
-          <TransactionCard />
         </div>
       </div>
     </div>
@@ -161,3 +165,13 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+
+
+
+
+// userTable
+// we will have all credit cards and bank account
+// we  will show each card
+// when we pick, we change to the currentCard State
+// we can show data for current card
