@@ -1,9 +1,7 @@
-import '../styles/pages/HomePage.css'
-//import '../styles/pages/TransferPage.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
+import '../styles/pages/TransferPage.css'
 import Navbar from '../components/Navbar'
 import React, { useState, useEffect } from 'react'
+import { left } from '@popperjs/core'
 
 const TransferPage = () => {
   const [fromAccount, setFromAccount] = useState('123456789');
@@ -80,8 +78,8 @@ const TransferPage = () => {
                 <h1>Transfer</h1>
             </div>
 
-            <div className="card-body">
-                <form>
+            <div className="transfer-card-body">
+                <form style={{width:'50%', marginLeft:'325px'}}>
                     <div className="form-group">
                         <label htmlFor="fromAccount">From:</label>
                         <input type="text" id="fromAccount" value={fromAccount} className="form-control" readOnly />

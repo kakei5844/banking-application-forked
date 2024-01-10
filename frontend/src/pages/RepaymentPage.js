@@ -1,7 +1,4 @@
-import '../styles/pages/HomePage.css'
-//import '../styles/pages/TransferPage.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
+import '../styles/pages/TransferPage.css'
 import Navbar from '../components/Navbar'
 import React, { useState, useEffect } from 'react'
 
@@ -91,7 +88,7 @@ const RepaymentPage = () => {
           </div>
 
           <div className="card-body">
-            <form>
+            <form style={{width:'50%', marginLeft:'325px'}}>
               <div className="form-group">
                 <label htmlFor="fromAccount" className="label">
                   From:
