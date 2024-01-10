@@ -4,6 +4,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import ActionButton from '../components/ActionButton'
 import BankAccountCard from '../components/BankAccountCard'
 import CardDisplay from '../components/CardDisplay'
+import CardScroll from '../components/CardScroll'
 import Navbar from '../components/Navbar'
 import TransactionHistory from '../components/TransactionHistory'
 // import { useState } from 'react';
@@ -43,7 +44,7 @@ const HomePage = () => {
 
                 <div className='middle'>
                     <div className='card-display'>
-                        <CardDisplay />
+                        <CardScroll />
                     </div>
                     <div className='button-list'>
                         <NavLink to="/credit-cards">
