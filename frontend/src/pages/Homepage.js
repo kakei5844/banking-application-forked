@@ -39,13 +39,6 @@ const HomePage = () => {
   const handleCardSelect = (cardNumber) => {
     setSelectedCard(cardNumber);
   };
-
-  return (
-    <div className="HomePage">
-      <div className="left-column">
-        <Navbar />
-      </div>
-
     return (
         <div className="HomePage">
             <div className='left-column'>
