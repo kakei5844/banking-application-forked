@@ -1,13 +1,14 @@
-import "../styles/pages/HomePage.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import ActionButton from "../components/ActionButton";
-import BankAccountCard from "../components/BankAccountCard";
-import CardDisplay from "../components/CardDisplay";
-import Navbar from "../components/Navbar";
-import TransactionHistory from "../components/TransactionHistory";
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import '../styles/pages/HomePage.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap-icons/font/bootstrap-icons.css'
+import ActionButton from '../components/ActionButton'
+import BankAccountCard from '../components/BankAccountCard'
+import CardDisplay from '../components/CardDisplay'
+import Navbar from '../components/Navbar'
+import TransactionHistory from '../components/TransactionHistory'
+import { useState } from 'react';
+import { NavLink } from 'react-router-dom'
+import CardScroll from '../components/CardScroll'
 
 const HomePage = () => {
   const bankAccountNumber = "1234 5678 9012 3456";
@@ -45,9 +46,63 @@ const HomePage = () => {
         <Navbar />
       </div>
 
-      <div className="right-column">
-        <div className="top">
-          <h1>Add apply to Credit Card Button Here</h1>
+    return (
+        <div className="HomePage">
+            <div className='left-column'>
+                <Navbar />
+            </div>
+
+            <div className='right-column'>
+                <div className='top'>
+                    <h1>Add apply to Credit Card Button Here</h1>
+                </div>
+
+                <div className='middle'>
+                    <div className='card-display'>
+                        <CardScroll />
+                    </div>
+                    <div className='button-list'>
+                        <NavLink to="/credit-cards">
+                            <ActionButton>
+                                <i className='bi bi-credit-card' />
+                                <span className='ms-2'>Cards</span>
+                            </ActionButton>
+                        </NavLink>
+                        <ActionButton>
+                            <i className='bi bi-gift' />
+                            <span className='ms-2'>Cashback</span>
+                        </ActionButton>
+                    </div>
+                </div>
+                <hr />
+                <div className='bottom'>
+                    <div className='bottom-left'>
+                        <div className='bottom-left-1'>
+                            <BankAccountCard bankName="SG Bank" accountNumber="123456789" initialBalance="5000" />
+                            <BankAccountCard bankName="HK Bank" accountNumber="999999999" initialBalance="15000" />
+                        </div>
+                        <div className='bottom-left-2'>
+                            <h2>Transaction History</h2>
+                            <TransactionHistory />
+                        </div>
+                    </div>
+
+                    <div className='bottom-right'>
+                        <div className='button-list'>
+                            <NavLink to="/credit-cards">
+                                <ActionButton>
+                                    <i className='bi bi-credit-card' />
+                                    <span className='ms-2'>Cards</span>
+                                </ActionButton>
+                            </NavLink>
+                            <ActionButton>
+                                <i className='bi bi-gift' />
+                                <span className='ms-2'>Cashback</span>
+                            </ActionButton>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div className="middle">

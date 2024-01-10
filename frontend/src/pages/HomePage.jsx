@@ -5,6 +5,7 @@ import "../styles/HomePage.css";
 import ActionButton from "../components/ActionButton";
 import CardDisplay from "../components/CardDisplay";
 import Navbar from "../components/Navbar";
+import CardScroll from '../components/CardScroll'
 
 function HomePage() {
   return (
@@ -20,7 +21,7 @@ function HomePage() {
 
         <div className="middle">
           <div className="card-display">
-            <CardDisplay />
+            <CardScroll />
           </div>
           <div className="button-list">
             <ActionButton>
