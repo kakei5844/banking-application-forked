@@ -1,17 +1,15 @@
-.HomePage {
+.App {
   background: #e3f2fd;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   height: 100vh;
-  overflow-y: auto;
 }
 
 .left-column {
   flex: 0.4;
   margin: 0;
   padding: 0;
-  min-width: 250px;
 }
 
 .right-column {
@@ -45,26 +43,8 @@
   margin-bottom: 20px;
 }
 
-.bottom-left {
+.bottom {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
   padding: 20px;
-}
-
-.bottom-left-1 {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  padding: 20px;
-}
-
-.bottom-left-2 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.bottom-right {
-  margin-top: 50px;
 }
