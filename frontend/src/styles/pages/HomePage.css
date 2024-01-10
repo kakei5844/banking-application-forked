@@ -59,6 +59,12 @@
   padding: 20px;
 }
 
+.bottom-left-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .bottom-right {
   margin-top: 50px;
 }

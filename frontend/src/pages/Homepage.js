@@ -39,23 +39,16 @@ const HomePage = () => {
   const handleCardSelect = (cardNumber) => {
     setSelectedCard(cardNumber);
   };
-
-  return (
-    <div className="HomePage">
-      <div className="left-column">
-        <Navbar />
-      </div>
-
     return (
         <div className="HomePage">
             <div className='left-column'>
                 <Navbar />
             </div>
 
-            <div className='right-column'>
-                <div className='top'>
-                    <h1>Add apply to Credit Card Button Here</h1>
-                </div>
+      <div className="right-column">
+        <div className="top">
+          <h1>Bank Account</h1>
+        </div>
 
                 <div className='middle'>
                     <div className='card-display'>
@@ -87,22 +80,41 @@ const HomePage = () => {
                         </div>
                     </div>
 
-                    <div className='bottom-right'>
-                        <div className='button-list'>
-                            <NavLink to="/credit-cards">
-                                <ActionButton>
-                                    <i className='bi bi-credit-card' />
-                                    <span className='ms-2'>Cards</span>
-                                </ActionButton>
-                            </NavLink>
-                            <ActionButton>
-                                <i className='bi bi-gift' />
-                                <span className='ms-2'>Cashback</span>
-                            </ActionButton>
-                        </div>
-                    </div>
-                </div>
+          <div className="bottom-right">
+            <div className="button-list">
+              <NavLink to="/credit-cards">
+                <ActionButton>
+                  <i className="bi bi-plus-circle" />
+                  <span className="ms-2">Deposit</span>
+                </ActionButton>
+              </NavLink>
+              <NavLink to="/credit-cards">
+                <ActionButton>
+                  <i className="bi bi-dash-circle" />
+                  <span className="ms-2">Withdraw</span>
+                </ActionButton>
+              </NavLink>
+              <NavLink to="/credit-cards">
+                <ActionButton>
+                  <i className="bi bi-arrow-right-circle" />
+                  <span className="ms-2">Transfer</span>
+                </ActionButton>
+              </NavLink>
+              <NavLink to="/credit-cards">
+                <ActionButton>
+                  <i className="bi bi-receipt" />
+                  <span className="ms-2">Payment</span>
+                </ActionButton>
+              </NavLink>
             </div>
+          </div>
+        </div>
+
+        <div>
+          {/* // in here we pass endpoint bla bla bla */}
+          {transactionData.map((transactionItem) => (
+            <TransactionCard transactionData={transactionItem} />
+          ))}
         </div>
 
         <div className="middle">
@@ -164,3 +176,13 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+
+
+
+
+// userTable
+// we will have all credit cards and bank account
+// we  will show each card
+// when we pick, we change to the currentCard State
+// we can show data for current card
