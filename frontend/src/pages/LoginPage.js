@@ -28,7 +28,7 @@ function Login() {
     if (!formValidation()) return;
 
     if (verifyCredentials()) {
-      alert("Successfully loggin in!");
+      alert("Successfully logged in!");
       navigate("/home");
     } else {
       alert("Wrong credentials. Please try again.");
@@ -97,7 +97,7 @@ function Login() {
                     className="btn btn-outline-secondary link-btn"
                     onClick={() => navigate("/registration")}
                   >
-                    Doesn't have an account? Register here.
+                    Don't have an account? Register here.
                   </button>
                 </div>
               </div>

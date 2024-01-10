@@ -1,0 +1,20 @@
+.transaction-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+
+}
+
+.transaction-card {
+    margin: 0 auto;
+    background-color: #3498db;
+    color: #fff;
+    padding: 20px 40px;
+    width: 40%;
+    border-radius: 20px;
+    border: 0.5px solid black;
+
+    margin-bottom: 20px;
+
+}
