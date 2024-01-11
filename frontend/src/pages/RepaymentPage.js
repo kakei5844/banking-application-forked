@@ -1,23 +1,23 @@
-import '../styles/pages/TransferPage.css'
-import Navbar from '../components/Navbar'
-import React, { useState, useEffect } from 'react'
+import "../styles/pages/TransferPage.css";
+import Navbar from "../components/Navbar";
+import React, { useState, useEffect } from "react";
 
 const RepaymentPage = () => {
-  const [fromAccount, setFromAccount] = useState('123456789');
+  const [fromAccount, setFromAccount] = useState("123456789");
   const [creditCards, setCreditCards] = useState([
     "1111222233334444",
     "5555666677778888",
-    "9999888877776666"
+    "9999888877776666",
   ]);
   const [creditCardDetails, setCreditCardDetails] = useState({
-    '1111222233334444': 2000,
-    '5555666677778888': 5000,
-    '9999888877776666': 9000,
+    1111222233334444: 2000,
+    5555666677778888: 5000,
+    9999888877776666: 9000,
   });
-  const [toCreditCard, setToCreditCard] = useState('');
-  const [amount, setAmount] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [toCreditCard, setToCreditCard] = useState("");
+  const [amount, setAmount] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleToCreditCardChange = (event) => {
     setToCreditCard(event.target.value);
@@ -37,22 +37,25 @@ const RepaymentPage = () => {
     event.preventDefault();
 
     if (!amount) {
-      setErrorMessage('Amount field is required');
-      setSuccessMessage('');
+      setErrorMessage("Amount field is required");
+      setSuccessMessage("");
     } else {
       // Implement repayment logic
       // API call for backend validation
-      console.log(`Repayment of credit card bill initiated from ${fromAccount} to ${toCreditCard} with amount ${amount}`);
-      setErrorMessage('');
-      setSuccessMessage('Successfully transferred');
-      setAmount('');
+      console.log(
+        `Repayment of credit card bill initiated from ${fromAccount} to ${toCreditCard} with amount ${amount}`
+      );
+      setErrorMessage("");
+      setSuccessMessage("Successfully transferred");
+      setAmount("");
     }
   };
 
   useEffect(() => {
     // Fetch credit card data
     // Insert the URL with actual API endpoint
-    {/*
+    {
+      /*
     fetch('/path/to/example.json') // Adjust the path accordingly
       .then((response) => response.json())
       .then((data) => {
@@ -66,7 +69,8 @@ const RepaymentPage = () => {
         console.error('Error fetching credit cards:', error);
       });
   }, []);
-    */}
+    */
+    }
 
     setToCreditCard(creditCards[0]);
   }, [creditCards]);
@@ -74,54 +78,76 @@ const RepaymentPage = () => {
   const placeholderAmount =
     creditCardDetails[toCreditCard] !== undefined
       ? creditCardDetails[toCreditCard]
-      : '';
-  
+      : "";
+
   return (
     <div className="HomePage">
-        <div className='left-column'>
-          <Navbar />
+      <div className="left-column">
+        <Navbar />
+      </div>
+
+      <div className="right-column">
+        <div className="top">
+          <h1>Pay Credit Card Bill</h1>
         </div>
 
-        <div className='right-column'>
-          <div className='top'>
-              <h1>Pay Credit Card Bill</h1>
-          </div>
-
-          <div className="card-body">
-            <form style={{width:'50%', marginLeft:'325px'}}>
-              <div className="form-group">
-                <label htmlFor="fromAccount" className="label">
-                  From:
-                </label>
-                <input type="text" id="fromAccount" value={fromAccount} readOnly className="form-control" />
-              </div>
-              <div className="form-group">
-                <label htmlFor="toCreditCard" className="label">
-                  To (Credit Card Number):
-                </label>
-                <select id="toCreditCard" value={toCreditCard}  onChange={handleToCreditCardChange} className="form-control">
-                  {/* Options for credit card numbers */}
-                  {creditCards.map((creditCard) => (
-                    <option key={creditCard} value={creditCard}>
-                      {creditCard}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-group">
-                <label htmlFor="amount" className="label">
-                  Amount:
-                </label>
-                <input type="text" id="amount" value={amount} onChange={handleAmountChange} placeholder={placeholderAmount} className="form-control" />
-              </div>
-              <button onClick={handlePayButtonClick} className="button">
-                Pay
-              </button>
-              {errorMessage && <div className="error-message">{errorMessage}</div>}
-              {successMessage && <div className="success-message">{successMessage}</div>}
-              </form>
-          </div>
+        <div className="card-body">
+          <form style={{ width: "50%", marginLeft: "325px" }}>
+            <div className="form-group">
+              <label htmlFor="fromAccount" className="label">
+                From:
+              </label>
+              <input
+                type="text"
+                id="fromAccount"
+                value={fromAccount}
+                readOnly
+                className="form-control"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="toCreditCard" className="label">
+                To (Credit Card Number):
+              </label>
+              <select
+                id="toCreditCard"
+                value={toCreditCard}
+                onChange={handleToCreditCardChange}
+                className="form-control"
+              >
+                {/* Options for credit card numbers */}
+                {creditCards.map((creditCard) => (
+                  <option key={creditCard} value={creditCard}>
+                    {creditCard}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="amount" className="label">
+                Amount:
+              </label>
+              <input
+                type="text"
+                id="amount"
+                value={amount}
+                onChange={handleAmountChange}
+                placeholder={placeholderAmount}
+                className="form-control"
+              />
+            </div>
+            <button onClick={handlePayButtonClick} className="button">
+              Pay
+            </button>
+            {errorMessage && (
+              <div className="error-message">{errorMessage}</div>
+            )}
+            {successMessage && (
+              <div className="success-message">{successMessage}</div>
+            )}
+          </form>
         </div>
+      </div>
     </div>
   );
 };
