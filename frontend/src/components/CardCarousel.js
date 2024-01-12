@@ -52,18 +52,20 @@ const Carousel = ( {transactions, cards} ) => {
 
   return (
     <div className="carousel-container">
-      <Cards {...cards[currentCardIndex]} 
-      number={maskedCardNumber}
-      cvc={maskedCVC}/>
+      <Cards
+        {...cards[currentCardIndex]}
+        number={maskedCardNumber}
+        cvc={maskedCVC}
+      />
       <div className="button-container">
         <button onClick={handlePrevCard}>Previous</button>
         <button onClick={handleNextCard}>Next</button>
       </div>
-      <CreditCardTransaction
+      {/* <CreditCardTransaction
         selectedCard={currentCardIndex}
         transactions={transactions}
         cards={cards} // Pass the 'cards' array here
-      />
+      /> */}
     </div>
   );
 };
