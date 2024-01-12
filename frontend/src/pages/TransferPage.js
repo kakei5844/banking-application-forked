@@ -81,20 +81,23 @@ const TransferPage = () => {
             <div className="transfer-card-body">
                 <form style={{width:'50%', marginLeft:'325px'}}>
                     <div className="form-group">
-                        <label htmlFor="fromAccount">From:</label>
-                        <input type="text" id="fromAccount" value={fromAccount} className="form-control" readOnly />
+                        <label htmlFor="fromAccount" className="labelAmount mt-2">From:</label>
+                        <input type="text" id="fromAccount" value={fromAccount} className="form-control mt-2" readOnly />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="toAccount">To:</label>
-                        <input type="text" id="toAccount" value={toAccount} onChange={handleToAccountChange} className="form-control" />
+                        <label htmlFor="toAccount" className="labelAmount mt-2">To:</label>
+                        <input type="text" id="toAccount" value={toAccount} onChange={handleToAccountChange} className="form-control mt-2" />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="amount">Amount:</label>
-                        <input type="text" id="amount" value={amount} onChange={handleAmountChange} className="form-control" />
+                        <label htmlFor="amount" className="labelAmount mt-2">Amount:</label>
+                        <input type="text" id="amount" value={amount} onChange={handleAmountChange} className="form-control mt-2" />
                     </div>
-                    <button onClick={handlePayButtonClick} className="btn btn-primary">
-                        Transfer
-                    </button>
+
+                    <div className="btn-group mt-3">
+                      <button onClick={handlePayButtonClick} className="btn btn-primary">
+                          Transfer
+                      </button>
+                    </div>
                     {errorMessage && <div className="error-message">{errorMessage}</div>}
                     {successMessage && <div className="success-message">{successMessage}</div>}
                 </form>
