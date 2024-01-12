@@ -4,6 +4,8 @@ import CreditCardFeature from "./pages/CreditCardFeature";
 import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import WithdrawDeposit from "./pages/WithdrawDeposit";
+import RepaymentPage from "./pages/RepaymentPage";
+import TransferPage from "./pages/TransferPage";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/credit-cards" element={<CreditCardFeature />} />
         <Route path="/withdraw-deposit" element={<WithdrawDeposit />} />
+        <Route path="/transfer" element={<TransferPage />} />
+        <Route path="/repayment" element={<RepaymentPage />} />
       </Routes>
     </div>
   );
