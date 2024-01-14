@@ -1,7 +1,7 @@
 import '../styles/pages/TransferPage.css'
 import Navbar from '../components/Navbar'
 import React, { useState, useEffect } from 'react'
-import { left } from '@popperjs/core'
+import axios from 'axios';
 
 const TransferPage = () => {
   const [fromAccount, setFromAccount] = useState('123456789');
@@ -41,34 +41,44 @@ const TransferPage = () => {
     } else {
       // Implement payment logic
       // API call for backend validation
-      console.log(`Payment initiated from ${fromAccount} to ${toAccount} with amount ${amount}`);
-      setErrorMessage('');
-      setSuccessMessage('Successfully transferred');
-      
-      setToAccount('');
-      setAmount('');
+      axios.post('http://localhost:8080/api/v1/bank-accounts/transfer', {
+      fromAccount,
+      toAccount,
+      amount,
+    })
+      .then((response) => {
+        console.log('Transfer response:', response.data);
+        setErrorMessage('');
+        setSuccessMessage('Successfully transferred');
+        setToAccount('');
+        setAmount('');
+      })
+      .catch((error) => {
+        console.error('Transfer error:', error);
+        setErrorMessage('Error transferring funds. Please try again.');
+        setSuccessMessage('');
+      });
     }
   };
 
   useEffect(() => {
     // Fetch bank account number from endpoint
     // Update the state
-    {/*
-    fetch('your_endpoint_to_get_bank_account')
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && data.bankAccount) {
-          setFromAccount(data.bankAccount);
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching bank account:', error);
-      });
-    */}
+    // {bank_account_id} -> change to the user's bank acc id (1, 2, etc)
+    axios.get('http://localhost:8080/api/v1/bank-accounts/{bank_account_id}')
+    .then((response) => response.json())
+    .then((data) => {
+      if (data && data.accountNumber) {
+        setFromAccount(data.accountNumber);
+      }
+    })
+    .catch((error) => {
+      console.error('Error fetching bank account:', error);
+    });
   }, []);
 
   return (
-    <div className="HomePage">
+    <div className="Page">
         <div className='left-column'>
             <Navbar />
         </div>

@@ -130,19 +130,19 @@ const HomePage = () => {
                 <span className="ms-2">Deposit</span>
               </ActionButton>
             </NavLink>
-            <NavLink to="/credit-cards">
+            <NavLink to="/withdraw-deposit">
               <ActionButton>
                 <i className="bi bi-dash-circle" />
                 <span className="ms-2">Withdraw</span>
               </ActionButton>
             </NavLink>
-            <NavLink to="/credit-cards">
+            <NavLink to="/transfer">
               <ActionButton>
                 <i className="bi bi-arrow-right-circle" />
                 <span className="ms-2">Transfer</span>
               </ActionButton>
             </NavLink>
-            <NavLink to="/credit-cards">
+            <NavLink to="/repayment">
               <ActionButton>
                 <i className="bi bi-receipt" />
                 <span className="ms-2">Payment</span>
