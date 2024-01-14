@@ -3,11 +3,11 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import ActionButton from '../components/ActionButton'
 import BankAccountCard from '../components/BankAccountCard'
+import BankTransactionHistory from '../components/BankTransactionHistory'
 import CardDisplay from '../components/CardDisplay'
 import CardScroll from '../components/CardScroll'
 import CardCarousel from '../components/CardCarousel'
 import Navbar from '../components/Navbar'
-import TransactionHistory from '../components/TransactionHistory'
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom'
 import { TransactionCard } from "../components/TransactionCard";
@@ -57,6 +57,45 @@ const transactionData = [
     status: "Completed",
     datetime: "2022-01-05T09:00:00Z",
     cardNumber: "**** **** **** 7890",
+  },
+  // Add more transactions as needed
+];
+
+const bankTransactionData = [
+  {
+    id: 1,
+    transactionType: "deposit",
+    amount: 100.0,
+    status: "Completed",
+    datetime: "2022-01-01T12:30:00Z",
+  },
+  {
+    id: 2,
+    transactionType: "withdraw",
+    amount: 50.0,
+    status: "Completed",
+    datetime: "2022-01-02T14:45:00Z",
+  },
+  {
+    id: 3,
+    transactionType: "transfer",
+    amount: 75.0,
+    status: "Completed",
+    datetime: "2022-01-03T10:15:00Z",
+  },
+  {
+    id: 4,
+    transactionType: "repayment",
+    amount: 120.0,
+    status: "Failed",
+    datetime: "2022-01-04T18:20:00Z",
+  },
+  {
+    id: 5,
+    transactionType: "repayment",
+    amount: 120.0,
+    status: "Pending",
+    datetime: "2022-01-05T09:00:00Z",
   },
   // Add more transactions as needed
 ];
@@ -123,7 +162,10 @@ const HomePage = () => {
           <div className='bottom-left'>
             <div className='bottom-left-2'>
               <h2>Transaction History</h2>
-              <TransactionHistory />
+              {/* {bankTransactionData.map((bankTransactionItem) => (
+                <BankTransactionHistory bankTransactionData={bankTransactionItem} />
+              ))} */}
+              <BankTransactionHistory />
             </div>
           </div>
 
@@ -157,12 +199,11 @@ const HomePage = () => {
           </div>
         </div>
 
-        <div>
-          {/* // in here we pass endpoint bla bla bla */}
+        {/* <div>
           {transactionData.map((transactionItem) => (
             <TransactionCard transactionData={transactionItem} />
           ))}
-        </div>
+        </div> */}
 
       </div>
     </div>
