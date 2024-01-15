@@ -108,40 +108,6 @@ const TransferPage = () => {
             </form>
       </div>
     </div>
-
-    // <div className="HomePage">
-    //     <div className='left-column'>
-    //         <Navbar />
-    //     </div>
-
-    //     <div className='right-column'>
-    //         <div className='top'>
-    //             <h1>Transfer</h1>
-    //         </div>
-
-    //         <div className="card-body">
-    //             <form>
-    //                 <div className="form-group">
-    //                     <label htmlFor="fromAccount">From:</label>
-    //                     <input type="text" id="fromAccount" value={fromAccount} className="form-control" readOnly />
-    //                 </div>
-    //                 <div className="form-group">
-    //                     <label htmlFor="toAccount">To:</label>
-    //                     <input type="text" id="toAccount" value={toAccount} onChange={handleToAccountChange} className="form-control" />
-    //                 </div>
-    //                 <div className="form-group">
-    //                     <label htmlFor="amount">Amount:</label>
-    //                     <input type="text" id="amount" value={amount} onChange={handleAmountChange} className="form-control" />
-    //                 </div>
-    //                 <button onClick={handlePayButtonClick} className="btn btn-primary">
-    //                     Transfer
-    //                 </button>
-    //                 {errorMessage && <div className="error-message">{errorMessage}</div>}
-    //                 {successMessage && <div className="success-message">{successMessage}</div>}
-    //             </form>
-    //         </div>
-    //     </div>
-    // </div>
   );
 };
 
