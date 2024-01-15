@@ -7,9 +7,7 @@ public record CreditCardTransactionDTO(
                 Long creditCardId,
                 double amount,
                 String description,
-                LocalDateTime createdAt,
-                int mcc,
-                String merchantCategoryName
+                LocalDateTime createdAt
 ) {
 
 }
