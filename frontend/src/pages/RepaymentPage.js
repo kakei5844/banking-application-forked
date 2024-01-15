@@ -1,4 +1,4 @@
-import "../styles/pages/TransferPage.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "../components/Navbar";
 import React, { useState, useEffect } from "react";
 
@@ -14,18 +14,27 @@ const RepaymentPage = () => {
     5555666677778888: 5000,
     9999888877776666: 9000,
   });
-  const [toCreditCard, setToCreditCard] = useState("");
+
   const [amount, setAmount] = useState("");
+  const [toCreditCard, setToCreditCard] = useState("");
+
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  const handleFullPayment = () => {
+    setAmount(creditCardDetails[toCreditCard].toString());
+  };
+
+  const handleMinPayment = () => {
+    const minPayment = 100;
+    setAmount(minPayment.toString());
+  };
 
   const handleToCreditCardChange = (event) => {
     setToCreditCard(event.target.value);
   };
 
   const handleAmountChange = (event) => {
-    // setAmount(event.target.value);
-
     const input = event.target.value;
 
     if (/^\d*\.?\d*$/.test(input)) {
@@ -81,7 +90,7 @@ const RepaymentPage = () => {
       : "";
 
   return (
-    <div className="HomePage">
+    <div className="Page">
       <div className="left-column">
         <Navbar />
       </div>
@@ -93,29 +102,19 @@ const RepaymentPage = () => {
 
         <div className="card-body">
           <form style={{ width: "50%", marginLeft: "325px" }}>
-            <div className="form-group">
-              <label htmlFor="fromAccount" className="label">
+            < div className="form-group">
+              <label htmlFor="fromAccount" className="labelAmount mt-2">
                 From:
               </label>
-              <input
-                type="text"
-                id="fromAccount"
-                value={fromAccount}
-                readOnly
-                className="form-control"
-              />
+              <input type="text" id="fromAccount" value={fromAccount} readOnly className="form-control mt-2" />
             </div>
+
             <div className="form-group">
-              <label htmlFor="toCreditCard" className="label">
-                To (Credit Card Number):
+              <label htmlFor="toCreditCard" className="labelAmount mt-2">
+                For (Credit Card Number):
               </label>
-              <select
-                id="toCreditCard"
-                value={toCreditCard}
-                onChange={handleToCreditCardChange}
-                className="form-control"
-              >
-                {/* Options for credit card numbers */}
+              <select id="toCreditCard" value={toCreditCard} onChange={handleToCreditCardChange} className="form-control mt-2">
+
                 {creditCards.map((creditCard) => (
                   <option key={creditCard} value={creditCard}>
                     {creditCard}
@@ -123,28 +122,32 @@ const RepaymentPage = () => {
                 ))}
               </select>
             </div>
+
             <div className="form-group">
-              <label htmlFor="amount" className="label">
+              <label htmlFor="amount" className="labelAmount mt-2">
                 Amount:
               </label>
-              <input
-                type="text"
-                id="amount"
-                value={amount}
-                onChange={handleAmountChange}
-                placeholder={placeholderAmount}
-                className="form-control"
-              />
+              <input className="form-control mt-2" type="text" id="amount" value={amount} onChange={handleAmountChange} placeholder={placeholderAmount} />
             </div>
-            <button onClick={handlePayButtonClick} className="button">
-              Pay
-            </button>
-            {errorMessage && (
-              <div className="error-message">{errorMessage}</div>
-            )}
-            {successMessage && (
-              <div className="success-message">{successMessage}</div>
-            )}
+
+            <div className="btn-group mt-3">
+              <button className="btn btn-outline-primary rounded me-2" type="button" onClick={() => handleFullPayment()}>
+                Pay Full Amount
+              </button>
+              <button className="btn btn-outline-primary rounded me-2" type="button" onClick={() => handleMinPayment()}>
+                Pay Min Amount
+              </button>
+            </div>
+            <br />
+
+            <div className="btn-group mt-3">
+              <button onClick={handlePayButtonClick} type="button" className="btn btn-primary mt-3 btn-lg">
+                Pay
+              </button>
+            </div>
+
+            {errorMessage && (<div className="error-message">{errorMessage}</div>)}
+            {successMessage && (<div className="success-message">{successMessage}</div>)}
           </form>
         </div>
       </div>
