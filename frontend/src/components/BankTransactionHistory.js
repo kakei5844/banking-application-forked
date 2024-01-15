@@ -6,31 +6,31 @@ import '../styles/components/TransactionHistory.css';
 const bankTransactionData = [
     {
         id: 1,
-        transactionType: "deposit",
+        description: "deposit",
         amount: 100.0,
         datetime: "2022-01-01T12:30:00Z",
     },
     {
         id: 2,
-        transactionType: "withdraw",
+        description: "withdraw",
         amount: 50.0,
         datetime: "2022-01-02T14:45:00Z",
     },
     {
         id: 3,
-        transactionType: "transfer",
+        description: "transfer",
         amount: 75.0,
         datetime: "2022-01-03T10:15:00Z",
     },
     {
         id: 4,
-        transactionType: "repayment",
+        description: "repayment",
         amount: 120.0,
         datetime: "2022-01-04T18:20:00Z",
     },
     {
         id: 5,
-        transactionType: "repayment",
+        description: "repayment",
         amount: 120.0,
         datetime: "2022-01-05T09:00:00Z",
     },
@@ -39,13 +39,12 @@ const bankTransactionData = [
 
 const BankTransactionHistory = () => {
 
-    // const {
-    //     id,
-    //     transactionType,
-    //     amount,
-    //     status,
-    //     datetime,
-    // } = bankTransactionData || {};
+    const {
+        id,
+        description,
+        amount,
+        datetime,
+    } = bankTransactionData || {};
 
     const [filterType, setFilterType] = useState('date');
     const [selectedDate, setSelectedDate] = useState(null);
@@ -98,7 +97,6 @@ const BankTransactionHistory = () => {
                         <th>Transaction ID</th>
                         <th>Transaction Type</th>
                         <th>Amount</th>
-                        <th>Status</th>
                         <th>Date and Time</th>
                     </tr>
                 </thead>

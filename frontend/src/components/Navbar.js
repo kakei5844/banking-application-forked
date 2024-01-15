@@ -2,8 +2,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/js/dist/dropdown";
 import "../styles/components/Navbar.css";
+import { useAuth } from "../misc/AuthContext";
 
 const Navbar = () => {
+
+  const { getUser, userIsAuthenticated, userLogout } = useAuth()
+
+  const logout = () => {
+    userLogout()
+  }
+
   return (
     <div className="container-fluid">
       <div className="bg-dark col-auto col-md-12 min-vh-100 d-flex justify-content-between flex-column">
@@ -87,7 +95,7 @@ const Navbar = () => {
             <a className="dropdown-item" href="#">
               Setting
             </a>
-            <a className="dropdown-item" href="/login">
+            <a className="dropdown-item" href="/login" onClick={logout}>
               Logout
             </a>
           </div>

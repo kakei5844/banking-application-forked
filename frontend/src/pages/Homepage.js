@@ -1,16 +1,16 @@
-import '../styles/pages/HomePage.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import ActionButton from '../components/ActionButton'
-import BankAccountCard from '../components/BankAccountCard'
-import BankTransactionHistory from '../components/BankTransactionHistory'
-import CardDisplay from '../components/CardDisplay'
-import CardScroll from '../components/CardScroll'
-import CardCarousel from '../components/CardCarousel'
-import Navbar from '../components/Navbar'
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom'
-import { TransactionCard } from "../components/TransactionCard";
+import "../styles/pages/HomePage.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import ActionButton from "../components/ActionButton";
+import BankAccountCard from "../components/BankAccountCard";
+import CardDisplay from "../components/CardDisplay";
+import Navbar from "../components/Navbar";
+import BankTransactionHistory from "../components/BankTransactionHistory";
+import { useEffect, useState } from 'react'
+import { NavLink, Navigate } from 'react-router-dom'
+import { useAuth } from '../misc/AuthContext';
+import { bankingApi } from '../misc/BankingApi';
+import { handleLogError } from '../misc/Helpers';
 
 const transactionData = [
   {
@@ -101,120 +101,112 @@ const bankTransactionData = [
 ];
 
 const HomePage = () => {
-  const bankAccountNumber = "1234 5678 9012 3456";
+  const Auth = useAuth();
+  const user = Auth.getUser();
+  const isLoggedIn = Auth.userIsAuthenticated();
+  const [userDb, setUserDb] = useState(null);
 
-  const creditCards = ["Card 1", "Card 2", "Card 3"]; // Replace with your credit card data
+  const [appliedToCreditCard, setAppliedToCreditCard] = useState(false);
 
-  // Dropdown
-  const initialSelectedCard = "1234 5678 9012 3456";
+  useEffect(()=> {
+    loadUserDb()
+  }, []);
 
-  const [selectedCard, setSelectedCard] = useState(initialSelectedCard);
-
-  const cardList = [
-    {
-      cardNumber: "1234 5678 9012 3456",
-      cardHolder: "John Doe",
-      expiryDate: "12/23",
-      cardType: "Visa",
-    },
-    {
-      cardNumber: "9876 5432 1098 7654",
-      cardHolder: "Jane Doe",
-      expiryDate: "11/22",
-      cardType: "MasterCard",
-    },
-    // Add more cards as needed
-  ];
-
-  const handleCardSelect = (cardNumber) => {
-    setSelectedCard(cardNumber);
+  const loadUserDb = async () => {
+      try {
+          const response = await bankingApi.getUser(user)
+          console.log(response.data)
+          setUserDb(response.data)
+      } catch (error) {
+          handleLogError(error)
+      }
   };
-  return (
+
+  if (!isLoggedIn) {
+    return <Navigate to='/login' />
+  };
+
+  return ( userDb &&
     <div className="HomePage">
-      <div className='left-column'>
+      <div className="left-column">
         <Navbar />
       </div>
 
       <div className="right-column">
         <div className="top">
+          {appliedToCreditCard ? (
+            () => null
+          ) : (
+            <div className="credit-apply-div">
+              <button className="credit-apply-btn">Apply To Credit Card</button>
+            </div>
+          )}
           <h1>Bank Account</h1>
         </div>
 
-        <div className='middle'>
-          <div className='card-display'>
-            <BankAccountCard bankName="SG Bank" accountNumber="123456789" initialBalance="5000" />
+        <div className="middle">
+          <div className="card-display">
+            <CardDisplay />
           </div>
-          <div className='button-list'>
+          <div className="button-list">
             <NavLink to="/credit-cards">
               <ActionButton>
-                <i className='bi bi-credit-card' />
-                <span className='ms-2'>Cards</span>
+                <i className="bi bi-credit-card" />
+                <span className="ms-2">Cards</span>
               </ActionButton>
             </NavLink>
             <ActionButton>
-              <i className='bi bi-gift' />
-              <span className='ms-2'>Cashback</span>
+              <i className="bi bi-gift" />
+              <span className="ms-2">Cashback</span>
             </ActionButton>
+            <NavLink to="/credit-cards">
+              <ActionButton>
+                <i className="bi bi-plus-circle" />
+                <span className="ms-2">Deposit</span>
+              </ActionButton>
+            </NavLink>
+            <NavLink to="/credit-cards">
+              <ActionButton>
+                <i className="bi bi-dash-circle" />
+                <span className="ms-2">Withdraw</span>
+              </ActionButton>
+            </NavLink>
+            <NavLink to="/credit-cards">
+              <ActionButton>
+                <i className="bi bi-arrow-right-circle" />
+                <span className="ms-2">Transfer</span>
+              </ActionButton>
+            </NavLink>
+            <NavLink to="/credit-cards">
+              <ActionButton>
+                <i className="bi bi-receipt" />
+                <span className="ms-2">Payment</span>
+              </ActionButton>
+            </NavLink>
           </div>
         </div>
         <hr />
-        <div className='bottom'>
-          <div className='bottom-left'>
-            <div className='bottom-left-2'>
+        <div className="bottom">
+          <div className="bottom-left">
+            <div className="bottom-left-1">
+              <BankAccountCard
+                bankName="SG Bank"
+                accountNumber={userDb.bankAccount.id}
+                balance={userDb.bankAccount.balance}
+              />
+            </div>
+            <div className="bottom-left-2">
               <h2>Transaction History</h2>
-              {/* {bankTransactionData.map((bankTransactionItem) => (
-                <BankTransactionHistory bankTransactionData={bankTransactionItem} />
-              ))} */}
               <BankTransactionHistory />
             </div>
           </div>
-
-          <div className="bottom-right">
-            <div className="button-list">
-              <NavLink to="/credit-cards">
-                <ActionButton>
-                  <i className="bi bi-plus-circle" />
-                  <span className="ms-2">Deposit</span>
-                </ActionButton>
-              </NavLink>
-              <NavLink to="/credit-cards">
-                <ActionButton>
-                  <i className="bi bi-dash-circle" />
-                  <span className="ms-2">Withdraw</span>
-                </ActionButton>
-              </NavLink>
-              <NavLink to="/credit-cards">
-                <ActionButton>
-                  <i className="bi bi-arrow-right-circle" />
-                  <span className="ms-2">Transfer</span>
-                </ActionButton>
-              </NavLink>
-              <NavLink to="/credit-cards">
-                <ActionButton>
-                  <i className="bi bi-receipt" />
-                  <span className="ms-2">Payment</span>
-                </ActionButton>
-              </NavLink>
-            </div>
-          </div>
         </div>
-
-        {/* <div>
-          {transactionData.map((transactionItem) => (
-            <TransactionCard transactionData={transactionItem} />
-          ))}
-        </div> */}
-
       </div>
     </div>
   );
 };
 
 export default HomePage;
-
-
-
-
 
 // userTable
 // we will have all credit cards and bank account

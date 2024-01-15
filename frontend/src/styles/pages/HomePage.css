@@ -4,7 +4,7 @@
   justify-content: space-between;
   align-items: flex-start;
   height: 100%;
-    /* overflow-y: auto; */
+    overflow-y: auto;
 }
 
 .left-column {
@@ -12,39 +12,52 @@
   margin: 0;
   padding: 0;
   min-width: 250px;
+  position: fixed;
 }
 
 .right-column {
   flex: 1.6;
+  margin-left: 250px;
+  }
+  
+  .right-column-first {
+    display: flex;
 }
 
 .top {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   padding-top: 20px;
 }
 
 .middle {
+  margin-top: 20px;
   display: flex;
-  justify-content: space-between;
-  padding: 40px;
+  flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .card-display {
-  flex: 1.5;
+  flex: 1.2;
 }
-
 .button-list {
-  flex: 0.3;
+  flex: 0.5;
   display: flex;
   flex-direction: column;
   padding-top: 30px;
 }
 
-.button-list .ActionButton {
+.button-list {
   margin-bottom: 20px;
 }
 
+.bottom {
+  display: flex;
+  justify-content: center;
+}
 .bottom-left {
   display: flex;
   flex-direction: column;
@@ -67,4 +80,23 @@
 
 .bottom-right {
   margin-top: 50px;
+}
+
+.credit-apply-div {
+  margin: 20px;
+}
+
+.credit-apply-btn {
+  padding: 30px;
+  width: 450px;
+  background-color: #3498db;
+}
+
+.credit-apply-btn:hover {
+  /* background-attachment: fixed; */
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out 0.5s;
+  cursor: pointer;
+  background-color: #3498db;
+
 }

@@ -1,72 +1,73 @@
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
-import Cards from 'react-credit-cards-2';
+import React, { useState } from 'react';
+import Cards from 'react-credit-cards-2'; 
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import '../styles/components/CardCarousel.css'
-
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-
-const cardData = [
-    { cvc: '123', expiry: '2020', focus: '', name: 'tom', number: '5542123412341234' },
-    { cvc: '246', expiry: '2021', focus: '', name: 'jerry', number: '6134123412341234' },
-    { cvc: '369', expiry: '2022', focus: '', name: 'tim', number: '4343123412341234' },
-    { cvc: '322', expiry: '2022', focus: '', name: 'trey', number: '3743123412341234' },
-    { cvc: '387', expiry: '2022', focus: '', name: 'angus', number: '3643123412341234' },
-    { cvc: '365', expiry: '2022', focus: '', name: 'bob', number: '6243123412341234' },
-    { cvc: '324', expiry: '2022', focus: '', name: 'bailey', number: '3543123412341234' }
-];
-
-const CardCarousel = () => {
-    return (
-        <div className="container">
-            <Swiper
-                effect={'coverflow'}
-                grabCursor={true}
-                centeredSlides={true}
-                loop={true}
-                slidesPerView={'auto'}
-                coverflowEffect={{
-                    rotate: 0,
-                    stretch: 0,
-                    depth: 100,
-                    modifier: 2.5,
-                }}
-                pagination={{ el: '.swiper-pagination', clickable: true }}
-                navigation={{
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                    clickable: true,
-                }}
-                modules={[EffectCoverflow, Pagination, Navigation]}
-                className='swiper-container'
-            >
-                {cardData.map((card, cardIndex) => (
-                    <SwiperSlide key={cardIndex}>
-                        <div className="card-item">
-                            <Cards
-                                cvc={card.cvc}
-                                expiry={card.expiry}
-                                focus={card.focus}
-                                name={card.name}
-                                number={card.number}
-                            />
-                        </div>
-                    </SwiperSlide>
-                ))}
-
-                <div className="slider-controler">
-                    <div className="swiper-button-prev slider-arrow"></div>
-                    <div className="swiper-button-next slider-arrow"></div>
-                    <div className="swiper-pagination"></div>
-                </div>
-            </Swiper>
-        </div>
-    );
+import '../styles/components/Carousel.css'
+import CreditCardTransaction from './CreditCardTransactionHistory';
+  
+const maskCardNumber = (number) => {
+  const cardLength = number.length;
+  const firstFourDigits = number.slice(0, 4);
+  const lastFourDigits = number.slice(-4);
+  const maskedDigits = '*'.repeat(cardLength - 8); // Replace middle digits with asterisks
+  return `${firstFourDigits}${maskedDigits}${lastFourDigits}`;
 };
 
-export default CardCarousel;
+const maskCVC = (cvc) => {
+  return '*'.repeat(cvc.length); // Replace all CVV digits with asterisks
+};
+
+const Carousel = ( {transactions, cards} ) => {
+
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [transactionData, setTransactionData] = useState({
+    0: [], // Initialize with an empty array for each card index
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: [],
+    6: [],
+    7: [],
+  });
+
+  const handleNextCard = () => {
+    setCurrentCardIndex((prevIndex) => (prevIndex + 1) % cards.length);
+  };
+
+  const handlePrevCard = () => {
+    setCurrentCardIndex(
+      (prevIndex) => (prevIndex - 1 + cards.length) % cards.length
+    );
+  };
+
+  const handleTransactionUpdate = (cardIndex, newTransactions) => {
+    setTransactionData((prevData) => ({
+      ...prevData,
+      [cardIndex]: newTransactions,
+    }));
+  };
+
+  const maskedCardNumber = maskCardNumber(cards[currentCardIndex].number);
+  const maskedCVC = maskCVC(cards[currentCardIndex].cvc);
+
+  return (
+    <div className="carousel-container">
+      <Cards
+        {...cards[currentCardIndex]}
+        number={maskedCardNumber}
+        cvc={maskedCVC}
+      />
+      <div className="button-container">
+        <button onClick={handlePrevCard}>Previous</button>
+        <button onClick={handleNextCard}>Next</button>
+      </div>
+      {/* <CreditCardTransaction
+        selectedCard={currentCardIndex}
+        transactions={transactions}
+        cards={cards} // Pass the 'cards' array here
+      /> */}
+    </div>
+  );
+};
+
+export default Carousel;
