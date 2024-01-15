@@ -14,6 +14,7 @@ import com.fdmgroup.BankingApplication.model.User;
 import com.fdmgroup.BankingApplication.repository.BankAccountRepository;
 import com.fdmgroup.BankingApplication.repository.UserRepository;
 import com.fdmgroup.BankingApplication.security.Role;
+import com.fdmgroup.BankingApplication.util.BankAccountNumberGenerator;
 
 import jakarta.transaction.Transactional;
 
@@ -29,6 +30,9 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     
+    private static final int ACCOUNT_NUMBER_LENGTH = 16;
+    private static final int MAX_ATTEMPTS = 10;
+    
     @Transactional
     public User saveUser(UserRegistrationRequestDTO req) throws UsernameAlreadyExistsException {
     	
@@ -39,12 +43,16 @@ public class UserService {
         User user = new User();
         user.setUsername(req.getUsername());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
+        user.setFirstName(req.getFirstName());
+        user.setLastName(req.getLastName());
+        user.setPhoneNumber(req.getPhoneNumber());
         user.setRole(req.getRole());
 
         if (user.getRole() == Role.USER) {
             BankAccount bankAccount = new BankAccount();
             bankAccount.setUser(user);
             bankAccount.setBalance(req.getInitialBalance());
+            bankAccount.setAccountNumber(generateUniqueAccountNumber());
             BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
             user.setBankAccount(savedBankAccount);
         } else {
@@ -52,6 +60,23 @@ public class UserService {
         }
 
         return userRepository.save(user);
+    }
+    
+    private String generateUniqueAccountNumber() {
+        String accountNumber;
+        boolean isUnique = false;
+        int attempts = 0;
+        do {
+            accountNumber = BankAccountNumberGenerator.generateAccountNumber(ACCOUNT_NUMBER_LENGTH);
+            isUnique = !bankAccountRepository.existsByAccountNumber(accountNumber);
+            attempts++;
+        } while (!isUnique && attempts < MAX_ATTEMPTS);
+
+        if (!isUnique) {
+            throw new RuntimeException("Unable to generate a unique bank account number after " + MAX_ATTEMPTS + " attempts.");
+        }
+
+        return accountNumber;
     }
 
     public Optional<User> getUserByUsername(String username) {

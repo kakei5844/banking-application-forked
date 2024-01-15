@@ -1,10 +1,16 @@
 package com.fdmgroup.BankingApplication.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Bill {
@@ -12,23 +18,43 @@ public class Bill {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private LocalDateTime issueDate; // YYYY-MM-DD 00:00:00
-	private LocalDateTime dueDate; // YYYY-MM-DD 00:00:00
+	private LocalDateTime issueDate; // YYYY-MM-DD 23:59:59
+	private LocalDateTime dueDate; // YYYY-MM-DD 23:59:59
 	private double balanceDue;
 	private double minimumPayment;
 	private double totalRepaymentAmount;
+
+	@ManyToOne
+	@JoinColumn(name = "credit_card_id", nullable = false)
+	private CreditCard creditCard;
+
+	@OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
+	private List<CreditCardTransaction> billedTransactions;
 
 	public Bill() {
 	}
 
 	public Bill(Long id, LocalDateTime issueDate, LocalDateTime dueDate, double balanceDue, double minimumPayment,
-			double totalRepaymentAmount) {
+			double totalRepaymentAmount, CreditCard creditCard, List<CreditCardTransaction> billedTransactions) {
 		this.id = id;
 		this.issueDate = issueDate;
 		this.dueDate = dueDate;
 		this.balanceDue = balanceDue;
 		this.minimumPayment = minimumPayment;
 		this.totalRepaymentAmount = totalRepaymentAmount;
+		this.creditCard = creditCard;
+		this.billedTransactions = billedTransactions;
+	}
+
+	public Bill(LocalDateTime issueDate, LocalDateTime dueDate, double balanceDue, double minimumPayment,
+			double totalRepaymentAmount, CreditCard creditCard, List<CreditCardTransaction> billedTransactions) {
+		this.issueDate = issueDate;
+		this.dueDate = dueDate;
+		this.balanceDue = balanceDue;
+		this.minimumPayment = minimumPayment;
+		this.totalRepaymentAmount = totalRepaymentAmount;
+		this.creditCard = creditCard;
+		this.billedTransactions = billedTransactions;
 	}
 
 	public long getId() {
@@ -77,6 +103,29 @@ public class Bill {
 
 	public void setTotalRepaymentAmount(double totalRepaymentAmount) {
 		this.totalRepaymentAmount = totalRepaymentAmount;
+	}
+
+	public CreditCard getCreditCard() {
+		return creditCard;
+	}
+
+	public void setCreditCard(CreditCard creditCard) {
+		this.creditCard = creditCard;
+	}
+
+	public List<CreditCardTransaction> getBilledTransactions() {
+		return billedTransactions;
+	}
+
+	public void setBilledTransactions(List<CreditCardTransaction> billedTransactions) {
+		this.billedTransactions = billedTransactions;
+	}
+
+	@Override
+	public String toString() {
+		return "Bill [id=" + id + ", issueDate=" + issueDate + ", dueDate=" + dueDate + ", balanceDue=" + balanceDue
+				+ ", minimumPayment=" + minimumPayment + ", totalRepaymentAmount=" + totalRepaymentAmount
+				+ ", creditCard=" + creditCard + ", billedTransactions=" + billedTransactions + "]";
 	}
 
 }
