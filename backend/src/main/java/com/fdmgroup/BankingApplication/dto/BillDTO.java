@@ -10,6 +10,7 @@ public record BillDTO(
                 double balanceDue, 
                 double minimumPayment, 
                 double totalRepaymentAmount, 
+                double remainingBalance,
                 List<CreditCardTransactionDTO> billedTransactionsDTO
             ) {
 }
