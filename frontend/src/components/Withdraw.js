@@ -1,24 +1,15 @@
 import React, {useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Withdraw() {
+function Withdraw({ bankAccountId, apiCall }) {
     const [amount, setAmount] = useState(0);
 
-    const handleWithdraw = (e) => {  
-        // e.preventDefault();
-
-        if(amount<=0){
-          alert("Please input a valid positive number")
-          return;
-        } else{
-            alert("Withdrawal success")
-        }
-        
+    const handleWithdraw = async (e) => {  
+        apiCall(bankAccountId, amount)
       };
     
     const handleAmountButtonClick = (buttonAmount) => {
         setAmount(buttonAmount);
-        
     };
 
       return (
@@ -26,18 +17,6 @@ function Withdraw() {
                 <div className="col-12 col-md-6">
                     <h2>Withdraw</h2>
                     <div className="form-group">
-                        <div className="from mt-2">
-                            <label htmlFor="from">From:</label>
-                            <div className = "bank">
-
-                            
-                            <button class="btn btn-secondary dropdown-toggle mt-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled = "true">
-                                Bank Account
-                            </button>
-                            </div>
-                        </div>
-                        
-
                         <label class = "amount mt-2" htmlFor="withdrawAmount">Amount:</label>
                         <input
                         type="number"

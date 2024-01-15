@@ -6,7 +6,7 @@ import BankAccountCard from "../components/BankAccountCard";
 import CardDisplay from "../components/CardDisplay";
 import Navbar from "../components/Navbar";
 import BankTransactionHistory from "../components/BankTransactionHistory";
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { NavLink, Navigate } from 'react-router-dom'
 import { useAuth } from '../misc/AuthContext';
 import { bankingApi } from '../misc/BankingApi';
@@ -61,70 +61,55 @@ const transactionData = [
   // Add more transactions as needed
 ];
 
-const bankTransactionData = [
-  {
-    id: 1,
-    transactionType: "deposit",
-    amount: 100.0,
-    status: "Completed",
-    datetime: "2022-01-01T12:30:00Z",
-  },
-  {
-    id: 2,
-    transactionType: "withdraw",
-    amount: 50.0,
-    status: "Completed",
-    datetime: "2022-01-02T14:45:00Z",
-  },
-  {
-    id: 3,
-    transactionType: "transfer",
-    amount: 75.0,
-    status: "Completed",
-    datetime: "2022-01-03T10:15:00Z",
-  },
-  {
-    id: 4,
-    transactionType: "repayment",
-    amount: 120.0,
-    status: "Failed",
-    datetime: "2022-01-04T18:20:00Z",
-  },
-  {
-    id: 5,
-    transactionType: "repayment",
-    amount: 120.0,
-    status: "Pending",
-    datetime: "2022-01-05T09:00:00Z",
-  },
-  // Add more transactions as needed
-];
-
 const HomePage = () => {
   const Auth = useAuth();
   const user = Auth.getUser();
   const isLoggedIn = Auth.userIsAuthenticated();
   const [userDb, setUserDb] = useState(null);
+  const [transactions, setTransactions] = useState([]);
 
   const [appliedToCreditCard, setAppliedToCreditCard] = useState(false);
 
-  useEffect(()=> {
-    loadUserDb()
-  }, []);
-
-  const loadUserDb = async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-          const response = await bankingApi.getUser(user)
-          console.log(response.data)
-          setUserDb(response.data)
+        const userResponse = await bankingApi.getUser(user);
+        console.log(userResponse.data);
+        setUserDb(userResponse.data);
+
+        if (userResponse.data && userResponse.data.bankAccount) {
+          const bankResponse = await bankingApi.getTransactions(userResponse.data.bankAccount.id);
+          console.log(bankResponse.data);
+
+          // Transform the bank data into the format you want for transactions
+          const formattedTransactions = bankResponse.data.map(transaction => ({
+            id: transaction.id,
+            description: transaction.description,
+            amount: transaction.amount,
+            bankAccountId: transaction.bankAccount.id,
+            date: transaction.createdAt,
+          }));
+
+          setTransactions(formattedTransactions);
+        } else {
+          console.error('User data or bank account information is not available.');
+        }
       } catch (error) {
-          handleLogError(error)
+        handleLogError(error);
       }
-  };
+    };
+
+    // Check if user is logged in before fetching data
+    if (isLoggedIn) {
+      fetchData();
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array ensures the effect runs only once on component mount
 
   if (!isLoggedIn) {
-    return <Navigate to='/login' />
-  };
+    return <Navigate to="/login" />;
+  }
 
   return ( userDb &&
     <div className="HomePage">
@@ -197,7 +182,7 @@ const HomePage = () => {
             </div>
             <div className="bottom-left-2">
               <h2>Transaction History</h2>
-              <BankTransactionHistory />
+              <BankTransactionHistory transactions={transactions} />
             </div>
           </div>
         </div>
