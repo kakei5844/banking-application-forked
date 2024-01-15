@@ -1,31 +1,39 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function Deposit() {
+function Deposit({ bankAccountId, apiCall }) {
   const [amount, setAmount] = useState(0);
-  const [recipient, setRecipient] = useState("");
 
   const handleDeposit = (e) => {
-    // e.preventDefault();
-
-    if (amount <= 0) {
-      alert("Please input a valid positive number");
-      return;
-    } else {
-      alert("Withdrawal success");
-    }
+    apiCall(bankAccountId, amount)
   };
 
   const handleAmountButtonClick = (buttonAmount) => {
     setAmount(buttonAmount);
   };
+  // const [recipient, setRecipient] = useState("");
+
+  // const handleDeposit = (e) => {
+  //   // e.preventDefault();
+
+  //   if (amount <= 0) {
+  //     alert("Please input a valid positive number");
+  //     return;
+  //   } else {
+  //     alert("Withdrawal success");
+  //   }
+  // };
+
+  // const handleAmountButtonClick = (buttonAmount) => {
+  //   setAmount(buttonAmount);
+  // };
 
   return (
     <form className="row justify-content-center" onSubmit={handleDeposit}>
       <div className="col-12 col-md-6">
         <h2>Deposit</h2>
         <div className="form-group">
-          <div className="fromBankAccount">
+          {/* <div className="fromBankAccount">
             <label className="toBA " htmlFor="from">
               To:
             </label>
@@ -37,7 +45,7 @@ function Deposit() {
               onChange={(e) => setRecipient(e.target.value)}
               placeholder="Bank Account"
             />
-          </div>
+          </div> */}
 
           <label className="labelAmount mt-2" htmlFor="depositAmount">
             Amount

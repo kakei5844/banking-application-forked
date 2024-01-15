@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 function Registration() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [dob, setDob] = useState("");
-  const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [initialBalance, setinitialBalance] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -25,9 +25,9 @@ function Registration() {
     if (
       !firstName ||
       !lastName ||
-      !dob ||
-      !email ||
       !phoneNumber ||
+      !email ||
+      !initialBalance ||
       !password ||
       !confirmPassword
     ) {
@@ -116,16 +116,15 @@ function Registration() {
                     <div className="col-md-6 mb-4">
                       <div className="form-floating">
                         <input
-                          value={dob}
-                          onChange={(e) => setDob(e.target.value)}
-                          type="date"
-                          id="dob"
+                          value={phoneNumber}
+                          onChange={(e) => setPhoneNumber(e.target.value)}
+                          type="tel"
+                          id="phoneNumber"
                           className="form-control form-control-lg"
-                          placeholder="Birthday"
-                          style={{ fontSize: "15px" }}
+                          placeholder="Phone no."
                         />
-                        <label className="form-label" htmlFor="dob">
-                          Birthday
+                        <label className="form-label" htmlFor="phoneNumber">
+                          Phone no.
                         </label>
                       </div>
                     </div>
@@ -150,15 +149,15 @@ function Registration() {
                     <div className="col-md-6 mb-4">
                       <div className="form-floating">
                         <input
-                          value={phoneNumber}
-                          onChange={(e) => setPhoneNumber(e.target.value)}
+                          value={initialBalance}
+                          onChange={(e) => setinitialBalance(e.target.value)}
                           type="tel"
-                          id="phoneNumber"
+                          id="initialBalance"
                           className="form-control form-control-lg"
-                          placeholder="Phone no."
+                          placeholder="Initial Balance"
                         />
-                        <label className="form-label" htmlFor="phoneNumber">
-                          Phone no.
+                        <label className="form-label" htmlFor="initialBalance">
+                          Initial Balance
                         </label>
                       </div>
                     </div>

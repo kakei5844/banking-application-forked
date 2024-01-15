@@ -3,49 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../styles/components/TransactionHistory.css';
 
-const bankTransactionData = [
-    {
-        id: 1,
-        description: "deposit",
-        amount: 100.0,
-        datetime: "2022-01-01T12:30:00Z",
-    },
-    {
-        id: 2,
-        description: "withdraw",
-        amount: 50.0,
-        datetime: "2022-01-02T14:45:00Z",
-    },
-    {
-        id: 3,
-        description: "transfer",
-        amount: 75.0,
-        datetime: "2022-01-03T10:15:00Z",
-    },
-    {
-        id: 4,
-        description: "repayment",
-        amount: 120.0,
-        datetime: "2022-01-04T18:20:00Z",
-    },
-    {
-        id: 5,
-        description: "repayment",
-        amount: 120.0,
-        datetime: "2022-01-05T09:00:00Z",
-    },
-    // Add more transactions as needed
-];
-
-const BankTransactionHistory = () => {
-
-    const {
-        id,
-        description,
-        amount,
-        datetime,
-    } = bankTransactionData || {};
-
+const BankTransactionHistory = ({ transactions }) => {
     const [filterType, setFilterType] = useState('date');
     const [selectedDate, setSelectedDate] = useState(null);
 
@@ -57,9 +15,9 @@ const BankTransactionHistory = () => {
         setSelectedDate(null);
     };
 
-    const filteredTransactions = bankTransactionData.filter(transaction => {
+    const filteredTransactions = transactions.filter(transaction => {
         if (filterType === 'date' && selectedDate) {
-            return transaction.datetime.includes(selectedDate.toISOString().split('T')[0]);
+            return transaction.date.includes(selectedDate.toISOString().split('T')[0]);
         }
         return true;
     });
@@ -97,7 +55,8 @@ const BankTransactionHistory = () => {
                         <th>Transaction ID</th>
                         <th>Transaction Type</th>
                         <th>Amount</th>
-                        <th>Date and Time</th>
+                        <th>Date</th>
+                        <th>Time</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -106,7 +65,8 @@ const BankTransactionHistory = () => {
                             <td>{transaction.id}</td>
                             <td>{transaction.description}</td>
                             <td>{transaction.amount}</td>
-                            <td>{new Date(transaction.datetime).toLocaleString()}</td>
+                            <td>{new Date(transaction.date).toLocaleDateString()}</td>
+                            <td>{new Date(transaction.date).toLocaleTimeString()}</td>
                         </tr>
                     ))}
                 </tbody>

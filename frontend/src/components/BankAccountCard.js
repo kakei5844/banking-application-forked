@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import '../styles/components/BankAccountCard.css';
 
-const BankAccountCard = ({ accountNumber, initialBalance, bankName }) => {
+const BankAccountCard = ({ accountNumber, balance, bankName }) => {
 
     const [balanceVisible, setBalanceVisible] = useState(false);
   
@@ -15,7 +15,7 @@ const BankAccountCard = ({ accountNumber, initialBalance, bankName }) => {
         <div className="bank-name">{bankName}</div>
           <div className="account-number">{`Account Number: ${accountNumber}`}</div>
           <div className="balance">
-            {balanceVisible ? `Balance: $${initialBalance}` : 'Balance: *********'}
+            {balanceVisible ? `Balance: $${balance}` : 'Balance: *********'}
           </div>
         </div>
       </div>
