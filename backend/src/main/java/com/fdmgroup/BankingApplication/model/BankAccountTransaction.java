@@ -23,25 +23,36 @@ public class BankAccountTransaction {
 	private double amount;
 	private String description;
 	private LocalDateTime createdAt;
+	private double updatedBalance;
 
 	public BankAccountTransaction() {
 	}
 
 	public BankAccountTransaction(Long id, BankAccount bankAccount, double amount, String description,
-			LocalDateTime createdAt) {
+			LocalDateTime createdAt, double updatedBalance) {
+		super();
 		this.id = id;
 		this.bankAccount = bankAccount;
 		this.amount = amount;
 		this.description = description;
 		this.createdAt = createdAt;
+		this.updatedBalance = updatedBalance;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public BankAccount getBankAccount() {
+		return bankAccount;
+	}
+
+	public void setBankAccount(BankAccount bankAccount) {
+		this.bankAccount = bankAccount;
 	}
 
 	public double getAmount() {
@@ -68,12 +79,12 @@ public class BankAccountTransaction {
 		this.createdAt = createdAt;
 	}
 
-	public BankAccount getBankAccount() {
-		return bankAccount;
+	public double getUpdatedBalance() {
+		return updatedBalance;
 	}
 
-	public void setBankAccount(BankAccount bankAccount) {
-		this.bankAccount = bankAccount;
+	public void setUpdatedBalance(double updatedBalance) {
+		this.updatedBalance = updatedBalance;
 	}
 
 }

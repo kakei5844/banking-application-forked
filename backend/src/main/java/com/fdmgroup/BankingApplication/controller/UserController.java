@@ -3,6 +3,7 @@ package com.fdmgroup.BankingApplication.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,15 +22,8 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
-	
-	// GET ALL USERS
-	
-	// GET USER BY ID
-	
-	// UPDATE USER BY ID
-	
-	// DELETE USER
 
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/me")
     public User getCurrentUser(@AuthenticationPrincipal UserPrincipal currentUser) {
 		Optional<User> optionalUser = userService.getUserByUsername(currentUser.getUsername());

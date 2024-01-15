@@ -1,0 +1,918 @@
+{
+	"info": {
+		"_postman_id": "6a2538e6-70c0-491b-b950-35752ba5e833",
+		"name": "BankingApplication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31659620"
+	},
+	"item": [
+		{
+			"name": "Register testAdmin1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"testAdmin1\",\n    \"password\": \"pw123\",\n    \"firstName\": \"firstname 1\",\n    \"lastName\": \"lastName1\",\n    \"phoneNumber\": \"12345678\",\n    \"role\": \"ADMIN\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register testUser1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"testUser1\",\r\n    \"password\": \"pw123\",\r\n    \"firstName\": \"firstname 2\",\r\n    \"lastName\": \"lastName 2\",\r\n    \"phoneNumber\": \"12345678\",\r\n    \"role\": \"USER\",\r\n    \"initialBalance\": 1000.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"protocolProfileBehavior": {
+				"followRedirects": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"testUser1\",\r\n    \"password\": \"pw123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"login"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "testuser@example.com",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Withdraw",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"bankAccountId\": 1,\r\n  \"amount\": 100\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bank-accounts/withdraw",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bank-accounts",
+						"withdraw"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deposit",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"bankAccountId\": 1,\r\n  \"amount\": 100\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bank-accounts/deposit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bank-accounts",
+						"deposit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register testUser2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"testUser2\",\r\n    \"password\": \"pw123\",\r\n    \"firstName\": \"firstname 3\",\r\n    \"lastName\": \"lastName 3\",\r\n    \"phoneNumber\": \"12345678\",\r\n    \"role\": \"USER\",\r\n    \"initialBalance\": 1000.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transfer",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"fromBankAccountId\": 1,\r\n  \"toBankAccountId\": 2,\r\n  \"amount\": 500\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bank-accounts/transfer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bank-accounts",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bank Account - testUser1",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bank-accounts/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bank-accounts",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bank Account Transaction History - testUser1",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bank-accounts/1/history",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bank-accounts",
+						"1",
+						"history"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bank Account Transaction History - testUser2",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser2",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bank-accounts/2/history",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bank-accounts",
+						"2",
+						"history"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Apply Credit Card - testUser1",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"annualSalary\": 2000000,\n    \"cardType\": \"VISA\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/credit-cards/apply",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"credit-cards",
+						"apply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Apply Credit Card - testUser2",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser2",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"annualSalary\": 2000000,\n    \"cardType\": \"VISA\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/credit-cards/apply",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"credit-cards",
+						"apply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Credit Cards - testUser1",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/credit-cards/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"credit-cards",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Credit Cards - testUser2",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser2",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/credit-cards/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"credit-cards",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Single Credit Card by Id",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/credit-cards/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"credit-cards",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Purchase - credit card 1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"creditCardId\": 1,\n    \"amount\": 300,\n    \"merchantName\": \"Happy Dining\",\n    \"mcc\": 5812\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/credit-cards/purchase",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"credit-cards",
+						"purchase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Purchase - credit card 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"creditCardId\": 2,\n    \"amount\": 1000,\n    \"merchantName\": \"Happy Dining\",\n    \"mcc\": 5812\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/credit-cards/purchase",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"credit-cards",
+						"purchase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Credit Card History - credit card 1",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/credit-cards/1/history",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"credit-cards",
+						"1",
+						"history"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Manual Bill Generation",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testAdmin1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bills/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bills",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Bills (Admin)",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testAdmin1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bills/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bills",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Latest Bill - testUser1",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bills/credit-card/1/latest",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bills",
+						"credit-card",
+						"1",
+						"latest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Bills - testUser1",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bills/credit-card/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bills",
+						"credit-card",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bill Payment",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"creditCardId\": 1,\n    \"bankAccountId\": 1,\n    \"amount\": 180\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bills/payment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bills",
+						"payment"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,5 +1,6 @@
 package com.fdmgroup.BankingApplication.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,11 +20,14 @@ public class CreditCard {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private String cardNumber;
 	private String type;
 
-	private double balance; // amount spent
-	private double availableLimit;
+	private double outstandingBalance; // amount spent (changed from balance to availableBalance)
+	private double availableCredit; // available credit balance (changed from availableLimit to availableCredit)
 	private double creditLimit;
+
+	private LocalDate issueDate;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "creditCard", cascade = CascadeType.ALL)
@@ -34,16 +38,28 @@ public class CreditCard {
 	@JsonIgnore
 	private User user;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "creditCard", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Bill> bills;
+
 	public CreditCard() {
+		super();
 	}
 
-	public CreditCard(Long id, String type, double balance, double availableLimit, double creditLimit, User user) {
+	public CreditCard(Long id, String cardNumber, String type, double outstandingBalance, double availableCredit,
+			double creditLimit, LocalDate issueDate, List<CreditCardTransaction> creditCardTransactions, User user,
+			List<Bill> bills) {
+		super();
 		this.id = id;
+		this.cardNumber = cardNumber;
 		this.type = type;
-		this.balance = balance;
-		this.availableLimit = availableLimit;
+		this.outstandingBalance = outstandingBalance;
+		this.availableCredit = availableCredit;
 		this.creditLimit = creditLimit;
+		this.issueDate = issueDate;
+		this.creditCardTransactions = creditCardTransactions;
 		this.user = user;
+		this.bills = bills;
 	}
 
 	public long getId() {
@@ -54,6 +70,14 @@ public class CreditCard {
 		this.id = id;
 	}
 
+	public String getCardNumber() {
+		return cardNumber;
+	}
+
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
+	}
+
 	public String getType() {
 		return type;
 	}
@@ -62,20 +86,20 @@ public class CreditCard {
 		this.type = type;
 	}
 
-	public double getBalance() {
-		return balance;
+	public double getOutstandingBalance() {
+		return outstandingBalance;
 	}
 
-	public void setBalance(double balance) {
-		this.balance = balance;
+	public void setOutstandingBalance(double outstandingBalance) {
+		this.outstandingBalance = outstandingBalance;
 	}
 
-	public double getAvailableLimit() {
-		return availableLimit;
+	public double getAvailableCredit() {
+		return availableCredit;
 	}
 
-	public void setAvailableLimit(double availableLimit) {
-		this.availableLimit = availableLimit;
+	public void setAvailableCredit(double availableCredit) {
+		this.availableCredit = availableCredit;
 	}
 
 	public double getCreditLimit() {
@@ -86,12 +110,36 @@ public class CreditCard {
 		this.creditLimit = creditLimit;
 	}
 
+	public LocalDate getIssueDate() {
+		return issueDate;
+	}
+
+	public void setIssueDate(LocalDate issueDate) {
+		this.issueDate = issueDate;
+	}
+
 	public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public List<CreditCardTransaction> getCreditCardTransactions() {
+		return creditCardTransactions;
+	}
+
+	public void setCreditCardTransactions(List<CreditCardTransaction> creditCardTransactions) {
+		this.creditCardTransactions = creditCardTransactions;
+	}
+
+	public List<Bill> getBills() {
+		return bills;
+	}
+
+	public void setBills(List<Bill> bills) {
+		this.bills = bills;
 	}
 
 }

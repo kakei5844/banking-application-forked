@@ -1,63 +1,102 @@
 package com.fdmgroup.BankingApplication.dto;
 
+import com.fdmgroup.BankingApplication.dto.annotation.ValidInitialBalance;
 import com.fdmgroup.BankingApplication.security.Role;
 
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 
+@ValidInitialBalance
 public class UserRegistrationRequestDTO {
-	
-    @NotBlank
-    private String username;
 
-    @NotBlank
-    private String password;
+	@NotBlank(message = "username must not be blank")
+	private String username;
 
-    private Role role;
+	@NotBlank(message = "password must not be blank")
+	private String password;
 
-    @DecimalMin(value = "0.01", message = "Amount must be greater than zero")
-    private double initialBalance;
-    
-    public UserRegistrationRequestDTO() {
-    }
+	@NotBlank(message = "First name must not be blank")
+	private String firstName;
 
-    public UserRegistrationRequestDTO(String username, String password, Role role, double initialBalance) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.initialBalance = initialBalance;
-    }
+	@NotBlank(message = "Last name must not be blank")
+	private String lastName;
 
-    public String getUsername() {
-        return username;
-    }
+	@NotBlank(message = "Phone number must not be blank")
+	private String phoneNumber;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	private Role role;
 
-    public String getPassword() {
-        return password;
-    }
+	private double initialBalance;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public UserRegistrationRequestDTO() {
+		super();
+	}
 
-    public Role getRole() {
-        return role;
-    }
+	public UserRegistrationRequestDTO(String username, String password, String firstName, String lastName,
+			String phoneNumber, Role role, double initialBalance) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
+		this.role = role;
+		this.initialBalance = initialBalance;
+	}
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public double getInitialBalance() {
-        return initialBalance;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public void setInitialBalance(double initialBalance) {
-        this.initialBalance = initialBalance;
-    }
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public double getInitialBalance() {
+		return initialBalance;
+	}
+
+	public void setInitialBalance(double initialBalance) {
+		this.initialBalance = initialBalance;
+	}
 
 }

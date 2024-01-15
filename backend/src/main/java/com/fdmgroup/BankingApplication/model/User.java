@@ -14,7 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 
 @Entity
 public class User {
@@ -26,6 +25,10 @@ public class User {
 	private String username;
 	private String password;
 	
+	private String firstName;
+	private String lastName;
+	private String phoneNumber;
+
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
@@ -37,13 +40,18 @@ public class User {
 	private List<CreditCard> creditCards;
 
 	public User() {
+		super();
 	}
 
-	public User(Long id, String username, String password, Role role, BankAccount bankAccount,
-			List<CreditCard> creditCards) {
+	public User(Long id, String username, String password, String firstName, String lastName, String phoneNumber,
+			Role role, BankAccount bankAccount, List<CreditCard> creditCards) {
+		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
 		this.role = role;
 		this.bankAccount = bankAccount;
 		this.creditCards = creditCards;
@@ -71,6 +79,30 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public Role getRole() {
