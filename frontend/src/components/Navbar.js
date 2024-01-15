@@ -6,13 +6,16 @@ import { useAuth } from "../misc/AuthContext";
 
 const Navbar = () => {
 
-  const { getUser, userIsAuthenticated, userLogout } = useAuth()
+  const Auth = useAuth();
+  const userLogout = Auth.userLogout
+  const user = Auth.getUser();
+  const isLoggedIn = Auth.userIsAuthenticated();
 
   const logout = () => {
     userLogout()
   }
 
-  return (
+  return ( isLoggedIn &&
     <div className="container-fluid">
       <div className="bg-dark col-auto col-md-12 min-vh-100 d-flex justify-content-between flex-column">
         <div>

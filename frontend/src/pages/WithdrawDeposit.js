@@ -58,9 +58,9 @@ if (!isLoggedIn) {
 
   return ( userDb &&
     <div className="Page">
-      <div className="left-column">
+      {/* <div className="left-column">
         <Navbar />
-      </div>
+      </div> */}
       <div className="container mt-5 ">
         <div className="row">
           <div className="col-12 text-center mb-4">

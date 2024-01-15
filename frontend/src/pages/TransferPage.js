@@ -68,9 +68,9 @@ const TransferPage = () => {
 
   return ( userDb &&
     <div className="Page">
-      <div className="left-column">
+      {/* <div className="left-column">
         <Navbar />
-      </div>
+      </div> */}
       <div className='right-column'>
         <div className='top'>
             <h1>Transfer</h1>

@@ -113,9 +113,9 @@ const HomePage = () => {
 
   return ( userDb &&
     <div className="HomePage">
-      <div className="left-column">
+      {/* <div className="left-column">
         <Navbar />
-      </div>
+      </div> */}
 
       <div className="right-column">
         <div className="top">
