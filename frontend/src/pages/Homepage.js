@@ -5,11 +5,12 @@ import ActionButton from "../components/ActionButton";
 import BankAccountCard from "../components/BankAccountCard";
 import CardDisplay from "../components/CardDisplay";
 import Navbar from "../components/Navbar";
-import TransactionHistory from "../components/TransactionHistory";
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
-import CardScroll from "../components/CardScroll";
-import { TransactionCard } from "../components/TransactionCard";
+import BankTransactionHistory from "../components/BankTransactionHistory";
+import { useEffect, useState } from 'react'
+import { NavLink, Navigate } from 'react-router-dom'
+import { useAuth } from '../misc/AuthContext';
+import { bankingApi } from '../misc/BankingApi';
+import { handleLogError } from '../misc/Helpers';
 
 const transactionData = [
   {
@@ -60,38 +61,72 @@ const transactionData = [
   // Add more transactions as needed
 ];
 
+const bankTransactionData = [
+  {
+    id: 1,
+    transactionType: "deposit",
+    amount: 100.0,
+    status: "Completed",
+    datetime: "2022-01-01T12:30:00Z",
+  },
+  {
+    id: 2,
+    transactionType: "withdraw",
+    amount: 50.0,
+    status: "Completed",
+    datetime: "2022-01-02T14:45:00Z",
+  },
+  {
+    id: 3,
+    transactionType: "transfer",
+    amount: 75.0,
+    status: "Completed",
+    datetime: "2022-01-03T10:15:00Z",
+  },
+  {
+    id: 4,
+    transactionType: "repayment",
+    amount: 120.0,
+    status: "Failed",
+    datetime: "2022-01-04T18:20:00Z",
+  },
+  {
+    id: 5,
+    transactionType: "repayment",
+    amount: 120.0,
+    status: "Pending",
+    datetime: "2022-01-05T09:00:00Z",
+  },
+  // Add more transactions as needed
+];
+
 const HomePage = () => {
-  const bankAccountNumber = "1234 5678 9012 3456";
-
-  const creditCards = ["Card 1", "Card 2", "Card 3"]; // Replace with your credit card data
-
-  // Dropdown
-  const initialSelectedCard = "1234 5678 9012 3456";
-
-  const [selectedCard, setSelectedCard] = useState(initialSelectedCard);
+  const Auth = useAuth();
+  const user = Auth.getUser();
+  const isLoggedIn = Auth.userIsAuthenticated();
+  const [userDb, setUserDb] = useState(null);
 
   const [appliedToCreditCard, setAppliedToCreditCard] = useState(false);
 
-  const cardList = [
-    {
-      cardNumber: "1234 5678 9012 3456",
-      cardHolder: "John Doe",
-      expiryDate: "12/23",
-      cardType: "Visa",
-    },
-    {
-      cardNumber: "9876 5432 1098 7654",
-      cardHolder: "Jane Doe",
-      expiryDate: "11/22",
-      cardType: "MasterCard",
-    },
-    // Add more cards as needed
-  ];
+  useEffect(()=> {
+    loadUserDb()
+  }, []);
 
-  const handleCardSelect = (cardNumber) => {
-    setSelectedCard(cardNumber);
+  const loadUserDb = async () => {
+      try {
+          const response = await bankingApi.getUser(user)
+          console.log(response.data)
+          setUserDb(response.data)
+      } catch (error) {
+          handleLogError(error)
+      }
   };
-  return (
+
+  if (!isLoggedIn) {
+    return <Navigate to='/login' />
+  };
+
+  return ( userDb &&
     <div className="HomePage">
       <div className="left-column">
         <Navbar />
@@ -156,18 +191,13 @@ const HomePage = () => {
             <div className="bottom-left-1">
               <BankAccountCard
                 bankName="SG Bank"
-                accountNumber="123456789"
-                initialBalance="5000"
-              />
-              <BankAccountCard
-                bankName="HK Bank"
-                accountNumber="999999999"
-                initialBalance="15000"
+                accountNumber={userDb.bankAccount.id}
+                balance={userDb.bankAccount.balance}
               />
             </div>
             <div className="bottom-left-2">
               <h2>Transaction History</h2>
-              <TransactionHistory />
+              <BankTransactionHistory />
             </div>
           </div>
         </div>

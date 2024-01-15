@@ -1,39 +1,53 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from '../misc/AuthContext';
+import { bankingApi } from '../misc/BankingApi';
+import { handleLogError } from '../misc/Helpers';
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const Auth = useAuth()
+  const isLoggedIn = Auth.userIsAuthenticated()
+
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isError, setIsError] = useState(false)
 
   const navigate = useNavigate();
 
-  const verifyCredentials = () => {
-    // TODO: Send get request to server api for user login
-    return true;
-  };
 
   const formValidation = () => {
     // Check all inputs
-    if (!email || !password) {
-      alert("Please ensure all fields are filled in.");
+    if (!username || !password) {
+      setIsError(true)
       return false;
     }
-
     return true;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!formValidation()) return;
 
-    if (verifyCredentials()) {
-      alert("Successfully logged in!");
-      navigate("/home");
-    } else {
-      alert("Wrong credentials. Please try again.");
+    try {
+      const response = await bankingApi.authenticate(username, password)
+      const { id, name, role } = response.data
+      const authdata = window.btoa(username + ':' + password)
+      const authenticatedUser = { id, name, role, authdata }
+
+      Auth.userLogin(authenticatedUser)
+
+      setUsername('')
+      setPassword('')
+      setIsError(false)
+    } catch (error) {
+      handleLogError(error)
+      setIsError(true)
     }
   };
+
+  if (isLoggedIn) {
+    return <Navigate to={'/home'} />
+  }
 
   return (
     <section className="vh-100 gradient-custom">
@@ -48,21 +62,20 @@ function Login() {
                 <h2 className="mb-4 pb-2 pb-md-0 mb-md-5">
                   Banking System Login
                 </h2>
-
                 <form onSubmit={handleSubmit}>
                   <div className="row">
                     <div className="col-12 mb-4">
                       <div className="form-floating">
                         <input
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          type="email"
-                          id="email"
+                          value={username}
+                          name="username"
+                          onChange={(e) => setUsername(e.target.value)}
+                          id="username"
                           className="form-control form-control-lg"
-                          placeholder="Email"
+                          placeholder="Username"
                         />
-                        <label className="form-label" htmlFor="email">
-                          Email
+                        <label className="form-label" htmlFor="username">
+                          Username
                         </label>
                       </div>
                     </div>
@@ -75,6 +88,7 @@ function Login() {
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           type="password"
+                          name="password"
                           id="password"
                           className="form-control form-control-lg"
                           placeholder="Password"
@@ -110,3 +124,4 @@ function Login() {
 }
 
 export default Login;
+
