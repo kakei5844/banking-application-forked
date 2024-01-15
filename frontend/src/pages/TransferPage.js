@@ -1,10 +1,17 @@
-import '../styles/pages/TransferPage.css'
-import Navbar from '../components/Navbar'
-import React, { useState, useEffect } from 'react'
-import axios from 'axios';
+import '../styles/pages/TransferPage.css';
+import Navbar from '../components/Navbar';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../misc/AuthContext';
+import { bankingApi } from '../misc/BankingApi';
+import { handleLogError } from '../misc/Helpers';
+import { Navigate } from 'react-router-dom';
 
 const TransferPage = () => {
-  const [fromAccount, setFromAccount] = useState('123456789');
+  const Auth = useAuth()
+  const isLoggedIn = Auth.userIsAuthenticated()
+  const user = Auth.getUser()
+  const [userDb, setUserDb] = useState(null)
+
   const [toAccount, setToAccount] = useState('');
   const [amount, setAmount] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -26,7 +33,7 @@ const TransferPage = () => {
     }
   };
 
-  const handlePayButtonClick = (event) => {
+  const handlePayButtonClick = async (event) => {
     event.preventDefault();
     
     if (!toAccount && !amount) {
@@ -39,43 +46,39 @@ const TransferPage = () => {
       setErrorMessage('Amount field is required');
       setSuccessMessage('');
     } else {
-      // Implement payment logic
-      // API call for backend validation
-      axios.post('http://localhost:8080/api/v1/bank-accounts/transfer', {
-      fromAccount,
-      toAccount,
-      amount,
-    })
-      .then((response) => {
-        console.log('Transfer response:', response.data);
+      try {
+        const response = await bankingApi.transfer(userDb.bankAccount.id, toAccount, amount)
+        console.log(response.data)
         setErrorMessage('');
         setSuccessMessage('Successfully transferred');
         setToAccount('');
         setAmount('');
-      })
-      .catch((error) => {
-        console.error('Transfer error:', error);
+
+      } catch (error) {
+        handleLogError(error)
         setErrorMessage('Error transferring funds. Please try again.');
         setSuccessMessage('');
-      });
+      }
     }
   };
 
   useEffect(() => {
-    // Fetch bank account number from endpoint
-    // Update the state
-    // {bank_account_id} -> change to the user's bank acc id (1, 2, etc)
-    axios.get('http://localhost:8080/api/v1/bank-accounts/{bank_account_id}')
-    .then((response) => response.json())
-    .then((data) => {
-      if (data && data.accountNumber) {
-        setFromAccount(data.accountNumber);
-      }
-    })
-    .catch((error) => {
-      console.error('Error fetching bank account:', error);
-    });
+    loadUserDb()
   }, []);
+
+  if (!isLoggedIn) {
+    return <Navigate to='/login' />
+  }
+
+  const loadUserDb = async () => {
+    try {
+      const response = await bankingApi.getUser(user)
+      console.log(response.data)
+      setUserDb(response.data)
+    } catch (error) {
+      handleLogError(error)
+    }
+  }
 
   return (
     <div className="Page">
@@ -90,10 +93,6 @@ const TransferPage = () => {
 
             <div className="transfer-card-body">
                 <form style={{width:'50%', marginLeft:'325px'}}>
-                    <div className="form-group">
-                        <label htmlFor="fromAccount" className="labelAmount mt-2">From:</label>
-                        <input type="text" id="fromAccount" value={fromAccount} className="form-control mt-2" readOnly />
-                    </div>
                     <div className="form-group">
                         <label htmlFor="toAccount" className="labelAmount mt-2">To:</label>
                         <input type="text" id="toAccount" value={toAccount} onChange={handleToAccountChange} className="form-control mt-2" />
