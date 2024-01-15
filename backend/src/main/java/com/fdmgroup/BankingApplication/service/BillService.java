@@ -74,6 +74,7 @@ public class BillService {
             bill.getBalanceDue(), 
             bill.getMinimumPayment(), 
             bill.getTotalRepaymentAmount(), 
+            bill.getBalanceDue() - bill.getTotalRepaymentAmount(),
             bill.getBilledTransactions()
                 .stream()
                 .map(t -> creditCardService.convertToDTO(t))

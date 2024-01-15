@@ -149,8 +149,7 @@ public class CreditCardService {
 
 	public CreditCardTransactionDTO convertToDTO(CreditCardTransaction transaction) {
 		return new CreditCardTransactionDTO(transaction.getId(), transaction.getCreditCard().getId(),
-				transaction.getAmount(), transaction.getDescription(), transaction.getCreatedAt(), transaction.getMcc(),
-				transaction.getMerchantCategory().name());
+				transaction.getAmount(), transaction.getDescription(), transaction.getCreatedAt());
 	}
 
 	public CreditCardTransaction processTransaction(long creditCardId, double amount, String description, int mcc) {
