@@ -36,10 +36,12 @@ function logout() {
   })
 }
 
-function getTransactions({ bankAccountId }) {
-  return instance.get(`/api/v1/bank-accounts/${bankAccountId}/history`, {
+function getTransactions(bankAccountId) {
+  const url = `/api/v1/bank-accounts/${bankAccountId}/history`;
+
+  return instance.get(url, {
     withCredentials: true
-  })
+  });
 }
 
 function withdraw(bankAccountId, amount) {
