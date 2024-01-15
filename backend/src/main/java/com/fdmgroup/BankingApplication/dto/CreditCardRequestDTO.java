@@ -1,13 +1,10 @@
 package com.fdmgroup.BankingApplication.dto;
 
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
+// import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 
 public class CreditCardRequestDTO {
-
-    @Min(value = 1, message = "invalid user id")
-    private long userId;
 
     @DecimalMin(value = "0.01", message = "annual salary must be greater than zero")
     private double annualSalary; 
@@ -16,14 +13,6 @@ public class CreditCardRequestDTO {
     private String cardType;
 
     public CreditCardRequestDTO() {
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
     }
 
     public double getAnnualSalary() {

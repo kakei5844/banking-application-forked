@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,16 +29,34 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(BankAccountNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleBankAccountNotFoundException(BankAccountNotFoundException ex) {
+    @ExceptionHandler({BankAccountNotFoundException.class, CreditCardNotFoundException.class, UserNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handleNotFoundException(RuntimeException ex) {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage(), Collections.emptyList());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({InvalidAmountException.class, InsufficientBalanceException.class})
+    // @ExceptionHandler(CreditCardNotFoundException.class)
+    // public ResponseEntity<ErrorResponse> handleCreditCardNotFoundException(CreditCardNotFoundException ex) {
+    //     ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage(), Collections.emptyList());
+    //     return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    // }
+
+    // @ExceptionHandler(UserNotFoundException.class)
+    // public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
+    //     ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage(), Collections.emptyList());
+    //     return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    // }
+
+    @ExceptionHandler({InvalidAmountException.class, InsufficientBalanceException.class, InsufficientCreditException.class})
     public ResponseEntity<ErrorResponse> handleBusinessExceptions(RuntimeException ex) {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), Collections.emptyList());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({AccessDeniedException.class})
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(RuntimeException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), Collections.emptyList());
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(Exception.class)

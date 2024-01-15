@@ -51,5 +51,4 @@ public class TransferRequestDTO {
         this.amount = amount;
     }
 
-    
 }

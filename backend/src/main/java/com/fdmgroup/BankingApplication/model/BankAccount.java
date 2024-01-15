@@ -23,6 +23,8 @@ public class BankAccount {
 	@OneToOne(mappedBy = "bankAccount", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private User user;
+	
+	private String accountNumber;
 
 	private double balance;
 
@@ -33,9 +35,10 @@ public class BankAccount {
 	public BankAccount() {
 	}
 
-	public BankAccount(Long id, User user, double balance) {
+	public BankAccount(Long id, User user, String accountNumber, double balance) {
 		this.id = id;
 		this.user = user;
+		this.accountNumber = accountNumber;
 		this.balance = balance;
 	}
 
@@ -53,6 +56,14 @@ public class BankAccount {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
 	}
 
 	public double getBalance() {
