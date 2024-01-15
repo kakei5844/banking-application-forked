@@ -8,8 +8,8 @@
 
 import React from "react";
 import "../styles/components/TransactionCard.css";
-import ReactDatePicker from "react-datepicker";
-import { useState } from "react";
+// import ReactDatePicker from "react-datepicker";
+// import { useState } from "react";
 
 export const TransactionCard = ({ transactionData }) => {
   const {
