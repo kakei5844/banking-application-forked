@@ -4,11 +4,11 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../styles/components/CreditCardTransactionHistory.css'; 
 
-const revealLastFourDigits = (cardNumber) => {
-  const hiddenDigits = cardNumber.slice(0, -4).replace(/\d/g, '*');
-  const lastFourDigits = cardNumber.slice(-4);
-  return `${hiddenDigits}${lastFourDigits}`;
-};
+// const revealLastFourDigits = (cardNumber) => {
+//   const hiddenDigits = cardNumber.slice(0, -4).replace(/\d/g, '*');
+//   const lastFourDigits = cardNumber.slice(-4);
+//   return `${hiddenDigits}${lastFourDigits}`;
+// };
 
 const CreditCardTransaction = ({ selectedCard, transactions, cards }) => {
 
@@ -26,11 +26,10 @@ const CreditCardTransaction = ({ selectedCard, transactions, cards }) => {
 
   const selectedTransactions = transactions.filter(
     (transaction) =>
-      transaction.cardNumber === cards[selectedCard].number &&
+      transaction.creditCardId === (cards[selectedCard]?.id || null) &&
       (!selectedMonth || new Date(transaction.datetime).getMonth() + 1 === parseInt(selectedMonth, 10)) &&
       (!selectedYear || new Date(transaction.datetime).getFullYear() === parseInt(selectedYear, 10))
-  );
-
+  );  
   
   const handleResetFilters = () => {
     setSelectedMonth('');
@@ -75,25 +74,29 @@ const CreditCardTransaction = ({ selectedCard, transactions, cards }) => {
         <table className="transaction-table">
           <thead>
             <tr>
-              <th>Payment Type</th>
+            <th>Transaction ID</th>
+              {/* <th>Payment Type</th> */}
               <th>Amount</th>
-              <th>Merchant Code</th>
-              <th>Status</th>
+              <th>Description</th>
+              {/* <th>Merchant Code</th>
+              <th>Status</th> */}
               <th>Date</th>
               <th>Time</th>
-              <th>Card Number</th>
+              {/* <th>Card Number</th> */}
             </tr>
           </thead>
           <tbody>
             {selectedTransactions.map((transaction) => (
-              <tr key={transaction.id}>
-                <td>{transaction.paymentType}</td>
+              <tr key={`${transaction.id}-${transaction.creditCardId}`}>
+                <td>{transaction.id}</td>
+                {/* <td>{transaction.paymentType}</td> */}
                 <td>{transaction.amount}</td>
-                <td>{transaction.merchantCode}</td>
-                <td>{transaction.status}</td>
-                <td>{new Date(transaction.datetime).toLocaleDateString()}</td>
-                <td>{new Date(transaction.datetime).toLocaleTimeString()}</td>
-                <td>{revealLastFourDigits(transaction.cardNumber)}</td>
+                <td>{transaction.description}</td>
+                {/* <td>{transaction.merchantCode}</td>
+                <td>{transaction.status}</td> */}
+                <td>{new Date(transaction.date).toLocaleDateString()}</td>
+                <td>{new Date(transaction.date).toLocaleTimeString()}</td>
+                {/* <td>{revealLastFourDigits(transaction.cardNumber)}</td> */}
               </tr>
             ))}
           </tbody>
