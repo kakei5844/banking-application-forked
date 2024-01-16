@@ -83,9 +83,8 @@ function getCreditCardTransactions(creditCardId) {
   });
 }
 
-function applyCreditCard(user, annualSalary, cardType) {
+function applyCreditCard(annualSalary, cardType) {
   return instance.post('/api/v1/credit-cards/apply', {
-    headers: { 'Authorization': basicAuth(user) },
     'annualSalary': annualSalary,
     'cardType': cardType
   }, {

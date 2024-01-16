@@ -93,17 +93,7 @@ const HomePage = () => {
             />
           </div>
           <div className="button-list">
-            <NavLink to="/credit-cards">
-              <ActionButton>
-                <i className="bi bi-credit-card" />
-                <span className="ms-2">Cards</span>
-              </ActionButton>
-            </NavLink>
-            <ActionButton>
-              <i className="bi bi-gift" />
-              <span className="ms-2">Cashback</span>
-            </ActionButton>
-            <NavLink to="/credit-cards">
+            <NavLink to="/withdraw-deposit">
               <ActionButton>
                 <i className="bi bi-plus-circle" />
                 <span className="ms-2">Deposit</span>
