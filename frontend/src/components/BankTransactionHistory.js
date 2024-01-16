@@ -22,8 +22,13 @@ const BankTransactionHistory = ({ transactions }) => {
         return true;
     });
 
-    // Sort transactions by id in reverse order
-    const sortedTransactions = filteredTransactions.slice().sort((a, b) => b.id - a.id);
+    const checkColor = (amount) => {
+        if (amount < 0) {
+            return "red";
+        } else {
+            return "green";
+        }
+    }
 
     return (
         <div className="transaction-container">
@@ -55,19 +60,17 @@ const BankTransactionHistory = ({ transactions }) => {
             <table className="transaction-table">
                 <thead>
                     <tr>
-                        <th>Transaction ID</th>
-                        <th>Transaction Type</th>
-                        <th>Amount</th>
                         <th>Date and Time</th>
+                        <th>Description</th>
+                        <th>Amount</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {sortedTransactions.map((transaction, index) => (
-                        <tr key={index} className="transaction-item">
-                            <td>{transaction.id}</td>
-                            <td>{transaction.description}</td>
-                            <td>{transaction.amount}</td>
+                    {filteredTransactions.map((transaction, index) => (
+                        <tr key={transaction.id} className="transaction-item">
                             <td>{new Date(transaction.date).toLocaleString()}</td>
+                            <td>{transaction.description}</td>
+                            <td style={{ color: `${checkColor(transaction.amount)}` }}>{Math.abs(transaction.amount)}</td>
                         </tr>
                     ))}
                 </tbody>

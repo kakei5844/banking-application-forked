@@ -68,7 +68,7 @@ public class BankAccountService {
 
 	public List<BankAccountTransactionDTO> getTransactionsById(Long id) {
 		BankAccount bankAccount = findBankAccountById(id);
-		List<BankAccountTransaction> transactions = bankAccount.getBankAccountTransactions();
+		List<BankAccountTransaction> transactions = bankAccountTransactionRepository.findByBankAccountOrderByCreatedAtDesc(bankAccount);
 		return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
 
