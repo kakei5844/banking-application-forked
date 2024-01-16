@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import Cards from 'react-credit-cards-2'; 
-import 'react-credit-cards-2/dist/es/styles-compiled.css';
-import '../styles/components/Carousel.css'
-import CreditCardTransaction from './CreditCardTransactionHistory';
-  
+import React, { useState } from "react";
+import Cards from "react-credit-cards-2";
+import "react-credit-cards-2/dist/es/styles-compiled.css";
+import "../styles/components/Carousel.css";
+import CreditCardTransaction from "./CreditCardTransactionHistory";
+import CreditDetails from "../components/CreditDetails.js";
+
 const maskCardNumber = (number) => {
   const cardLength = number.length;
   const firstFourDigits = number.slice(0, 4);
   const lastFourDigits = number.slice(-4);
-  const maskedDigits = '*'.repeat(cardLength - 8); // Replace middle digits with asterisks
+  const maskedDigits = "*".repeat(cardLength - 8); // Replace middle digits with asterisks
   return `${firstFourDigits}${maskedDigits}${lastFourDigits}`;
 };
 
 const maskCVC = (cvc) => {
-  return '*'.repeat(cvc.length); // Replace all CVV digits with asterisks
+  return "*".repeat(cvc.length); // Replace all CVV digits with asterisks
 };
 
-const Carousel = ( {transactions, cards} ) => {
-
+const Carousel = ({ transactions, cards }) => {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [transactionData, setTransactionData] = useState({
     0: [], // Initialize with an empty array for each card index
@@ -57,6 +57,7 @@ const Carousel = ( {transactions, cards} ) => {
         number={maskedCardNumber}
         cvc={maskedCVC}
       />
+
       <div className="button-container">
         <button onClick={handlePrevCard}>Previous</button>
         <button onClick={handleNextCard}>Next</button>
