@@ -14,7 +14,7 @@ function Withdraw({ bankAccountId }) {
       const response = await bankingApi.withdraw(bankAccountId, amount)
       console.log(response.data);
         setErrorMessage("");
-        setSuccessMessage("Successfully withdrawed money");
+        setSuccessMessage("Successfully withdrawn money");
         setAmount(0);
     } catch (error) {
       handleLogError(error);
