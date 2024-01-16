@@ -96,60 +96,44 @@ const CreditCardFeature = () => {
     return <Navigate to="/login" />;
   }
 
-  return ( userDb &&
+  return (userDb &&
     <div className="CreditCardPage">
       {/* <div className="left-column">
         <Navbar />
       </div> */}
 
-      <div className="right-column">
-        <div className="top">
-          <h1>Credit Card</h1>
+      <div className="middle">
+        <div className="card-display">
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              {cards.length > 0 ? (
+                <Cards
+                  number={maskCardNumber(cards[currentCardIndex]?.number)}
+                  name={cards[currentCardIndex]?.name}
+                  expiry={cards[currentCardIndex]?.expiry}
+                  className="credit-card"
+                />
+              ) : (
+                <p>No credit card data available</p>
+              )}
+              <div className="button-container">
+                <button className="arrow-btn" onClick={handlePrevCard}>
+                  Previous
+                </button>
+                <button className="arrow-btn" onClick={handleNextCard}>
+                  Next
+                </button>
+              </div>
+            </>
+          )}
         </div>
-
-        <div className="middle">
-          <div className="card-display">
-            {isLoading ? (
-              <p>Loading...</p>
-            ) : (
-              <>
-                {cards.length > 0 ? (
-                  <Cards
-                    number={maskCardNumber(cards[currentCardIndex]?.number)}
-                    name={cards[currentCardIndex]?.name}
-                    expiry={cards[currentCardIndex]?.expiry}
-                    className="credit-card"
-                  />
-                ) : (
-                  <p>No credit card data available</p>
-                )}
-                <div className="button-container">
-                  <button className="arrow-btn" onClick={handlePrevCard}>
-                    Previous
-                  </button>
-                  <button className="arrow-btn" onClick={handleNextCard}>
-                    Next
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-          <div className="credit-card-button-list">
-            <ActionButton>
-              <i className="bi bi-credit-card" />
-              <span className="ms-2">Bank Account</span>
-            </ActionButton>
-            <ActionButton>
-              <i className="bi bi-gift" />
-              <span className="ms-2">Cashback</span>
-            </ActionButton>
-            <NavLink to="/credit-cards">
-              <ActionButton>
-                <i className="bi bi-receipt" />
-                <span className="ms-2">Payment</span>
-              </ActionButton>
-            </NavLink>
-          </div>
+        <div className="credit-card-button-list">
+          <ActionButton>
+            <i className="bi bi-receipt" />
+            <span className="ms-2">Payment</span>
+          </ActionButton>
         </div>
         <hr />
         <div className="bottom">
