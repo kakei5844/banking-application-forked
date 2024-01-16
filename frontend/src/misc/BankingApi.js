@@ -75,20 +75,20 @@ function transfer(fromAccountId, toAccountId, amount) {
   })
 }
 
-function getCreditCardTransactions(creditCardId) {
+function getCreditCardTransactions(creditCardId, user) {
   const url = `/api/v1/credit-cards/${creditCardId}/history`;
 
   return instance.get(url, {
-    withCredentials: true
+    headers: { 'Authorization': basicAuth(user) }
   });
 }
 
-function applyCreditCard(annualSalary, cardType) {
+function applyCreditCard(annualSalary, cardType, user) {
   return instance.post('/api/v1/credit-cards/apply', {
     'annualSalary': annualSalary,
     'cardType': cardType
   }, {
-    withCredentials: true
+    headers: { 'Authorization': basicAuth(user) }
   })
 }
 

@@ -68,7 +68,7 @@ const CreditCardFeature = () => {
           const creditCardPromises = userResponse.data.creditCards.map(
             async (creditCard) => {
               const creditCardHistoryResponse =
-                await bankingApi.getCreditCardTransactions(creditCard.id);
+                await bankingApi.getCreditCardTransactions(creditCard.id, user);
               const formattedTransactions = creditCardHistoryResponse.data.map(
                 (transaction) => ({
                   id: transaction.id,

@@ -48,7 +48,8 @@ const Application = () => {
             // Make API call to submit the application
             const response = await bankingApi.applyCreditCard(
                 annualSalary,
-                cardType
+                cardType,
+                user
             );
             console.log(response.data)
             
