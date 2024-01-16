@@ -47,14 +47,10 @@ const HomePage = () => {
         handleLogError(error);
       }
     };
-
-    // Check if user is logged in before fetching data
     if (isLoggedIn) {
       fetchData();
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty dependency array ensures the effect runs only once on component mount
+  }, []);
 
   if (!isLoggedIn) {
     return <Navigate to="/login" />;
@@ -62,12 +58,9 @@ const HomePage = () => {
 
   return ( userDb &&
     <div className="HomePage">
-      <div className="left-column">
-        <Navbar 
-          firstName={userDb.firstName}
-          lastName={userDb.lastName}
-        />
-      </div>
+      {/* <div className="left-column">
+        <Navbar />
+      </div> */}
 
       <div className="right-column">
         <div className="top">

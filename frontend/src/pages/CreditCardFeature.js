@@ -98,9 +98,9 @@ const CreditCardFeature = () => {
 
   return ( userDb &&
     <div className="CreditCardPage">
-      <div className="left-column">
+      {/* <div className="left-column">
         <Navbar />
-      </div>
+      </div> */}
 
       <div className="right-column">
         <div className="top">

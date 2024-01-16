@@ -7,12 +7,16 @@ import WithdrawDeposit from "./pages/WithdrawDeposit";
 import RepaymentPage from "./pages/RepaymentPage";
 import TransferPage from "./pages/TransferPage";
 import { AuthProvider } from "./misc/AuthContext";
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <div className="App">
       <AuthProvider>
         <Router>
+          <div className='left-column'>
+            <Navbar />
+          </div>
           <Routes>
             <Route index element={<LoginPage />} />
             <Route path="/login" element={<LoginPage />} />

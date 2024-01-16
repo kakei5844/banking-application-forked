@@ -23,7 +23,7 @@ export default function WithdrawDeposit() {
   const withdraw = async (bankAccountId, amount) => {
     try {
       const response = await bankingApi.withdraw(bankAccountId, amount)
-      console.log(response.data)
+      console.log("WIthdraw >>>", response.data)
     } catch (error) {
         handleLogError(error)
     }   
@@ -32,7 +32,7 @@ export default function WithdrawDeposit() {
   const deposit = async (bankAccountId, amount) => {
     try {
       const response = await bankingApi.deposit(bankAccountId, amount)
-      console.log(response.data)
+      console.log("Deposit >>>", response.data)
     } catch (error) {
         handleLogError(error)
     }   
@@ -45,7 +45,7 @@ export default function WithdrawDeposit() {
   const loadUserDb = async () => {
     try {
         const response = await bankingApi.getUser(user)
-        console.log(response.data)
+        // console.log(response.data)
         setUserDb(response.data)
     } catch (error) {
         handleLogError(error)
@@ -58,12 +58,9 @@ if (!isLoggedIn) {
 
   return ( userDb &&
     <div className="Page">
-      <div className="left-column">
-        <Navbar 
-          firstName={userDb.firstName}
-          lastName={userDb.lastName}
-        />
-      </div>
+      {/* <div className="left-column">
+        <Navbar />
+      </div> */}
       <div className="container mt-5 ">
         <div className="row">
           <div className="col-12 text-center mb-4">
