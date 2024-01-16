@@ -1,29 +1,3 @@
-.HomePage {
-  background: #e3f2fd;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  height: 100%;
-    overflow-y: auto;
-}
-
-.left-column {
-  flex: 0.4;
-  margin: 0;
-  padding: 0;
-  min-width: 250px;
-  position: fixed;
-}
-
-.right-column {
-  flex: 1.6;
-  margin-left: 250px;
-  }
-  
-  .right-column-first {
-    display: flex;
-}
-
 .top {
   display: flex;
   flex-direction: column;
@@ -36,8 +10,8 @@
   margin-top: 20px;
   display: flex;
   flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .card-display {
@@ -73,9 +47,9 @@
 }
 
 .bottom-left-2 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .bottom-right {
@@ -98,5 +72,4 @@
   transition: transform 0.3s ease-in-out 0.5s;
   cursor: pointer;
   background-color: #3498db;
-
 }
