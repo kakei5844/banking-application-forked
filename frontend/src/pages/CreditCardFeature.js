@@ -64,47 +64,6 @@ const CreditCardFeature = () => {
         const userResponse = await bankingApi.getUser(user);
         setUserDb(userResponse.data);
 
-        // const maskedCardNumber = maskCardNumber(cards[currentCardIndex].number);
-        // const maskedCVC = maskCVC(cards[currentCardIndex].cvc);
-
-        // return (
-        //   <div className="credit-card-page">
-        //     <div className="top me-5">
-        //       <h1>Credit Card</h1>
-        //     </div>
-
-        //     <div className="middle ms-5">
-        //       <div className="card-display ms-5">
-        //         <div className="d-flex ms-5">
-        //           <div className="mt-5">
-        //             <Cards
-        //               className="credit-card"
-        //               {...cards[currentCardIndex]}
-        //               number={maskedCardNumber}
-        //               cvc={maskedCVC}
-        //             />
-        //             <div className="card-limit d-flex justify-content-center align-items-center bg-primary rounded mt-4 pt-3">
-        //               <p className="text-white fw-bold">
-        //                 Card limit: ${cards[currentCardIndex].limit}
-        //               </p>
-        //             </div>
-        //           </div>
-        //           <div className="card-details" style={{ minWidth: "300px" }}>
-        //             <CreditDetails card={cards[currentCardIndex]} />
-        //           </div>
-        //         </div>
-        //         <div className="button-container ms-5">
-        //           <button className="arrow-btn" onClick={handlePrevCard}>
-        //             Previous
-        //           </button>
-        //           <button className="arrow-btn" onClick={handleNextCard}>
-        //             Next
-        //           </button>
-        //         </div>
-
-        {
-          /* <Carousel transactions={transactions} cards={cards} /> */
-        }
         if (userResponse.data && userResponse.data.creditCards) {
           const creditCardPromises = userResponse.data.creditCards.map(
             async (creditCard) => {

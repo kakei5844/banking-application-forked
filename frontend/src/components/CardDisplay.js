@@ -5,7 +5,6 @@ import logo from "../images/logo.png";
 import chip from "../images/chip.png";
 
 const CardDisplay = ({ firstName, lastName, accountNumber, balance }) => {
-
   const [balanceVisible, setBalanceVisible] = useState(false);
 
   const revealBalance = () => {
@@ -14,7 +13,7 @@ const CardDisplay = ({ firstName, lastName, accountNumber, balance }) => {
 
   const formatAccountNumber = (accountNumber) => {
     // Remove existing spaces and add a space every 4 characters
-    return accountNumber.replace(/\s/g, '').replace(/(.{4})/g, '$1 ');
+    return accountNumber?.replace(/\s/g, "").replace(/(.{4})/g, "$1 ");
   };
 
   return (
@@ -32,9 +31,11 @@ const CardDisplay = ({ firstName, lastName, accountNumber, balance }) => {
           <div className="name-number">
             <h6>Card Number</h6>
             <h5 className="number">{formatAccountNumber(accountNumber)}</h5>
-            <h5 className="name">{firstName} {lastName}</h5>
+            <h5 className="name">
+              {firstName} {lastName}
+            </h5>
             <h5>
-              {balanceVisible ? `Balance: $${balance}` : 'Balance: ******'}
+              {balanceVisible ? `Balance: $${balance}` : "Balance: ******"}
             </h5>
           </div>
 
