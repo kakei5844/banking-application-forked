@@ -22,6 +22,9 @@ const BankTransactionHistory = ({ transactions }) => {
         return true;
     });
 
+    // Sort transactions by id in reverse order
+    const sortedTransactions = filteredTransactions.slice().sort((a, b) => b.id - a.id);
+
     return (
         <div className="transaction-container">
             <div className="filter-options">
@@ -55,18 +58,16 @@ const BankTransactionHistory = ({ transactions }) => {
                         <th>Transaction ID</th>
                         <th>Transaction Type</th>
                         <th>Amount</th>
-                        <th>Date</th>
-                        <th>Time</th>
+                        <th>Date and Time</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredTransactions.map((transaction, index) => (
+                    {sortedTransactions.map((transaction, index) => (
                         <tr key={index} className="transaction-item">
                             <td>{transaction.id}</td>
                             <td>{transaction.description}</td>
                             <td>{transaction.amount}</td>
-                            <td>{new Date(transaction.date).toLocaleDateString()}</td>
-                            <td>{new Date(transaction.date).toLocaleTimeString()}</td>
+                            <td>{new Date(transaction.date).toLocaleString()}</td>
                         </tr>
                     ))}
                 </tbody>

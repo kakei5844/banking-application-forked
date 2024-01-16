@@ -56,30 +56,9 @@
 
 .bottom {
   display: flex;
-  justify-content: center;
-}
-.bottom-left {
-  display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-}
-
-.bottom-left-1 {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  padding: 20px;
-}
-
-.bottom-left-2 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.bottom-right {
-  margin-top: 50px;
+  margin-top: 40px;
 }
 
 .credit-apply-div {

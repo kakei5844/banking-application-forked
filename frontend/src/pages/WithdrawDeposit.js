@@ -59,7 +59,10 @@ if (!isLoggedIn) {
   return ( userDb &&
     <div className="Page">
       <div className="left-column">
-        <Navbar />
+        <Navbar 
+          firstName={userDb.firstName}
+          lastName={userDb.lastName}
+        />
       </div>
       <div className="container mt-5 ">
         <div className="row">

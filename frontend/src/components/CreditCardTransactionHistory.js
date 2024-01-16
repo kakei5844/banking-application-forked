@@ -75,25 +75,29 @@ const CreditCardTransaction = ({ selectedCard, transactions, cards }) => {
         <table className="transaction-table">
           <thead>
             <tr>
-              <th>Payment Type</th>
+            <th>Transaction ID</th>
+              {/* <th>Payment Type</th> */}
               <th>Amount</th>
-              <th>Merchant Code</th>
-              <th>Status</th>
+              <th>Description</th>
+              {/* <th>Merchant Code</th>
+              <th>Status</th> */}
               <th>Date</th>
               <th>Time</th>
-              <th>Card Number</th>
+              {/* <th>Card Number</th> */}
             </tr>
           </thead>
           <tbody>
             {selectedTransactions.map((transaction) => (
-              <tr key={transaction.id}>
-                <td>{transaction.paymentType}</td>
+              <tr key={transaction.creditCardId}>
+                <td>{transaction.id}</td>
+                {/* <td>{transaction.paymentType}</td> */}
                 <td>{transaction.amount}</td>
-                <td>{transaction.merchantCode}</td>
-                <td>{transaction.status}</td>
-                <td>{new Date(transaction.datetime).toLocaleDateString()}</td>
-                <td>{new Date(transaction.datetime).toLocaleTimeString()}</td>
-                <td>{revealLastFourDigits(transaction.cardNumber)}</td>
+                <td>{transaction.description}</td>
+                {/* <td>{transaction.merchantCode}</td>
+                <td>{transaction.status}</td> */}
+                <td>{new Date(transaction.date).toLocaleDateString()}</td>
+                <td>{new Date(transaction.date).toLocaleTimeString()}</td>
+                {/* <td>{revealLastFourDigits(transaction.cardNumber)}</td> */}
               </tr>
             ))}
           </tbody>

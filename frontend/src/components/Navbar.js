@@ -4,7 +4,7 @@ import "bootstrap/js/dist/dropdown";
 import "../styles/components/Navbar.css";
 import { useAuth } from "../misc/AuthContext";
 
-const Navbar = () => {
+const Navbar = ({ firstName, lastName }) => {
 
   const { getUser, userIsAuthenticated, userLogout } = useAuth()
 
@@ -86,13 +86,13 @@ const Navbar = () => {
             aria-expanded="false"
           >
             <i className="bi bi-person-circle"></i>
-            <span className="ms-2">User123</span>
+            <span className="ms-2">{firstName} {lastName}</span>
           </a>
           <div className="dropdown-menu" aria-labelledby="triggerId">
-            <a className="dropdown-item" href="#">
+            <a className="dropdown-item" href="/home">
               Profile
             </a>
-            <a className="dropdown-item" href="#">
+            <a className="dropdown-item" href="/home">
               Setting
             </a>
             <a className="dropdown-item" href="/login" onClick={logout}>

@@ -69,7 +69,10 @@ const TransferPage = () => {
   return ( userDb &&
     <div className="Page">
       <div className="left-column">
-        <Navbar />
+        <Navbar 
+          firstName={userDb.firstName}
+          lastName={userDb.lastName}
+        />
       </div>
       <div className='right-column'>
         <div className='top'>
