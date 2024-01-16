@@ -7,7 +7,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ActionButton from "../components/ActionButton";
 import CardScroll from "../components/CardScroll";
-import Navbar from "../components/Navbar";
 import TransactionHistory from "../components/TransactionHistory";
 // // import { useState } from 'react';
 import { NavLink } from "react-router-dom";
@@ -149,61 +148,55 @@ const CreditCardFeature = () => {
   const maskedCVC = maskCVC(cards[currentCardIndex].cvc);
 
   return (
-    <div className="CreditCardPage">
-      {/* <div className="left-column">
-        <Navbar />
-      </div> */}
+    <div className="credit-card-page">
+      <div className="top">
+        <h1>Credit Card</h1>
+      </div>
 
-      <div className="right-column">
-        <div className="top">
-          <h1>Credit Card</h1>
+      <div className="middle">
+        <div className="card-display">
+          <Cards
+            className="credit-card"
+            {...cards[currentCardIndex]}
+            number={maskedCardNumber}
+            cvc={maskedCVC}
+          />
+          <div className="button-container">
+            <button className="arrow-btn" onClick={handlePrevCard}>
+              Previous
+            </button>
+            <button className="arrow-btn" onClick={handleNextCard}>
+              Next
+            </button>
+          </div>
+          {/* <Carousel transactions={transactions} cards={cards} /> */}
         </div>
-
-        <div className="middle">
-          <div className="card-display">
-            <Cards
-              className="credit-card"
-              {...cards[currentCardIndex]}
-              number={maskedCardNumber}
-              cvc={maskedCVC}
-            />
-            <div className="button-container">
-              <button className="arrow-btn" onClick={handlePrevCard}>
-                Previous
-              </button>
-              <button className="arrow-btn" onClick={handleNextCard}>
-                Next
-              </button>
-            </div>
-            {/* <Carousel transactions={transactions} cards={cards} /> */}
-          </div>
-          <div className="credit-card-button-list">
+        <div className="credit-card-button-list">
+          <ActionButton>
+            <i className="bi bi-credit-card" />
+            <span className="ms-2">Bank Account</span>
+          </ActionButton>
+          <ActionButton>
+            <i className="bi bi-gift" />
+            <span className="ms-2">Cashback</span>
+          </ActionButton>
+          <NavLink to="/credit-cards">
             <ActionButton>
-              <i className="bi bi-credit-card" />
-              <span className="ms-2">Bank Account</span>
+              <i className="bi bi-receipt" />
+              <span className="ms-2">Payment</span>
             </ActionButton>
-            <ActionButton>
-              <i className="bi bi-gift" />
-              <span className="ms-2">Cashback</span>
-            </ActionButton>
-            <NavLink to="/credit-cards">
-              <ActionButton>
-                <i className="bi bi-receipt" />
-                <span className="ms-2">Payment</span>
-              </ActionButton>
-            </NavLink>
-          </div>
+          </NavLink>
         </div>
-        <hr />
-        <div className="bottom">
-          <div className="bottom-left">
-            <h2>Transaction History</h2>
-            <CreditCardTransaction
-              selectedCard={currentCardIndex}
-              transactions={transactions}
-              cards={cards} // Pass the 'cards' array here
-            />
-          </div>
+      </div>
+      <hr />
+      <div className="bottom">
+        <div className="bottom-left">
+          <h2>Transaction History</h2>
+          <CreditCardTransaction
+            selectedCard={currentCardIndex}
+            transactions={transactions}
+            cards={cards} // Pass the 'cards' array here
+          />
         </div>
       </div>
     </div>
