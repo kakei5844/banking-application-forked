@@ -88,12 +88,12 @@ public class BillService {
         );
     }
 
-    public void payBill(long creditCardId, long bankAccountId, double amount, String username) {
+    public void payBill(long creditCardId, String bankAccountNumber, double amount, String username) {
         CreditCard creditCard = creditCardService.findCreditCardByIdAndUsername(creditCardId, username);
         creditCardService.processTransaction(creditCardId, amount * -1, "Credit Payment", 0);
         
         // TODO: ensure the user is the owner of the bank account
-        bankAccountService.processTransaction(bankAccountId, amount * -1, "Credit Payment");
+        bankAccountService.processTransaction(bankAccountNumber, amount * -1, "Credit Payment");
         
         Bill bill = billRepository.findFirstByCreditCardOrderByIssueDateDesc(creditCard);
         bill.setTotalRepaymentAmount(bill.getTotalRepaymentAmount() + amount);

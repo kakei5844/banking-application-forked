@@ -5,8 +5,7 @@ import jakarta.validation.constraints.Min;
 
 public class DepositRequestDTO {
 
-	@Min(value = 1, message = "Invalid bank account id")
-	private long bankAccountId;
+	private String bankAccountNumber;
 	
     @DecimalMin(value = "0.01", message = "Amount must be greater than zero")
 	private double amount;
@@ -14,17 +13,17 @@ public class DepositRequestDTO {
 	public DepositRequestDTO() {
 	}
 
-	public DepositRequestDTO(long bankAccountId, double amount) {
-		this.bankAccountId = bankAccountId;
+	public DepositRequestDTO(String bankAccountNumber, double amount) {
+		this.bankAccountNumber = bankAccountNumber;
 		this.amount = amount;
 	}
 
-	public long getBankAccountId() {
-		return bankAccountId;
+	public String getBankAccountNumber() {
+		return bankAccountNumber;
 	}
 
-	public void setBankAccountId(long bankAccountId) {
-		this.bankAccountId = bankAccountId;
+	public void setBankAccountNumber(String bankAccountNumber) {
+		this.bankAccountNumber = bankAccountNumber;
 	}
 
 	public double getAmount() {

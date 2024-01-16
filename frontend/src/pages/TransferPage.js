@@ -11,7 +11,7 @@ const TransferPage = () => {
   const isLoggedIn = Auth.userIsAuthenticated();
   const [userDb, setUserDb] = useState(null);
 
-  const [accountId, setAccountId] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
   const [amount, setAmount] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -37,10 +37,10 @@ const TransferPage = () => {
   const handleTransfer = async (event) => {
     event.preventDefault();
 
-    if (!accountId && !amount) {
+    if (!accountNumber && !amount) {
       setErrorMessage("To and Amount fields are required");
       setSuccessMessage("");
-    } else if (!accountId) {
+    } else if (!accountNumber) {
       setErrorMessage("To field is required");
       setSuccessMessage("");
     } else if (!amount) {
@@ -49,14 +49,14 @@ const TransferPage = () => {
     } else {
       try {
         const response = await bankingApi.transfer(
-          userDb.bankAccount.id,
-          accountId,
+          userDb.bankAccount.accountNumber,
+          accountNumber,
           amount
         );
         console.log(response.data);
         setErrorMessage("");
         setSuccessMessage("Successfully transferred");
-        setAccountId("");
+        setAccountNumber("");
         setAmount("");
       } catch (error) {
         handleLogError(error);
@@ -88,8 +88,8 @@ const TransferPage = () => {
                   type="text"
                   id="toBank"
                   className="form-control mt-2"
-                  value={accountId}
-                  onChange={(e) => setAccountId(e.target.value)}
+                  value={accountNumber}
+                  onChange={(e) => setAccountNumber(e.target.value)}
                   placeholder="Bank Account Number"
                 />
               </div>

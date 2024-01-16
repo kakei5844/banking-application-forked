@@ -58,7 +58,7 @@ public class BillController {
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/payment")
     public ResponseEntity<?> payBill(@RequestBody BillPaymentRequestDTO req, @AuthenticationPrincipal UserPrincipal currentUser) {
-        billService.payBill(req.getCreditCardId(), req.getBankAccountId(), req.getAmount(), currentUser.getUsername());
+        billService.payBill(req.getCreditCardId(), req.getBankAccountNumber(), req.getAmount(), currentUser.getUsername());
         return ResponseEntity.ok("Successful payment");
     }
 

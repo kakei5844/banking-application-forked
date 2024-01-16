@@ -8,11 +8,9 @@ import jakarta.validation.constraints.Min;
 @DifferentBankAccounts
 public class TransferRequestDTO {
 
-    @Min(value = 1, message = "Invalid bank account id")
-    private long fromBankAccountId;
+    private String fromBankAccountNumber;
 
-    @Min(value = 1, message = "Invalid bank account id")
-    private long toBankAccountId;
+    private String toBankAccountNumber;
     
     @DecimalMin(value = "0.01", message = "Amount must be greater than zero")
     private double amount;
@@ -20,30 +18,30 @@ public class TransferRequestDTO {
     public TransferRequestDTO() {
     }
 
-    public TransferRequestDTO(long fromBankAccountId, long toBankAccountId, double amount) {
+    public TransferRequestDTO(String fromBankAccountNumber, String toBankAccountNumber, double amount) {
     	
-        this.fromBankAccountId = fromBankAccountId;
-        this.toBankAccountId = toBankAccountId;
+        this.fromBankAccountNumber = fromBankAccountNumber;
+        this.toBankAccountNumber = toBankAccountNumber;
         this.amount = amount;
     }
 
-    public long getFromBankAccountId() {
-        return fromBankAccountId;
-    }
+    public String getFromBankAccountNumber() {
+		return fromBankAccountNumber;
+	}
 
-    public void setFromBankAccountId(long fromBankAccountId) {
-        this.fromBankAccountId = fromBankAccountId;
-    }
+	public void setFromBankAccountNumber(String fromBankAccountNumber) {
+		this.fromBankAccountNumber = fromBankAccountNumber;
+	}
 
-    public long getToBankAccountId() {
-        return toBankAccountId;
-    }
+	public String getToBankAccountNumber() {
+		return toBankAccountNumber;
+	}
 
-    public void setToBankAccountId(long toBankAccountId) {
-        this.toBankAccountId = toBankAccountId;
-    }
+	public void setToBankAccountNumber(String toBankAccountNumber) {
+		this.toBankAccountNumber = toBankAccountNumber;
+	}
 
-    public double getAmount() {
+	public double getAmount() {
         return amount;
     }
 

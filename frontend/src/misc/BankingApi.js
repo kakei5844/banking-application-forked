@@ -65,10 +65,10 @@ function deposit(bankAccountNumber, amount) {
   })
 }
 
-function transfer(fromAccountId, toAccountId, amount) {
+function transfer(fromBankAccountNumber, toBankAccountNumber, amount) {
   return instance.post('/api/v1/bank-accounts/transfer', {
-    'fromBankAccountId': fromAccountId,
-    'toBankAccountId': toAccountId,
+    'fromBankAccountNumber': fromBankAccountNumber,
+    'toBankAccountNumber': toBankAccountNumber,
     "amount": amount
   }, {
     withCredentials: true
