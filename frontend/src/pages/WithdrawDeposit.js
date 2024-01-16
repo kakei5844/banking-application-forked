@@ -28,6 +28,7 @@ export default function WithdrawDeposit() {
     try {
         const response = await bankingApi.getUser(user)
         // console.log(response.data)
+        console.log(response.data.bankAccount.accountNumber) // use bankAccount number instead of bankAccount id for bank account operations (deposit, withdraw)
         setUserDb(response.data)
     } catch (error) {
       handleLogError(error);
@@ -70,11 +71,11 @@ export default function WithdrawDeposit() {
             <div className="col-12">
               {activeTab === "withdraw" ? (
                 <Withdraw
-                  bankAccountId={userDb.bankAccount.id}
+                  bankAccountId={userDb.bankAccount.accountNumber}
                 />
               ) : (
                 <Deposit
-                  bankAccountId={userDb.bankAccount.id}
+                  bankAccountId={userDb.bankAccount.accountNumber}
                 />
               )}
             </div>

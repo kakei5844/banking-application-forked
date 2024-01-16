@@ -46,9 +46,9 @@ function getTransactions(bankAccountId) {
   });
 }
 
-function withdraw(bankAccountId, amount) {
+function withdraw(bankAccountNumber, amount) {
   return instance.post('api/v1/bank-accounts/withdraw', {
-    'bankAccountId': bankAccountId,
+    'bankAccountNumber': bankAccountNumber,
     'amount': amount
   }, {
     withCredentials: true
@@ -56,9 +56,9 @@ function withdraw(bankAccountId, amount) {
 
 }
 
-function deposit(bankAccountId, amount) {
+function deposit(bankAccountNumber, amount) {
   return instance.post('api/v1/bank-accounts/deposit', {
-    'bankAccountId': bankAccountId,
+    'bankAccountNumber': bankAccountNumber,
     'amount': amount
   }, {
     withCredentials: true
