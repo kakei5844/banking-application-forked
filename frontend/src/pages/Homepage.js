@@ -123,7 +123,9 @@ const HomePage = () => {
             () => null
           ) : (
             <div className="credit-apply-div">
-              <button className="credit-apply-btn">Apply To Credit Card</button>
+              <NavLink to="/application">
+                <button className="credit-apply-btn">Apply To Credit Card</button>
+              </NavLink>
             </div>
           )}
           <h1>Bank Account</h1>
