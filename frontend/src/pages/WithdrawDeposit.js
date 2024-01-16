@@ -22,7 +22,7 @@ export default function WithdrawDeposit() {
   const withdraw = async (bankAccountId, amount) => {
     try {
       const response = await bankingApi.withdraw(bankAccountId, amount)
-      console.log("WIthdraw >>>", response.data)
+      console.log("Withdraw >>>", response.data)
     } catch (error) {
       handleLogError(error);
     }
