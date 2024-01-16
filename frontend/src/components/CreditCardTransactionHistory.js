@@ -26,7 +26,7 @@ const CreditCardTransaction = ({ selectedCard, transactions, cards }) => {
 
   const selectedTransactions = transactions.filter(
     (transaction) =>
-      transaction.cardNumber === cards[selectedCard].number &&
+      transaction.creditCardId === cards[selectedCard].id &&
       (!selectedMonth || new Date(transaction.datetime).getMonth() + 1 === parseInt(selectedMonth, 10)) &&
       (!selectedYear || new Date(transaction.datetime).getFullYear() === parseInt(selectedYear, 10))
   );
@@ -87,7 +87,7 @@ const CreditCardTransaction = ({ selectedCard, transactions, cards }) => {
           </thead>
           <tbody>
             {selectedTransactions.map((transaction) => (
-              <tr key={transaction.creditCardId}>
+              <tr key={`${transaction.id}-${transaction.creditCardId}`}>
                 <td>{transaction.id}</td>
                 {/* <td>{transaction.paymentType}</td> */}
                 <td>{transaction.amount}</td>

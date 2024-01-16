@@ -17,7 +17,7 @@ const HomePage = () => {
   const [userDb, setUserDb] = useState(null);
   const [transactions, setTransactions] = useState([]);
 
-  const [appliedToCreditCard, setAppliedToCreditCard] = useState(false);
+  // const [appliedToCreditCard, setAppliedToCreditCard] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +30,7 @@ const HomePage = () => {
           const bankResponse = await bankingApi.getTransactions(
             userResponse.data.bankAccount.id
           );
-          console.log(bankResponse.data);
+          console.log(bankResponse.data)
 
           // Transform the bank data into the format you want for transactions
           const formattedTransactions = bankResponse.data.map(
@@ -38,10 +38,11 @@ const HomePage = () => {
               id: transaction.id,
               description: transaction.description,
               amount: transaction.amount,
-              bankAccountId: transaction.bankAccount.id,
+              bankAccountId: transaction.bankAccountId,
               date: transaction.createdAt,
             })
           );
+          console.log("Bank Transactions >>>", formattedTransactions);
 
           setTransactions(formattedTransactions);
         } else {
@@ -66,15 +67,15 @@ const HomePage = () => {
     userDb && (
       <div className="home-page">
         <div className="top">
-          {appliedToCreditCard ? (
+          {/* {appliedToCreditCard ? (
             () => null
-          ) : (
+          ) : ( */}
             <div className="credit-apply-div">
               <NavLink to="/application">
                 <button className="credit-apply-btn">Apply To Credit Card</button>
               </NavLink>
             </div>
-          )}
+          {/* )} */}
           <h1>Bank Account</h1>
         </div>
 

@@ -64,9 +64,10 @@ const CreditCardFeature = () => {
               date: transaction.createdAt,
             }));
             setTransactions(formattedTransactions);
-            console.log("Credit Card Transactions >>>", transactions);
+            console.log("Credit Card Transactions >>>", formattedTransactions);
 
             return {
+              id: creditCard.id,
               number: creditCard.cardNumber,
               name: `${userResponse.data.firstName} ${userResponse.data.lastName}`,
               expiry: `${(new Date(creditCard.issueDate).getMonth() + 1)
@@ -78,6 +79,7 @@ const CreditCardFeature = () => {
 
           const userCards = await Promise.all(creditCardPromises);
           setCards(userCards);
+          console.log("Cards>>>", userCards);
           setIsLoading(false); // Set loading to false when data is fetched
         } else {
           console.error('User data or credit card information is not available.');

@@ -9,7 +9,8 @@ export const bankingApi = {
   withdraw,
   deposit,
   transfer,
-  getCreditCardTransactions
+  getCreditCardTransactions,
+  applyCreditCard
 }
 
 function authenticate(username, password) {
@@ -80,6 +81,16 @@ function getCreditCardTransactions(creditCardId) {
   return instance.get(url, {
     withCredentials: true
   });
+}
+
+function applyCreditCard(user, annualSalary, cardType) {
+  return instance.post('/api/v1/credit-cards/apply', {
+    headers: { 'Authorization': basicAuth(user) },
+    'annualSalary': annualSalary,
+    'cardType': cardType
+  }, {
+    withCredentials: true
+  })
 }
 
 
