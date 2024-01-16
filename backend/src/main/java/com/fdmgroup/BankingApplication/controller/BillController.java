@@ -30,8 +30,8 @@ public class BillController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create") // SIMULATE AUTOMATIC BILL GENERATION
     public  ResponseEntity<?> createBillsForAllCreditCards() {
-        List<Bill> savedBills = billService.saveBills();
-        return new ResponseEntity<>(savedBills, HttpStatus.CREATED);
+        billService.saveBills();
+        return ResponseEntity.ok("Successfully generated bills");
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

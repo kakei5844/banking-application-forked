@@ -22,6 +22,8 @@ import com.fdmgroup.BankingApplication.repository.CreditCardRepository;
 import com.fdmgroup.BankingApplication.repository.CreditCardTransactionRepository;
 import com.fdmgroup.BankingApplication.util.CreditCardNumberGenerator;
 
+import static com.fdmgroup.BankingApplication.model.MerchantTypeCategory.*;
+
 @Service
 public class CreditCardService {
 
@@ -66,6 +68,7 @@ public class CreditCardService {
         creditCard.setType(cardType);
         creditCard.setUser(user);
         creditCard.setIssueDate(LocalDate.now());
+		creditCard.setCashback(0);
 
         // Generate a unique Credit Card Number
         String cardNumber = generateUniqueCardNumber(cardType);
@@ -163,6 +166,13 @@ public class CreditCardService {
 		// Resolve merchant category from MCC
 		MerchantTypeCategory merchantCategory = MerchantTypeCategory.findByMcc(mcc);
 
+		// Gain rewards based on mcc
+		if (merchantCategory != UNKNOWN && merchantCategory.getCashbackRate() != 0) {
+			double cashBack = merchantCategory.getCashbackRate() * amount;
+			creditCard.setCashback(creditCard.getCashback() + cashBack);
+			description = description.concat("\n" + cashBack + " cashbacks earned");
+		}
+
 		// Create and set up the CreditCardTransaction
 		CreditCardTransaction creditCardTransaction = new CreditCardTransaction();
 		creditCardTransaction.setAmount(amount);
@@ -171,10 +181,6 @@ public class CreditCardService {
 		creditCardTransaction.setCreditCard(creditCard);
 		creditCardTransaction.setMcc(mcc);
 		creditCardTransaction.setMerchantCategory(merchantCategory);
-
-		// Gain rewards based on mcc
-
-
 
 		// Update credit card outstanding balance & available credit
 		double newOutstandingBalance = creditCard.getOutstandingBalance() + amount;
@@ -186,4 +192,29 @@ public class CreditCardService {
 		return creditCardTransactionRepository.save(creditCardTransaction);
 	}
 
+	public CreditCard payCreditWithCashback(CreditCard creditCard) {
+		double accumulatedCashback = creditCard.getCashback();
+		
+		creditCard.setOutstandingBalance(
+			creditCard.getOutstandingBalance() - accumulatedCashback
+		);
+
+		creditCard.setAvailableCredit(
+			creditCard.getAvailableCredit() + accumulatedCashback
+		);
+
+		creditCard.setCashback(0);
+		
+		CreditCardTransaction transaction = new CreditCardTransaction();
+		transaction.setAmount(accumulatedCashback * -1);
+		transaction.setCreatedAt(LocalDateTime.now());
+		transaction.setCreditCard(creditCard);
+		transaction.setDescription("Offset by Cashback");
+		transaction.setMcc(0);
+		transaction.setMerchantCategory(UNKNOWN);
+
+		creditCardTransactionRepository.save(transaction);
+
+		return creditCardRepository.save(creditCard);
+	}
 }
