@@ -1,7 +1,6 @@
 package com.fdmgroup.BankingApplication.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +12,7 @@ import com.fdmgroup.BankingApplication.model.Bill;
 import com.fdmgroup.BankingApplication.model.CreditCard;
 import com.fdmgroup.BankingApplication.model.CreditCardTransaction;
 import com.fdmgroup.BankingApplication.repository.BillRepository;
+import com.fdmgroup.BankingApplication.repository.CreditCardTransactionRepository;
 
 @Service
 public class BillService {
@@ -26,11 +26,14 @@ public class BillService {
     @Autowired
     BankAccountService bankAccountService;
 
+    @Autowired
+    CreditCardTransactionRepository creditCardTransactionRepository;
+
     // Prototype (TO BE DONE WITH SCHEDULAR)
-    public List<Bill> saveBills() {
-        List<Bill> bills = new ArrayList<>();
+    public void saveBills() {
         List<CreditCard> creditCards = creditCardService.getAllCreditCards();
         for (CreditCard creditCard : creditCards) {
+            creditCard = creditCardService.payCreditWithCashback(creditCard);
             List<CreditCardTransaction> transactions = creditCardService.getLastMonthTransactionsByCreditCard(creditCard);
 
             Bill bill = new Bill(
@@ -41,11 +44,14 @@ public class BillService {
                                 0, 
                                 creditCard, 
                                 transactions);
-            transactions.stream().forEach(t -> t.setBill(bill));
-            bills.add(bill);
+            billRepository.save(bill);
+            
+            transactions.stream().forEach(t -> {
+                t.setBill(bill);
+                creditCardTransactionRepository.save(t);
+            });    
         }
-        
-        return billRepository.saveAll(bills);
+        return;
     }
 
     public List<Bill> getAllBills() {
