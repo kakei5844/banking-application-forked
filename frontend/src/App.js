@@ -6,6 +6,7 @@ import RegistrationPage from "./pages/RegistrationPage";
 import WithdrawDeposit from "./pages/WithdrawDeposit";
 import RepaymentPage from "./pages/RepaymentPage";
 import TransferPage from "./pages/TransferPage";
+import ApplicationPage from './pages/ApplicationPage';
 import BaseLayout from "./components/BaseLayout";
 import { AuthProvider } from "./misc/AuthContext";
 
@@ -24,6 +25,7 @@ function App() {
               <Route path="/withdraw-deposit" element={<WithdrawDeposit />} />
               <Route path="/transfer" element={<TransferPage />} />
               <Route path="/repayment" element={<RepaymentPage />} />
+              <Route path="/application" element={<ApplicationPage />} />
             </Route>
           </Routes>
         </Router>
