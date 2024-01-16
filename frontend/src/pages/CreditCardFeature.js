@@ -1,34 +1,41 @@
-/*
-this page will look cleaner after integration with backend
-*/
+import React, { useState, useEffect } from 'react';
+import { NavLink, Navigate } from 'react-router-dom';
+import Cards from 'react-credit-cards-2';
 
 import "../styles/pages/CreditCardFeature.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import 'react-credit-cards-2/dist/es/styles-compiled.css';
+
 import ActionButton from "../components/ActionButton";
-import CardScroll from "../components/CardScroll";
-import TransactionHistory from "../components/TransactionHistory";
-// // import { useState } from 'react';
-import { NavLink } from "react-router-dom";
-import Carousel from "../components/CardCarousel";
-import { useState } from "react";
+import Navbar from "../components/Navbar";
 import CreditCardTransaction from "../components/CreditCardTransactionHistory";
-import Cards from "react-credit-cards-2";
 
-const maskCardNumber = (number) => {
-  const cardLength = number.length;
-  const firstFourDigits = number.slice(0, 4);
-  const lastFourDigits = number.slice(-4);
-  const maskedDigits = "*".repeat(cardLength - 8); // Replace middle digits with asterisks
-  return `${firstFourDigits}${maskedDigits}${lastFourDigits}`;
-};
-
-const maskCVC = (cvc) => {
-  return "*".repeat(cvc.length); // Replace all CVV digits with asterisks
-};
+import { useAuth } from '../misc/AuthContext';
+import { bankingApi } from '../misc/BankingApi';
+import { handleLogError } from '../misc/Helpers';
 
 const CreditCardFeature = () => {
+  const Auth = useAuth();
+  const user = Auth.getUser();
+  const isLoggedIn = Auth.userIsAuthenticated();
+  const [userDb, setUserDb] = useState(null);
+  const [transactions, setTransactions] = useState([]);
+  const [cards, setCards] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
+
+  const maskCardNumber = (number) => {
+    if (number) {
+      const cardLength = number.length;
+      const firstFourDigits = number.slice(0, 4);
+      const lastFourDigits = number.slice(-4);
+      const maskedDigits = "*".repeat(cardLength - 8);
+      return `${firstFourDigits}${maskedDigits}${lastFourDigits}`;
+    } else {
+      return '';
+    }
+  };
 
   const handleNextCard = () => {
     setCurrentCardIndex((prevIndex) => (prevIndex + 1) % cards.length);
@@ -40,165 +47,110 @@ const CreditCardFeature = () => {
     );
   };
 
-  const [transactions, setTransactions] = useState([
-    // Transactions data as you have it in the Carousel component
-    {
-      paymentType: "Credit Card",
-      amount: "$50.00",
-      merchantCode: "902",
-      status: "Completed",
-      datetime: "2022-01-10T08:00:00",
-      cardNumber: "5542123412341234",
-    },
-    {
-      paymentType: "Credit Card",
-      amount: "$25.00",
-      merchantCode: "902",
-      status: "Pending",
-      datetime: "2022-01-10T08:15:00", // Replace with the actual datetime
-      cardNumber: "5542123412341234", // Card number without masking
-    },
-    {
-      paymentType: "Credit Card",
-      amount: "$80.00",
-      merchantCode: "902",
-      status: "Failed",
-      datetime: "2022-01-10T08:30:00", // Replace with the actual datetime
-      cardNumber: "5542123412341234", // Card number without masking
-    },
-    {
-      paymentType: "Credit Card",
-      amount: "$80.00",
-      merchantCode: "902",
-      status: "Failed",
-      datetime: "2022-02-10T08:30:00", // Replace with the actual datetime
-      cardNumber: "5542123412341234", // Card number without masking
-    },
-    {
-      paymentType: "Credit Card",
-      amount: "$80.00",
-      merchantCode: "902",
-      status: "Failed",
-      datetime: "2024-01-10T08:30:00", // Replace with the actual datetime
-      cardNumber: "5542123412341234", // Card number without masking
-    },
-  ]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userResponse = await bankingApi.getUser(user);
+        setUserDb(userResponse.data);
 
-  const [cards, setCards] = useState([
-    {
-      number: "4111111111111111",
-      name: "John Doe",
-      expiry: "12/23",
-      cvc: "123",
-      focus: "number",
-    },
-    {
-      cvc: "123",
-      expiry: "2020",
-      focus: "",
-      name: "tom",
-      number: "5542123412341234",
-    },
-    {
-      cvc: "246",
-      expiry: "2021",
-      focus: "",
-      name: "jerry",
-      number: "6134123412341234",
-    },
-    {
-      cvc: "369",
-      expiry: "2022",
-      focus: "",
-      name: "tim",
-      number: "4343123412341234",
-    },
-    {
-      cvc: "322",
-      expiry: "2022",
-      focus: "",
-      name: "trey",
-      number: "374312341234125",
-    },
-    {
-      cvc: "387",
-      expiry: "2022",
-      focus: "",
-      name: "angus",
-      number: "36431234123434",
-    },
-    {
-      cvc: "365",
-      expiry: "2022",
-      focus: "",
-      name: "bob",
-      number: "6243123412341234",
-    },
-    {
-      cvc: "324",
-      expiry: "2022",
-      focus: "",
-      name: "bailey",
-      number: "3543123412341234",
-    },
-    // Add other card data as needed
-  ]);
+        if (userResponse.data && userResponse.data.creditCards) {
+          const creditCardPromises = userResponse.data.creditCards.map(async (creditCard) => {
+            const creditCardHistoryResponse = await bankingApi.getCreditCardTransactions(creditCard.id);
+            const formattedTransactions = creditCardHistoryResponse.data.map((transaction) => ({
+              id: transaction.id,
+              description: transaction.description,
+              amount: transaction.amount,
+              creditCardId: transaction.creditCardId,
+              date: transaction.createdAt,
+            }));
+            setTransactions(formattedTransactions);
+            console.log("Credit Card Transactions >>>", formattedTransactions);
 
-  const maskedCardNumber = maskCardNumber(cards[currentCardIndex].number);
-  const maskedCVC = maskCVC(cards[currentCardIndex].cvc);
+            return {
+              id: creditCard.id,
+              number: creditCard.cardNumber,
+              name: `${userResponse.data.firstName} ${userResponse.data.lastName}`,
+              expiry: `${(new Date(creditCard.issueDate).getMonth() + 1)
+                .toString()
+                .padStart(2, '0')}/${(new Date(creditCard.issueDate).getFullYear() + 2) % 100}`,
+              transactions: formattedTransactions,
+            };
+          });
 
-  return (
-    <div className="credit-card-page">
-      <div className="top">
-        <h1>Credit Card</h1>
-      </div>
+          const userCards = await Promise.all(creditCardPromises);
+          setCards(userCards);
+          console.log("Cards>>>", userCards);
+          setIsLoading(false); // Set loading to false when data is fetched
+        } else {
+          console.error('User data or credit card information is not available.');
+        }
+      } catch (error) {
+        handleLogError(error);
+      }
+    };
+
+    if (isLoggedIn) {
+      fetchData();
+    }
+  }, [isLoggedIn]);
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
+
+  return (userDb &&
+    <div className="CreditCardPage">
+      {/* <div className="left-column">
+        <Navbar />
+      </div> */}
 
       <div className="middle">
         <div className="card-display">
-          <Cards
-            className="credit-card"
-            {...cards[currentCardIndex]}
-            number={maskedCardNumber}
-            cvc={maskedCVC}
-          />
-          <div className="button-container">
-            <button className="arrow-btn" onClick={handlePrevCard}>
-              Previous
-            </button>
-            <button className="arrow-btn" onClick={handleNextCard}>
-              Next
-            </button>
-          </div>
-          {/* <Carousel transactions={transactions} cards={cards} /> */}
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              {cards.length > 0 ? (
+                <Cards
+                  number={maskCardNumber(cards[currentCardIndex]?.number)}
+                  name={cards[currentCardIndex]?.name}
+                  expiry={cards[currentCardIndex]?.expiry}
+                  className="credit-card"
+                />
+              ) : (
+                <p>No credit card data available</p>
+              )}
+              <div className="button-container">
+                <button className="arrow-btn" onClick={handlePrevCard}>
+                  Previous
+                </button>
+                <button className="arrow-btn" onClick={handleNextCard}>
+                  Next
+                </button>
+              </div>
+            </>
+          )}
         </div>
         <div className="credit-card-button-list">
           <ActionButton>
-            <i className="bi bi-credit-card" />
-            <span className="ms-2">Bank Account</span>
+            <i className="bi bi-receipt" />
+            <span className="ms-2">Payment</span>
           </ActionButton>
-          <ActionButton>
-            <i className="bi bi-gift" />
-            <span className="ms-2">Cashback</span>
-          </ActionButton>
-          <NavLink to="/credit-cards">
-            <ActionButton>
-              <i className="bi bi-receipt" />
-              <span className="ms-2">Payment</span>
-            </ActionButton>
-          </NavLink>
         </div>
       </div>
+
       <hr />
+
       <div className="bottom">
         <div className="bottom-left">
-          <h2>Transaction History</h2>
           <CreditCardTransaction
             selectedCard={currentCardIndex}
             transactions={transactions}
-            cards={cards} // Pass the 'cards' array here
+            cards={cards}
           />
         </div>
       </div>
+
     </div>
   );
 };

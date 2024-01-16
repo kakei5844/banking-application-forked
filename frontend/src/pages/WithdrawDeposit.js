@@ -21,8 +21,8 @@ export default function WithdrawDeposit() {
 
   const withdraw = async (bankAccountId, amount) => {
     try {
-      const response = await bankingApi.withdraw(bankAccountId, amount);
-      console.log(response.data);
+      const response = await bankingApi.withdraw(bankAccountId, amount)
+      console.log("WIthdraw >>>", response.data)
     } catch (error) {
       handleLogError(error);
     }
@@ -30,8 +30,8 @@ export default function WithdrawDeposit() {
 
   const deposit = async (bankAccountId, amount) => {
     try {
-      const response = await bankingApi.deposit(bankAccountId, amount);
-      console.log(response.data);
+      const response = await bankingApi.deposit(bankAccountId, amount)
+      console.log("Deposit >>>", response.data)
     } catch (error) {
       handleLogError(error);
     }
@@ -43,9 +43,9 @@ export default function WithdrawDeposit() {
 
   const loadUserDb = async () => {
     try {
-      const response = await bankingApi.getUser(user);
-      console.log(response.data);
-      setUserDb(response.data);
+        const response = await bankingApi.getUser(user)
+        // console.log(response.data)
+        setUserDb(response.data)
     } catch (error) {
       handleLogError(error);
     }

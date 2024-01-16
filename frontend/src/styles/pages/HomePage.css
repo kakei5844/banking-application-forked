@@ -30,10 +30,6 @@
 
 .bottom {
   display: flex;
-  justify-content: center;
-}
-.bottom-left {
-  display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;

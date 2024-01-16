@@ -1,27 +1,29 @@
 import axios from 'axios'
 
 export const bankingApi = {
-    authenticate,
-    // signup
-    getUser,
-    logout,
-    getTransactions,
-    withdraw,
-    deposit,
-    transfer
+  authenticate,
+  register,
+  getUser,
+  logout,
+  getTransactions,
+  withdraw,
+  deposit,
+  transfer,
+  getCreditCardTransactions,
+  applyCreditCard
 }
 
 function authenticate(username, password) {
-    return instance.post('/api/v1/login', { username, password }, {
-      headers: { 'Content-type': 'application/json' }
-    })
-  }
+  return instance.post('/api/v1/login', { username, password }, {
+    headers: { 'Content-type': 'application/json' }
+  })
+}
 
-//   function signup(user) {
-//     return instance.post('/auth/signup', user, {
-//       headers: { 'Content-type': 'application/json' }
-//     })
-//   }
+function register(user) {
+  return instance.post('/api/v1/register', user, {
+    headers: { 'Content-type': 'application/json' }
+  })
+}
 
 function getUser(user) {
   const url = "/api/v1/users/me";
@@ -31,7 +33,7 @@ function getUser(user) {
 }
 
 function logout() {
-  return instance.post('/api/v1/logout', null , {
+  return instance.post('/api/v1/logout', null, {
     withCredentials: true
   })
 }
@@ -46,7 +48,7 @@ function getTransactions(bankAccountId) {
 
 function withdraw(bankAccountId, amount) {
   return instance.post('api/v1/bank-accounts/withdraw', {
-    'bankAccountId' : bankAccountId,
+    'bankAccountId': bankAccountId,
     'amount': amount
   }, {
     withCredentials: true
@@ -56,7 +58,7 @@ function withdraw(bankAccountId, amount) {
 
 function deposit(bankAccountId, amount) {
   return instance.post('api/v1/bank-accounts/deposit', {
-    'bankAccountId' : bankAccountId,
+    'bankAccountId': bankAccountId,
     'amount': amount
   }, {
     withCredentials: true
@@ -65,9 +67,27 @@ function deposit(bankAccountId, amount) {
 
 function transfer(fromAccountId, toAccountId, amount) {
   return instance.post('/api/v1/bank-accounts/transfer', {
-    'fromBankAccountId' : fromAccountId,
-    'toBankAccountId' : toAccountId,
+    'fromBankAccountId': fromAccountId,
+    'toBankAccountId': toAccountId,
     "amount": amount
+  }, {
+    withCredentials: true
+  })
+}
+
+function getCreditCardTransactions(creditCardId) {
+  const url = `/api/v1/credit-cards/${creditCardId}/history`;
+
+  return instance.get(url, {
+    withCredentials: true
+  });
+}
+
+function applyCreditCard(user, annualSalary, cardType) {
+  return instance.post('/api/v1/credit-cards/apply', {
+    headers: { 'Authorization': basicAuth(user) },
+    'annualSalary': annualSalary,
+    'cardType': cardType
   }, {
     withCredentials: true
   })
@@ -76,10 +96,10 @@ function transfer(fromAccountId, toAccountId, amount) {
 
 // -- Axios
 const instance = axios.create({
-    baseURL: "http://localhost:8080"
-  })
+  baseURL: "http://localhost:8080"
+})
 
-  // -- Helper functions
+// -- Helper functions
 
 function basicAuth(user) {
   return `Basic ${user.authdata}`
