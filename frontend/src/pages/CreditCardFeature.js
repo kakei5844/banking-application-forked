@@ -64,7 +64,7 @@ const CreditCardFeature = () => {
               date: transaction.createdAt,
             }));
             setTransactions(formattedTransactions);
-            console.log(">>>>", transactions)
+            console.log("Credit Card Transactions >>>", transactions);
 
             return {
               number: creditCard.cardNumber,
@@ -135,17 +135,20 @@ const CreditCardFeature = () => {
             <span className="ms-2">Payment</span>
           </ActionButton>
         </div>
-        <hr />
-        <div className="bottom">
-          <div className="bottom-left">
-            <CreditCardTransaction
-              selectedCard={currentCardIndex}
-              transactions={transactions}
-              cards={cards}
-            />
-          </div>
+      </div>
+
+      <hr />
+
+      <div className="bottom">
+        <div className="bottom-left">
+          <CreditCardTransaction
+            selectedCard={currentCardIndex}
+            transactions={transactions}
+            cards={cards}
+          />
         </div>
       </div>
+
     </div>
   );
 };

@@ -4,11 +4,11 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../styles/components/CreditCardTransactionHistory.css'; 
 
-const revealLastFourDigits = (cardNumber) => {
-  const hiddenDigits = cardNumber.slice(0, -4).replace(/\d/g, '*');
-  const lastFourDigits = cardNumber.slice(-4);
-  return `${hiddenDigits}${lastFourDigits}`;
-};
+// const revealLastFourDigits = (cardNumber) => {
+//   const hiddenDigits = cardNumber.slice(0, -4).replace(/\d/g, '*');
+//   const lastFourDigits = cardNumber.slice(-4);
+//   return `${hiddenDigits}${lastFourDigits}`;
+// };
 
 const CreditCardTransaction = ({ selectedCard, transactions, cards }) => {
 
@@ -30,7 +30,6 @@ const CreditCardTransaction = ({ selectedCard, transactions, cards }) => {
       (!selectedMonth || new Date(transaction.datetime).getMonth() + 1 === parseInt(selectedMonth, 10)) &&
       (!selectedYear || new Date(transaction.datetime).getFullYear() === parseInt(selectedYear, 10))
   );
-
   
   const handleResetFilters = () => {
     setSelectedMonth('');

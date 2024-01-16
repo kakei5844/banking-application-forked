@@ -118,7 +118,7 @@ const Navbar = () => {
               aria-expanded="false"
             >
               <i className="bi bi-person-circle"></i>
-              <span className="ms-2">User123</span>
+              <span className="ms-2">{userDb.firstName} {userDb.lastName}</span>
             </a>
             <div className="dropdown-menu" aria-labelledby="triggerId">
               <a className="dropdown-item" href="#">
