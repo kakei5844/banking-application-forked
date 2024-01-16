@@ -26,10 +26,10 @@ const CreditCardTransaction = ({ selectedCard, transactions, cards }) => {
 
   const selectedTransactions = transactions.filter(
     (transaction) =>
-      transaction.creditCardId === cards[selectedCard].id &&
+      transaction.creditCardId === (cards[selectedCard]?.id || null) &&
       (!selectedMonth || new Date(transaction.datetime).getMonth() + 1 === parseInt(selectedMonth, 10)) &&
       (!selectedYear || new Date(transaction.datetime).getFullYear() === parseInt(selectedYear, 10))
-  );
+  );  
   
   const handleResetFilters = () => {
     setSelectedMonth('');
