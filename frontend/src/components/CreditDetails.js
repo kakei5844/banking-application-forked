@@ -31,7 +31,7 @@ const CreditDetails = ({ card }) => {
           cy="80"
           fill="transparent"
           stroke="#e0e0e0"
-          stroke-width="12px"
+          strokeWidth="12px"  
         ></circle>
         <circle
           r="70"
@@ -39,10 +39,10 @@ const CreditDetails = ({ card }) => {
           cy="80"
           fill="transparent"
           stroke="#60e6a8"
-          stroke-linecap="round"
-          stroke-width="12px"
-          stroke-dasharray={circumference}
-          stroke-dashoffset={dashOffset}
+          strokeLinecap="round" 
+          strokeWidth="12px"
+          strokeDasharray={circumference}  
+          strokeDashoffset={dashOffset} 
         ></circle>
         <text
           x="50%"
