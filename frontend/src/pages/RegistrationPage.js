@@ -150,40 +150,23 @@ function Registration() {
                         </label>
                       </div>
                     </div>
+
                     <div className="col-md-6 mb-4">
                       <div className="form-floating">
                         <input
                           value={username}
                           onChange={(e) => setUsername(e.target.value)}
-                          type="email"
-                          id="email"
+                          type="text"
+                          id="username"
                           className="form-control form-control-lg"
-                          placeholder="Email"
+                          placeholder="Username"
                         />
-                        <label className="form-label" htmlFor="email">
-                          Email
+                        <label className="form-label" htmlFor="username">
+                          Username
                         </label>
                       </div>
                     </div>
-                  </div>
-
-                  <div className="row">
-                    <div className="col-md-6 mb-4">
-                      <div className="form-floating">
-                        <input
-                          value={initialBalance}
-                          onChange={(e) => setinitialBalance(e.target.value)}
-                          type="number"
-                          step="1000"
-                          id="initialBalance"
-                          className="form-control form-control-lg"
-                          placeholder="Initial Balance"
-                        />
-                        <label className="form-label" htmlFor="initialBalance">
-                          Initial Balance
-                        </label>
-                      </div>
-                    </div>
+                    
                   </div>
 
                   <div className="row">
@@ -214,6 +197,25 @@ function Registration() {
                         />
                         <label className="form-label" htmlFor="confirmPassword">
                           Confirm Password
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6 mb-4">
+                      <div className="form-floating">
+                        <input
+                          value={initialBalance}
+                          onChange={(e) => setinitialBalance(e.target.value)}
+                          type="number"
+                          step="1000"
+                          id="initialBalance"
+                          className="form-control form-control-lg"
+                          placeholder="Initial Balance"
+                        />
+                        <label className="form-label" htmlFor="initialBalance">
+                          Initial Balance
                         </label>
                       </div>
                     </div>
