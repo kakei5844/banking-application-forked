@@ -1,0 +1,25 @@
+.base-layout {
+  background: #e3f2fd;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100vh; /* 100vh: 100 % of viewport height */
+  overflow-y: auto;
+}
+
+.left-column {
+  flex: 0.4;
+  margin: 0;
+  padding: 0;
+  min-width: 250px;
+  position: fixed;
+}
+
+.right-column {
+  flex: 1.6;
+  margin-left: 250px;
+}
+
+.right-column-first {
+  display: flex;
+}

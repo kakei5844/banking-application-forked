@@ -26,11 +26,7 @@ const Application = () => {
     };
 
     return(
-        <div className="Page">
-            <div className="left-column">
-                <Navbar />
-            </div>
-            <div className='right-column'>
+        <div className="Application-Page">
                 <div className='top'>
                     <h1>Credit Card Application</h1>
                 </div>
@@ -44,16 +40,16 @@ const Application = () => {
                             id="annualSalary"
                             value={annualSalary}
                             onChange={handleAnnualSalaryChange}
-                            className="form-control"
+                            className="form-control mt-2"
                             required
                             />
 
-                            <label htmlFor="cardType">Card Type:</label>
+                            <label htmlFor="cardType" className="mt-2">Card Type:</label>
                             <select
                             id="cardType"
                             value={cardType}
                             onChange={handleCardTypeChange}
-                            className="form-control"
+                            className="form-control mt-2"
                             required
                             >
                                 <option value="" disabled>Select Card Type</option>
@@ -72,7 +68,6 @@ const Application = () => {
                         {successMessage && <div className="success-message">{successMessage}</div>}
                     </div>
                 </form>
-            </div>
         </div>
     )
 }

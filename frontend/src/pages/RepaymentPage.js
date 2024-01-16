@@ -1,5 +1,4 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from "../components/Navbar";
+import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 
 const RepaymentPage = () => {
@@ -90,66 +89,91 @@ const RepaymentPage = () => {
       : "";
 
   return (
-    <div className="Page">
-      <div className="left-column">
-        <Navbar />
+    <div className="repayment-page">
+      <div className="top">
+        <h1>Pay Credit Card Bill</h1>
       </div>
 
-      <div className="right-column">
-        <div className="top">
-          <h1>Pay Credit Card Bill</h1>
-        </div>
+      <div className="card-body">
+        <form style={{ width: "50%", marginLeft: "325px" }}>
+          <div className="form-group">
+            <label htmlFor="fromAccount" className="labelAmount mt-2">
+              From:
+            </label>
+            <input
+              type="text"
+              id="fromAccount"
+              value={fromAccount}
+              readOnly
+              className="form-control mt-2"
+            />
+          </div>
 
-        <div className="card-body">
-          <form style={{ width: "50%", marginLeft: "325px" }}>
-            < div className="form-group">
-              <label htmlFor="fromAccount" className="labelAmount mt-2">
-                From:
-              </label>
-              <input type="text" id="fromAccount" value={fromAccount} readOnly className="form-control mt-2" />
-            </div>
+          <div className="form-group">
+            <label htmlFor="toCreditCard" className="labelAmount mt-2">
+              For (Credit Card Number):
+            </label>
+            <select
+              id="toCreditCard"
+              value={toCreditCard}
+              onChange={handleToCreditCardChange}
+              className="form-control mt-2"
+            >
+              {creditCards.map((creditCard) => (
+                <option key={creditCard} value={creditCard}>
+                  {creditCard}
+                </option>
+              ))}
+            </select>
+          </div>
 
-            <div className="form-group">
-              <label htmlFor="toCreditCard" className="labelAmount mt-2">
-                For (Credit Card Number):
-              </label>
-              <select id="toCreditCard" value={toCreditCard} onChange={handleToCreditCardChange} className="form-control mt-2">
+          <div className="form-group">
+            <label htmlFor="amount" className="labelAmount mt-2">
+              Amount:
+            </label>
+            <input
+              className="form-control mt-2"
+              type="text"
+              id="amount"
+              value={amount}
+              onChange={handleAmountChange}
+              placeholder={placeholderAmount}
+            />
+          </div>
 
-                {creditCards.map((creditCard) => (
-                  <option key={creditCard} value={creditCard}>
-                    {creditCard}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <div className="btn-group mt-3">
+            <button
+              className="btn btn-outline-primary rounded me-2"
+              type="button"
+              onClick={() => handleFullPayment()}
+            >
+              Pay Full Amount
+            </button>
+            <button
+              className="btn btn-outline-primary rounded me-2"
+              type="button"
+              onClick={() => handleMinPayment()}
+            >
+              Pay Min Amount
+            </button>
+          </div>
+          <br />
 
-            <div className="form-group">
-              <label htmlFor="amount" className="labelAmount mt-2">
-                Amount:
-              </label>
-              <input className="form-control mt-2" type="text" id="amount" value={amount} onChange={handleAmountChange} placeholder={placeholderAmount} />
-            </div>
+          <div className="btn-group mt-3">
+            <button
+              onClick={handlePayButtonClick}
+              type="button"
+              className="btn btn-primary mt-3 btn-lg"
+            >
+              Pay
+            </button>
+          </div>
 
-            <div className="btn-group mt-3">
-              <button className="btn btn-outline-primary rounded me-2" type="button" onClick={() => handleFullPayment()}>
-                Pay Full Amount
-              </button>
-              <button className="btn btn-outline-primary rounded me-2" type="button" onClick={() => handleMinPayment()}>
-                Pay Min Amount
-              </button>
-            </div>
-            <br />
-
-            <div className="btn-group mt-3">
-              <button onClick={handlePayButtonClick} type="button" className="btn btn-primary mt-3 btn-lg">
-                Pay
-              </button>
-            </div>
-
-            {errorMessage && (<div className="error-message">{errorMessage}</div>)}
-            {successMessage && (<div className="success-message">{successMessage}</div>)}
-          </form>
-        </div>
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
+          {successMessage && (
+            <div className="success-message">{successMessage}</div>
+          )}
+        </form>
       </div>
     </div>
   );
