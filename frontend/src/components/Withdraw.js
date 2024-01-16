@@ -1,11 +1,27 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { bankingApi } from "../misc/BankingApi";
+import { handleLogError } from "../misc/Helpers";
 
-function Withdraw({ bankAccountId, apiCall }) {
+function Withdraw({ bankAccountId }) {
   const [amount, setAmount] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleWithdraw = async (e) => {
-    apiCall(bankAccountId, amount);
+    e.preventDefault();
+    try {
+      const response = await bankingApi.withdraw(bankAccountId, amount)
+      console.log(response.data);
+        setErrorMessage("");
+        setSuccessMessage("Successfully withdrawed money");
+        setAmount(0);
+    } catch (error) {
+      handleLogError(error);
+      setSuccessMessage("");
+      setErrorMessage(error.response.data.message);
+      setAmount(0);
+    }
   };
 
   const handleAmountButtonClick = (buttonAmount) => {
@@ -58,6 +74,12 @@ function Withdraw({ bankAccountId, apiCall }) {
             Withdraw
           </button>
         </div>
+        {errorMessage && (
+          <div className="error-message">{errorMessage}</div>
+        )}
+        {successMessage && (
+          <div className="success-message">{successMessage}</div>
+        )}
       </div>
     </form>
   );

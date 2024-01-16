@@ -40,29 +40,20 @@ public class BankAccountController {
 
 	@PostMapping("/deposit")
 	public ResponseEntity<?> deposit(@Valid @RequestBody DepositRequestDTO req) {
-
 		BankAccountTransactionDTO savedBankAccountTransaction = bankAccountService.deposit(req);
 		return new ResponseEntity<>(savedBankAccountTransaction, HttpStatus.OK);
 	}
 
 	@PostMapping("/withdraw")
 	public ResponseEntity<?> withdraw(@Valid @RequestBody WithdrawRequestDTO req) {
-		try {
-			BankAccountTransactionDTO savedBankAccountTransaction = bankAccountService.withdraw(req);
-			return new ResponseEntity<>(savedBankAccountTransaction, HttpStatus.OK);
-		} catch (InvalidAmountException | InsufficientBalanceException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST); // need to ask front-end they want an error message or an error object
-		}
+		BankAccountTransactionDTO savedBankAccountTransaction = bankAccountService.withdraw(req);
+		return new ResponseEntity<>(savedBankAccountTransaction, HttpStatus.OK);
 	}
 
 	@PostMapping("/transfer")
 	public ResponseEntity<?> transfer(@Valid @RequestBody TransferRequestDTO req) {
-		try {
-			BankAccountTransactionDTO response = bankAccountService.transfer(req);
-			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (InvalidAmountException | InsufficientBalanceException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
+		BankAccountTransactionDTO response = bankAccountService.transfer(req);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@GetMapping("/{bankAccountId}/history")

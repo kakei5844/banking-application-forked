@@ -15,26 +15,9 @@ export default function WithdrawDeposit() {
   const isLoggedIn = Auth.userIsAuthenticated();
   const [userDb, setUserDb] = useState(null);
 
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-  };
-
-  const withdraw = async (bankAccountId, amount) => {
-    try {
-      const response = await bankingApi.withdraw(bankAccountId, amount)
-      console.log("Withdraw >>>", response.data)
-    } catch (error) {
-      handleLogError(error);
-    }
-  };
-
-  const deposit = async (bankAccountId, amount) => {
-    try {
-      const response = await bankingApi.deposit(bankAccountId, amount)
-      console.log("Deposit >>>", response.data)
-    } catch (error) {
-      handleLogError(error);
-    }
   };
 
   useEffect(() => {
@@ -88,12 +71,10 @@ export default function WithdrawDeposit() {
               {activeTab === "withdraw" ? (
                 <Withdraw
                   bankAccountId={userDb.bankAccount.id}
-                  apiCall={withdraw}
                 />
               ) : (
                 <Deposit
                   bankAccountId={userDb.bankAccount.id}
-                  apiCall={deposit}
                 />
               )}
             </div>

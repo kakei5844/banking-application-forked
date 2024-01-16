@@ -60,6 +60,7 @@ const TransferPage = () => {
         setAmount("");
       } catch (error) {
         handleLogError(error);
+        setErrorMessage(error.response.data.message);
         setSuccessMessage("");
       }
     }
