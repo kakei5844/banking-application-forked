@@ -1,9 +1,7 @@
 package com.fdmgroup.BankingApplication.dto;
 
 import com.fdmgroup.BankingApplication.dto.annotation.DifferentBankAccounts;
-
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
 
 @DifferentBankAccounts
 public class TransferRequestDTO {

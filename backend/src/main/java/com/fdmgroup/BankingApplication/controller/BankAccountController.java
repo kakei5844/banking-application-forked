@@ -17,8 +17,6 @@ import com.fdmgroup.BankingApplication.dto.BankAccountTransactionDTO;
 import com.fdmgroup.BankingApplication.dto.DepositRequestDTO;
 import com.fdmgroup.BankingApplication.dto.TransferRequestDTO;
 import com.fdmgroup.BankingApplication.dto.WithdrawRequestDTO;
-import com.fdmgroup.BankingApplication.exception.InsufficientBalanceException;
-import com.fdmgroup.BankingApplication.exception.InvalidAmountException;
 import com.fdmgroup.BankingApplication.model.BankAccount;
 import com.fdmgroup.BankingApplication.service.BankAccountService;
 
