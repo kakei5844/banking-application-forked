@@ -3,16 +3,19 @@ import axios from 'axios'
 export const bankingApi = {
   authenticate,
   register,
-  getUser,
   logout,
+  getUser,
   getTransactions,
   withdraw,
   deposit,
   transfer,
   getCreditCardTransactions,
-  applyCreditCard
+  applyCreditCard,
+  getBill,
+  payBill
 }
 
+// -- User Management
 function authenticate(username, password) {
   return instance.post('/api/v1/login', { username, password }, {
     headers: { 'Content-type': 'application/json' }
@@ -25,6 +28,13 @@ function register(user) {
   })
 }
 
+function logout() {
+  return instance.post('/api/v1/logout', null, {
+    withCredentials: true
+  })
+}
+
+// -- Get User Details (Bank Account and Credit Card Details as well)
 function getUser(user) {
   const url = "/api/v1/users/me";
   return instance.get(url, {
@@ -32,12 +42,7 @@ function getUser(user) {
   });
 }
 
-function logout() {
-  return instance.post('/api/v1/logout', null, {
-    withCredentials: true
-  })
-}
-
+// -- Bank Account Features
 function getTransactions(bankAccountId) {
   const url = `/api/v1/bank-accounts/${bankAccountId}/history`;
 
@@ -75,6 +80,7 @@ function transfer(fromBankAccountNumber, toBankAccountNumber, amount) {
   })
 }
 
+// -- Credit Card Features
 function getCreditCardTransactions(creditCardId, user) {
   const url = `/api/v1/credit-cards/${creditCardId}/history`;
 
@@ -92,6 +98,24 @@ function applyCreditCard(annualSalary, cardType, user) {
   })
 }
 
+// -- Bill Management
+function getBill(creditCardId, user) {
+  const url = `/api/v1/bills/credit-card/${creditCardId}`;
+
+  return instance.get(url, {
+    headers: { 'Authorization': basicAuth(user) }
+  });
+}
+
+function payBill(creditCardId, bankAccountNumber, amount, user) {
+  return instance.post('/api/v1/bills/payment', {
+    'creditCardId': creditCardId,
+    'bankAccountNumber': bankAccountNumber,
+    'amount': amount
+  }, {
+    headers: { 'Authorization': basicAuth(user) }
+  })
+}
 
 // -- Axios
 const instance = axios.create({
