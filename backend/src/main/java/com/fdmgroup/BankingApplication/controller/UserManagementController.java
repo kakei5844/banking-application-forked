@@ -1,10 +1,9 @@
 package com.fdmgroup.BankingApplication.controller;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.BankingApplication.dto.AuthResponse;
-import com.fdmgroup.BankingApplication.dto.UserDTO;
 import com.fdmgroup.BankingApplication.dto.UserLoginRequestDTO;
 import com.fdmgroup.BankingApplication.dto.UserRegistrationRequestDTO;
 import com.fdmgroup.BankingApplication.model.User;
@@ -49,12 +47,9 @@ public class UserManagementController {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody UserLoginRequestDTO loginRequest) {
-		Optional<User> userOptional = userService.validUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword());
-		if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            return ResponseEntity.ok(new AuthResponse(user.getId(), user.getUsername(), user.getRole()));
-        }
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // to be confirmed with FE what they need
+		User user = userService.validUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword())
+						.orElseThrow(() -> new AccessDeniedException("Incorrect username/ password"));
+		return ResponseEntity.ok(new AuthResponse(user.getId(), user.getUsername(), user.getRole()));
 	}
 
 	@PostMapping("/logout")
