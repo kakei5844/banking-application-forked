@@ -13,5 +13,4 @@ public interface BankAccountTransactionRepository extends JpaRepository<BankAcco
 
     List<BankAccountTransaction> findByBankAccountOrderByCreatedAtDesc(BankAccount bankAccount);
 
-
 }

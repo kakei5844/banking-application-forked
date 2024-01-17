@@ -23,8 +23,8 @@ public class CreditCard {
 	private String cardNumber;
 	private String type;
 
-	private double outstandingBalance; // amount spent (changed from balance to availableBalance)
-	private double availableCredit; // available credit balance (changed from availableLimit to availableCredit)
+	private double outstandingBalance;
+	private double availableCredit;
 	private double creditLimit;
 
 	private LocalDate issueDate;

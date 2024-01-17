@@ -43,29 +43,11 @@ public class CreditCardService {
 
 	private static final int MAX_ATTEMPTS = 10;
 
-	public List<CreditCardDTO> getCreditCardsForUser(Long userId) {
-		return creditCardRepository.findByUserId(userId).stream().map(this::convertToDTO).collect(Collectors.toList());
-	}
-
-	private CreditCardDTO convertToDTO(CreditCard creditCard) {
-		return new CreditCardDTO(creditCard.getId(), creditCard.getOutstandingBalance(),
-				creditCard.getAvailableCredit(), creditCard.getCreditLimit());
-	}
-
-	public CreditCard findCreditCardByIdAndUsername(Long id, String username) {
-		CreditCard creditCard = findCreditCardById(id);
-		if (!creditCard.getUser().getUsername().equals(username)) {
-			throw new AccessDeniedException("Access Denied: You are not the owner of this credit card ID: " + id);
-		}
-		return creditCard;
-	}
-
 	public CreditCard createCreditCard(double annualSalary, String cardType, String username) {
 		User user = userService.getUserByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 		CreditCard creditCard = new CreditCard();
 
-		// Set credit limit, available credit, outstanding balance, etc.
 		creditCard.setCreditLimit(100000);
 		creditCard.setAvailableCredit(100000);
 		creditCard.setOutstandingBalance(0);
@@ -75,7 +57,6 @@ public class CreditCardService {
 		creditCard.setIssueDate(LocalDate.now());
 		creditCard.setCashback(0);
 
-		// Generate a unique Credit Card Number
 		String cardNumber = generateUniqueCardNumber(cardType);
 		creditCard.setCardNumber(cardNumber);
 
@@ -103,17 +84,17 @@ public class CreditCardService {
 
 	private String generateCardNumberForType(String cardType) {
 		String iin;
-		int accountNumberLength = 9; // Account number length for a total of 16 digits
+		int accountNumberLength = 9;
 
 		switch (cardType.toUpperCase()) {
-			case "VISA":
-				iin = "411111";
-				break;
-			case "MASTERCARD":
-				iin = "510000";
-				break;
-			default:
-				throw new IllegalArgumentException("Unsupported card type: " + cardType);
+		case "VISA":
+			iin = "411111";
+			break;
+		case "MASTERCARD":
+			iin = "510000";
+			break;
+		default:
+			throw new IllegalArgumentException("Unsupported card type: " + cardType);
 		}
 
 		return CreditCardNumberGenerator.generateCreditCardNumber(iin, accountNumberLength);
@@ -125,14 +106,30 @@ public class CreditCardService {
 		return user.getCreditCards();
 	}
 
-	public CreditCardTransactionDTO purchase(long creditCardId, double amount, String merchantName, int mcc) {
+	public CreditCard findCreditCardByIdAndUsername(Long id, String username) {
+		CreditCard creditCard = findCreditCardById(id);
+		if (!creditCard.getUser().getUsername().equals(username)) {
+			throw new AccessDeniedException("Access Denied: You are not the owner of this credit card ID: " + id);
+		}
+		return creditCard;
+	}
 
-		return convertToDTO(
-				processTransaction(
-						creditCardId,
-						amount,
-						"Purchase from " + merchantName,
-						mcc));
+	public List<CreditCardDTO> getCreditCardsForUser(Long userId) {
+		return creditCardRepository.findByUserId(userId).stream().map(this::convertToDTO).collect(Collectors.toList());
+	}
+
+	private CreditCardDTO convertToDTO(CreditCard creditCard) {
+		return new CreditCardDTO(creditCard.getId(), creditCard.getOutstandingBalance(),
+				creditCard.getAvailableCredit(), creditCard.getCreditLimit());
+	}
+
+	public CreditCardTransactionDTO purchase(long creditCardId, double amount, String merchantName, int mcc) {
+		return convertToDTO(processTransaction(creditCardId, amount, "Purchase from " + merchantName, mcc));
+	}
+	
+	public List<CreditCardTransactionDTO> getTransactionsByIdAndUsername(Long id, String username) {
+		CreditCard creditCard = findCreditCardByIdAndUsername(id, username);
+		return creditCard.getCreditCardTransactions().stream().map(t -> convertToDTO(t)).collect(Collectors.toList());
 	}
 
 	public List<CreditCard> getAllCreditCards() {
@@ -142,11 +139,6 @@ public class CreditCardService {
 	private CreditCard findCreditCardById(Long id) {
 		return creditCardRepository.findById(id)
 				.orElseThrow(() -> new CreditCardNotFoundException("Credit card not found for ID: " + id));
-	}
-
-	public List<CreditCardTransactionDTO> getTransactionsByIdAndUsername(Long id, String username) {
-		CreditCard creditCard = findCreditCardByIdAndUsername(id, username);
-		return creditCard.getCreditCardTransactions().stream().map(t -> convertToDTO(t)).collect(Collectors.toList());
 	}
 
 	public List<CreditCardTransaction> getTransactionsToBeBilledByCreditCard(CreditCard c) {
@@ -161,22 +153,18 @@ public class CreditCardService {
 	public CreditCardTransaction processTransaction(long creditCardId, double amount, String description, int mcc) {
 		CreditCard creditCard = findCreditCardById(creditCardId);
 
-		// Check and update credit card balance and limit before proceeding?
 		if (amount > creditCard.getAvailableCredit()) {
 			throw new InsufficientCreditException("Insufficient available credit for the transaction.");
 		}
 
-		// Resolve merchant category from MCC
 		MerchantTypeCategory merchantCategory = MerchantTypeCategory.findByMcc(mcc);
 
-		// Gain rewards based on mcc
 		if (merchantCategory != UNKNOWN && merchantCategory.getCashbackRate() != 0) {
 			double cashBack = merchantCategory.getCashbackRate() * amount;
 			creditCard.setCashback(creditCard.getCashback() + cashBack);
 			description = description.concat("\n" + cashBack + " cashbacks earned");
 		}
 
-		// Create and set up the CreditCardTransaction
 		CreditCardTransaction creditCardTransaction = new CreditCardTransaction();
 		creditCardTransaction.setAmount(amount);
 		creditCardTransaction.setCreatedAt(LocalDateTime.now());
@@ -185,24 +173,20 @@ public class CreditCardService {
 		creditCardTransaction.setMcc(mcc);
 		creditCardTransaction.setMerchantCategory(merchantCategory);
 
-		// Update credit card outstanding balance & available credit
 		double newOutstandingBalance = creditCard.getOutstandingBalance() + amount;
 		creditCard.setOutstandingBalance(newOutstandingBalance);
 		double newAvailableCredit = creditCard.getAvailableCredit() - amount;
 		creditCard.setAvailableCredit(newAvailableCredit);
 
-		// Save the transaction
 		return creditCardTransactionRepository.save(creditCardTransaction);
 	}
 
 	public CreditCard payCreditWithCashback(CreditCard creditCard) {
 		double accumulatedCashback = creditCard.getCashback();
 
-		creditCard.setOutstandingBalance(
-				creditCard.getOutstandingBalance() - accumulatedCashback);
+		creditCard.setOutstandingBalance(creditCard.getOutstandingBalance() - accumulatedCashback);
 
-		creditCard.setAvailableCredit(
-				creditCard.getAvailableCredit() + accumulatedCashback);
+		creditCard.setAvailableCredit(creditCard.getAvailableCredit() + accumulatedCashback);
 
 		creditCard.setCashback(0);
 
@@ -219,7 +203,6 @@ public class CreditCardService {
 		return creditCardRepository.save(creditCard);
 	}
 
-	// To be done with schedular
 	public void generateLatePaymentCharge() {
 		List<CreditCard> creditCards = this.getAllCreditCards();
 		for (CreditCard creditCard : creditCards) {
@@ -242,11 +225,9 @@ public class CreditCardService {
 					transaction.setMcc(0);
 					transaction.setMerchantCategory(UNKNOWN);
 
-					creditCard.setOutstandingBalance(
-							creditCard.getOutstandingBalance() + interestCharge);
+					creditCard.setOutstandingBalance(creditCard.getOutstandingBalance() + interestCharge);
 
-					creditCard.setAvailableCredit(
-							creditCard.getAvailableCredit() - interestCharge);
+					creditCard.setAvailableCredit(creditCard.getAvailableCredit() - interestCharge);
 				} else {
 					transaction.setAmount(interestAndPenaltyCharge);
 					transaction.setCreatedAt(LocalDateTime.now());
@@ -255,11 +236,9 @@ public class CreditCardService {
 					transaction.setMcc(0);
 					transaction.setMerchantCategory(UNKNOWN);
 
-					creditCard.setOutstandingBalance(
-							creditCard.getOutstandingBalance() + interestAndPenaltyCharge);
+					creditCard.setOutstandingBalance(creditCard.getOutstandingBalance() + interestAndPenaltyCharge);
 
-					creditCard.setAvailableCredit(
-							creditCard.getAvailableCredit() - interestAndPenaltyCharge);
+					creditCard.setAvailableCredit(creditCard.getAvailableCredit() - interestAndPenaltyCharge);
 				}
 
 				creditCardTransactionRepository.save(transaction);

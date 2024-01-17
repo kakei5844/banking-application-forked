@@ -35,18 +35,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    // @ExceptionHandler(CreditCardNotFoundException.class)
-    // public ResponseEntity<ErrorResponse> handleCreditCardNotFoundException(CreditCardNotFoundException ex) {
-    //     ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage(), Collections.emptyList());
-    //     return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    // }
-
-    // @ExceptionHandler(UserNotFoundException.class)
-    // public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
-    //     ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage(), Collections.emptyList());
-    //     return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    // }
-
     @ExceptionHandler({InvalidAmountException.class, InsufficientBalanceException.class, InsufficientCreditException.class})
     public ResponseEntity<ErrorResponse> handleBusinessExceptions(RuntimeException ex) {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), Collections.emptyList());
@@ -76,7 +64,6 @@ public class GlobalExceptionHandler {
             this.errors = errors;
         }
 
-        // Getters and setters
         public int getStatus() {
             return status;
         }

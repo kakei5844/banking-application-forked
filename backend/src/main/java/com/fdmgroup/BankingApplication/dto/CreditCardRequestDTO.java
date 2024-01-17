@@ -6,31 +6,29 @@ import jakarta.validation.constraints.NotEmpty;
 
 public class CreditCardRequestDTO {
 
-    @DecimalMin(value = "0.01", message = "annual salary must be greater than zero")
-    private double annualSalary; 
+	@DecimalMin(value = "0.01", message = "annual salary must be greater than zero")
+	private double annualSalary;
 
-    @NotEmpty(message = "card type must be provided")
-    private String cardType;
+	@NotEmpty(message = "card type must be provided")
+	private String cardType;
 
-    public CreditCardRequestDTO() {
-    }
+	public CreditCardRequestDTO() {
+	}
 
-    public double getAnnualSalary() {
-        return annualSalary;
-    }
+	public double getAnnualSalary() {
+		return annualSalary;
+	}
 
-    public void setAnnualSalary(double annualSalary) {
-        this.annualSalary = annualSalary;
-    }
+	public void setAnnualSalary(double annualSalary) {
+		this.annualSalary = annualSalary;
+	}
 
-    public String getCardType() {
-        return cardType;
-    }
+	public String getCardType() {
+		return cardType;
+	}
 
-    public void setCardType(String cardType) {
-        this.cardType = cardType;
-    }
-
-    
+	public void setCardType(String cardType) {
+		this.cardType = cardType;
+	}
 
 }

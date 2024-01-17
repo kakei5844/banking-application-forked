@@ -5,9 +5,9 @@ import jakarta.validation.constraints.Min;
 
 public class WithdrawRequestDTO {
 
-    private String bankAccountNumber;
-    
-    @DecimalMin(value = "0.01", message = "Amount must be greater than zero")
+	private String bankAccountNumber;
+
+	@DecimalMin(value = "0.01", message = "Amount must be greater than zero")
 	private double amount;
 
 	public WithdrawRequestDTO() {

@@ -40,7 +40,6 @@ public class UserManagementController {
 			AuthResponse response = new AuthResponse(savedUser.getId(), savedUser.getUsername(), savedUser.getRole());
 			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (Exception e) {
-			// to be confirmed with FE what they need
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
 	}
@@ -57,15 +56,12 @@ public class UserManagementController {
 			Authentication authentication) {
 		logoutHandler.logout(request, response, authentication);
 
-		// Invalidate the session and clear the security context
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			session.invalidate();
 		}
 		SecurityContextHolder.clearContext();
 
-		// Create a cookie with the same name as the session cookie but with a Max-Age
-		// of 0
 		Cookie cookie = new Cookie("JSESSIONID", null);
 		cookie.setPath(request.getContextPath());
 		cookie.setMaxAge(0);
