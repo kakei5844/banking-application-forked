@@ -1,77 +1,73 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Navigate } from 'react-router-dom';
 import CreditCardBill from "../components/CreditBill"
-import { useAuth } from '../misc/AuthContext';
-import { bankingApi } from '../misc/BankingApi';
-import { handleLogError } from '../misc/Helpers';
 
 
-const BillPage = () => {
+const BillPage = ( cards, transactions ) => {
   
-  const [transactions, setTransactions] = useState([
-    // Transactions data as you have it in the Carousel component
-    {
-      paymentType: 'Credit Card',
-      amount: '$50.00',
-      description: 'Purchase from lazada',
-      status: 'Completed',
-      datetime: '2022-01-10T08:00:00',
-      cardNumber: '5542123412341234',
-    },
-    {
-      paymentType: 'Credit Card',
-      amount: '$25.00',
-      description: 'Purchase from lazada',
-      status: 'Pending',
-      datetime: '2022-01-10T08:15:00', // Replace with the actual datetime
-      cardNumber: '5542123412341234', // Card number without masking
-    },
-    {
-      paymentType: 'Credit Card',
-      amount: '$80.00',
-      description: 'Purchase from lazada',
-      status: 'Failed',
-      datetime: '2022-01-10T08:30:00', // Replace with the actual datetime
-      cardNumber: '5542123412341234', // Card number without masking
-    },
-    {
-      paymentType: 'Credit Card',
-      amount: '$80.00',
-      description: 'Purchase from lazada',
-      status: 'Failed',
-      datetime: '2022-02-10T08:30:00', // Replace with the actual datetime
-      cardNumber: '5542123412341234', // Card number without masking
-    },
-    {
-      paymentType: 'Credit Card',
-      amount: '$80.00',
-      description: 'Purchase from lazada',
-      status: 'Failed',
-      datetime: '2024-01-10T08:30:00', // Replace with the actual datetime
-      cardNumber: '5542123412341234', // Card number without masking
-    },
-  ]);
+  const [billData, setBillData] = useState({
+    id: 0,
+    issueDate: '',
+    dueDate: '',
+    balanceDue: 0.0,
+    minimumPayment: 0.0,
+    totalRepaymentAmount: 0.0,
+    remainingBalance: 0.0,
+    billedTransactionsDTO: [], // Initialize as an empty array
+  });
 
-  const [cards, setCards] = useState([
-    {
-      number: '4111111111111111',
-      name: 'John Doe',
-      expiry: '12/23',
-      cvc: '123',
-      focus: 'number',
-    },
-    { cvc: '123', expiry: '2020', focus: '', name: 'tom', number: '5542123412341234' },
-    { cvc: '246', expiry: '2021', focus: '', name: 'jerry', number: '6134123412341234' },
-    { cvc: '369', expiry: '2022', focus: '', name: 'tim', number: '4343123412341234' },
-    { cvc: '322', expiry: '2022', focus: '', name: 'trey', number: '374312341234125' },
-    { cvc: '387', expiry: '2022', focus: '', name: 'angus', number: '36431234123434' },
-    { cvc: '365', expiry: '2022', focus: '', name: 'bob', number: '6243123412341234' },
-    { cvc: '324', expiry: '2022', focus: '', name: 'bailey', number: '3543123412341234' }
-    // Add other card data as needed
-  ]);
-  
+  const [billedTransactions, setBilledTransactions] = useState({
+    id: 0,
+                creditCardId: 0,
+                amount: 0.0,
+                description: '',
+                createdAt: ''
+  })
+
+  useEffect(() => {
+    // Fetch data from your API
+    const fetchData = async () => {
+      try {
+
+        const user = 'john';
+        const password = 888;
+        const basicAuthCredentials = btoa(`${user}:${password}`);
+
+        const response = await fetch('http://localhost:8080/api/v1/bills/credit-card/2', {
+          headers: {
+            'Authorization': `Basic ${basicAuthCredentials}`,
+            // Add any other headers if required
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+
+        const data = await response.json();
+        setBillData(data[0]);
+        setBilledTransactions(data[0].billedTransactionsDTO) // Assuming your API returns an array with one object
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    console.log(billedTransactions)
+    fetchData();
+  }, []);
+
+  // Access billedTransactionsDTO
+  // const billedTransactions = billData.billedTransactionsDTO || []
+
+  // console.log(billedTransactions.amount)
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   return (
-    <CreditCardBill  transactions={transactions} cards={cards} />
+    <CreditCardBill statementBalance={billData.balanceDue} minimumPayment={billData.minimumPayment} 
+    dueDate={formatDate(billData.dueDate)} remainingBalance={billData.remainingBalance} balancePaid={billData.totalRepaymentAmount} transactions={billedTransactions} cards={cards} />
   );
   
 };

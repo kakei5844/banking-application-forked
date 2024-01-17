@@ -15,6 +15,7 @@ import Cashback from "../components/CashBack";
 import { useAuth } from "../misc/AuthContext";
 import { bankingApi } from "../misc/BankingApi";
 import { handleLogError } from "../misc/Helpers";
+import BillPage from "./BillPage";
 
 const CreditCardFeature = () => {
   const Auth = useAuth();
@@ -170,7 +171,7 @@ const CreditCardFeature = () => {
                 <span className="ms-2">Bill Payment</span>
               </ActionButton>
             </NavLink>
-            <NavLink to='/bill'>
+            <NavLink to='/bill' element={<BillPage cards={cards} transactions={cards.transactions}/>}>
           <ActionButton>
             <i className="bi bi-receipt" />
             <span className="ms-2">Statement</span>
