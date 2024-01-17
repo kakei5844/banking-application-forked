@@ -9,7 +9,7 @@ import "react-credit-cards-2/dist/es/styles-compiled.css";
 import ActionButton from "../components/ActionButton";
 import CreditCardTransaction from "../components/CreditCardTransactionHistory";
 import Cards from "react-credit-cards-2";
-import CreditDetails from "../components/CreditDetails.js";
+import CreditDetails from "../components/CreditDetails";
 import Cashback from "../components/CashBack";
 
 import { useAuth } from "../misc/AuthContext";
@@ -24,7 +24,8 @@ const CreditCardFeature = () => {
   const [transactions, setTransactions] = useState([]);
   const [cards, setCards] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [isLoading, setIsLoading] = useState(true);
+  const [cashbackVisible, setCashbackVisible] = useState(false);
 
   const maskCardNumber = (number) => {
     if (number) {
@@ -47,8 +48,6 @@ const CreditCardFeature = () => {
       (prevIndex) => (prevIndex - 1 + cards.length) % cards.length
     );
   };
-
-  const [cashbackVisible, setCashbackVisible] = useState(false);
 
   const handleCashbackClick = () => {
     setCashbackVisible(true);
@@ -78,7 +77,6 @@ const CreditCardFeature = () => {
                   date: transaction.createdAt,
                 })
               );
-              setTransactions(formattedTransactions);
               console.log(
                 "Credit Card Transactions >>>",
                 formattedTransactions
@@ -89,9 +87,8 @@ const CreditCardFeature = () => {
                 name: `${userResponse.data.firstName} ${userResponse.data.lastName}`,
                 expiry: `${(new Date(creditCard.issueDate).getMonth() + 1)
                   .toString()
-                  .padStart(2, "0")}/${
-                  (new Date(creditCard.issueDate).getFullYear() + 2) % 100
-                }`,
+                  .padStart(2, "0")}/${(new Date(creditCard.issueDate).getFullYear() + 2) % 100
+                  }`,
                 transactions: formattedTransactions,
                 limit: creditCard.creditLimit,
                 spent: creditCard.outstandingBalance,
@@ -103,7 +100,7 @@ const CreditCardFeature = () => {
           const userCards = await Promise.all(creditCardPromises);
           setCards(userCards);
           console.log("Cards>>>", userCards);
-          setIsLoading(false); // Set loading to false when data is fetched
+          setIsLoading(false);
         } else {
           console.error(
             "User data or credit card information is not available."
@@ -190,18 +187,16 @@ const CreditCardFeature = () => {
             />
           </div>
         )}
-        {/* </div>
-      </div> */}
-
         <hr />
-
         <div className="bottom">
           <div className="bottom-left">
-            <CreditCardTransaction
-              selectedCard={currentCardIndex}
-              transactions={transactions}
-              cards={cards}
-            />
+            {currentCardIndex >= 0 && currentCardIndex < cards.length && (
+              <CreditCardTransaction
+                selectedCard={currentCardIndex}
+                transactions={cards[currentCardIndex].transactions}
+                cards={cards}
+              />
+            )}
           </div>
         </div>
       </div>

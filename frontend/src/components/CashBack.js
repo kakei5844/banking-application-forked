@@ -10,7 +10,7 @@ const CashBack = ({ cashback, onClose }) => {
       <h2 className="cashback-title">Cashback</h2>
       <div className="cashback-value-container d-grid gap-2">
         <div className="fs-5 text-white">Your cashback value is: </div>
-        <span className="cashback-value text-center">{cashback}</span>
+        <span className="cashback-value text-center">${cashback}</span>
       </div>
       <div className="button-container">
         <button className="popup-button btn btn-dark">Details</button>

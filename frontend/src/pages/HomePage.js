@@ -95,14 +95,8 @@ const HomePage = () => {
           <div className="button-list">
             <NavLink to="/withdraw-deposit">
               <ActionButton>
-                <i className="bi bi-plus-circle" />
-                <span className="ms-2">Deposit</span>
-              </ActionButton>
-            </NavLink>
-            <NavLink to="/withdraw-deposit">
-              <ActionButton>
-                <i className="bi bi-dash-circle" />
-                <span className="ms-2">Withdraw</span>
+                <i className="bi bi-cash-coin" />
+                <span className="ms-2">Withdraw/Deposit</span>
               </ActionButton>
             </NavLink>
             <NavLink to="/transfer">

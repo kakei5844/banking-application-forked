@@ -66,7 +66,7 @@ const BankTransactionHistory = ({ transactions }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredTransactions.map((transaction, index) => (
+                    {filteredTransactions.map((transaction) => (
                         <tr key={transaction.id} className="transaction-item">
                             <td>{new Date(transaction.date).toLocaleString()}</td>
                             <td>{transaction.description}</td>
