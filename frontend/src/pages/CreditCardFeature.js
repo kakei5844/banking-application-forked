@@ -170,6 +170,12 @@ const CreditCardFeature = () => {
                 <span className="ms-2">Bill Payment</span>
               </ActionButton>
             </NavLink>
+            <NavLink to='/bill'>
+          <ActionButton>
+            <i className="bi bi-receipt" />
+            <span className="ms-2">Statement</span>
+          </ActionButton>
+          </NavLink>
             <button
               className="btn btn-dark custom-button"
               onClick={handleCashbackClick}
