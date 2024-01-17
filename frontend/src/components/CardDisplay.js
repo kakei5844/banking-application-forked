@@ -38,11 +38,6 @@ const CardDisplay = ({ firstName, lastName, accountNumber, balance }) => {
               {balanceVisible ? `Balance: $${balance}` : "Balance: ******"}
             </h5>
           </div>
-
-          <div className="valid-date">
-            <h6>Valid To</h6>
-            <h5>10/30</h5>
-          </div>
         </div>
       </div>
     </div>
