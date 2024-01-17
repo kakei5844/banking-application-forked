@@ -56,16 +56,14 @@ public class BankAccountService {
 
 	@Transactional
 	public BankAccountTransactionDTO withdraw(WithdrawRequestDTO req) {
-		checkSufficientBalance(req.getBankAccountNumber(), req.getAmount());
 		BankAccountTransaction transaction = processTransaction(req.getBankAccountNumber(), -req.getAmount(), "Withdrawal");
 		return convertToDTO(transaction);
 	}
 
 	@Transactional
 	public BankAccountTransactionDTO transfer(TransferRequestDTO req) {
-		checkSufficientBalance(req.getFromBankAccountNumber(), req.getAmount());
 		processTransaction(req.getToBankAccountNumber(), req.getAmount(),
-				"Transfer from account " + req.getFromBankAccountNumber());
+				"Transferred from account " + req.getFromBankAccountNumber());
 		BankAccountTransaction fromTransaction = processTransaction(req.getFromBankAccountNumber(), -req.getAmount(),
 				"Transfer to account " + req.getToBankAccountNumber());
 		return convertToDTO(fromTransaction);
@@ -77,15 +75,16 @@ public class BankAccountService {
 		return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
 
-	private void checkSufficientBalance(String bankAccountNumber, double amount) {
-		BankAccount bankAccount = findBankAccountByNumber(bankAccountNumber);
-		if (bankAccount.getBalance() < amount) {
+	private boolean checkSufficientBalance(BankAccount bankAccount, double amount) {
+		if (bankAccount.getBalance() + amount < 0) {
 			throw new InsufficientBalanceException("Insufficient balance for transaction.");
 		}
+		return true;
 	}
 
 	public BankAccountTransaction processTransaction(String bankAccountNumber, double amount, String description) {
 	    BankAccount bankAccount = findBankAccountByNumber(bankAccountNumber);
+		checkSufficientBalance(bankAccount, amount);
 
 		// Update the balance
 		double newBalance = bankAccount.getBalance() + amount;
