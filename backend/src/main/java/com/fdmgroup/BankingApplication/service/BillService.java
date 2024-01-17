@@ -29,12 +29,11 @@ public class BillService {
     @Autowired
     CreditCardTransactionRepository creditCardTransactionRepository;
 
-    // Prototype (TO BE DONE WITH SCHEDULAR)
     public void saveBills() {
         List<CreditCard> creditCards = creditCardService.getAllCreditCards();
         for (CreditCard creditCard : creditCards) {
             creditCard = creditCardService.payCreditWithCashback(creditCard);
-            List<CreditCardTransaction> transactions = creditCardService.getLastMonthTransactionsByCreditCard(creditCard);
+            List<CreditCardTransaction> transactions = creditCardService.getTransactionsToBeBilledByCreditCard(creditCard);
 
             Bill bill = new Bill(
                                 LocalDateTime.now(), 
@@ -44,12 +43,12 @@ public class BillService {
                                 0, 
                                 creditCard, 
                                 transactions);
-            billRepository.save(bill);
-            
+
             transactions.stream().forEach(t -> {
                 t.setBill(bill);
                 creditCardTransactionRepository.save(t);
-            });    
+            });
+            billRepository.save(bill);
         }
         return;
     }
