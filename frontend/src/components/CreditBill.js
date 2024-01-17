@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/components/Bill.css';
+import '../styles/components/bill.css';
 import { useState } from 'react';
 import ReactDOM from 'react-dom';
 import BillTransactionHistory from './BillTransactionHistory';
