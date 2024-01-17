@@ -18,7 +18,7 @@ public class SchedulingTasks {
     @Autowired
     CreditCardService creditCardService;
 
-    @Scheduled(cron = "0 0 0 1 * ?") // Executed at 00:00:00 on 1st day of every month
+    @Scheduled(cron = "0 55 23 L * ?") // Executed at 23:55:00 on last day of every month
     public void monthlyBillGeneration() {
         billService.saveBills();
     }
