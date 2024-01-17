@@ -14,10 +14,12 @@ import com.fdmgroup.BankingApplication.dto.CreditCardDTO;
 import com.fdmgroup.BankingApplication.dto.CreditCardTransactionDTO;
 import com.fdmgroup.BankingApplication.exception.CreditCardNotFoundException;
 import com.fdmgroup.BankingApplication.exception.InsufficientCreditException;
+import com.fdmgroup.BankingApplication.model.Bill;
 import com.fdmgroup.BankingApplication.model.CreditCard;
 import com.fdmgroup.BankingApplication.model.CreditCardTransaction;
 import com.fdmgroup.BankingApplication.model.MerchantTypeCategory;
 import com.fdmgroup.BankingApplication.model.User;
+import com.fdmgroup.BankingApplication.repository.BillRepository;
 import com.fdmgroup.BankingApplication.repository.CreditCardRepository;
 import com.fdmgroup.BankingApplication.repository.CreditCardTransactionRepository;
 import com.fdmgroup.BankingApplication.util.CreditCardNumberGenerator;
@@ -35,8 +37,11 @@ public class CreditCardService {
 
 	@Autowired
 	private UserService userService;
-	
-    private static final int MAX_ATTEMPTS = 10;
+
+	@Autowired
+	private BillRepository billRepository;
+
+	private static final int MAX_ATTEMPTS = 10;
 
 	public List<CreditCardDTO> getCreditCardsForUser(Long userId) {
 		return creditCardRepository.findByUserId(userId).stream().map(this::convertToDTO).collect(Collectors.toList());
@@ -56,62 +61,63 @@ public class CreditCardService {
 	}
 
 	public CreditCard createCreditCard(double annualSalary, String cardType, String username) {
-        User user = userService.getUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-        CreditCard creditCard = new CreditCard();
+		User user = userService.getUserByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+		CreditCard creditCard = new CreditCard();
 
-        // Set credit limit, available credit, outstanding balance, etc.
-        creditCard.setCreditLimit(100000);
-        creditCard.setAvailableCredit(100000);
-        creditCard.setOutstandingBalance(0);
+		// Set credit limit, available credit, outstanding balance, etc.
+		creditCard.setCreditLimit(100000);
+		creditCard.setAvailableCredit(100000);
+		creditCard.setOutstandingBalance(0);
 
-        creditCard.setType(cardType);
-        creditCard.setUser(user);
-        creditCard.setIssueDate(LocalDate.now());
+		creditCard.setType(cardType);
+		creditCard.setUser(user);
+		creditCard.setIssueDate(LocalDate.now());
 		creditCard.setCashback(0);
 
-        // Generate a unique Credit Card Number
-        String cardNumber = generateUniqueCardNumber(cardType);
-        creditCard.setCardNumber(cardNumber);
+		// Generate a unique Credit Card Number
+		String cardNumber = generateUniqueCardNumber(cardType);
+		creditCard.setCardNumber(cardNumber);
 
-        user.getCreditCards().add(creditCard);
-        return creditCardRepository.save(creditCard);
-    }
+		user.getCreditCards().add(creditCard);
+		return creditCardRepository.save(creditCard);
+	}
 
 	private String generateUniqueCardNumber(String cardType) {
-        String cardNumber;
-        boolean isUnique = false;
-        int attempts = 0;
-        do {
-            cardNumber = generateCardNumberForType(cardType);
-            isUnique = !creditCardRepository.existsByCardNumber(cardNumber);
-            attempts++;
-        } while (!isUnique && attempts < MAX_ATTEMPTS);
+		String cardNumber;
+		boolean isUnique = false;
+		int attempts = 0;
+		do {
+			cardNumber = generateCardNumberForType(cardType);
+			isUnique = !creditCardRepository.existsByCardNumber(cardNumber);
+			attempts++;
+		} while (!isUnique && attempts < MAX_ATTEMPTS);
 
-        if (!isUnique) {
-            throw new RuntimeException("Unable to generate a unique credit card number after " + MAX_ATTEMPTS + " attempts.");
-        }
+		if (!isUnique) {
+			throw new RuntimeException(
+					"Unable to generate a unique credit card number after " + MAX_ATTEMPTS + " attempts.");
+		}
 
-        return cardNumber;
-    }
-	
+		return cardNumber;
+	}
+
 	private String generateCardNumberForType(String cardType) {
 		String iin;
-        int accountNumberLength = 9; // Account number length for a total of 16 digits
+		int accountNumberLength = 9; // Account number length for a total of 16 digits
 
-        switch (cardType.toUpperCase()) {
-            case "VISA":
-                iin = "411111";
-                break;
-            case "MASTERCARD":
-                iin = "510000";
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported card type: " + cardType);
-        }
+		switch (cardType.toUpperCase()) {
+			case "VISA":
+				iin = "411111";
+				break;
+			case "MASTERCARD":
+				iin = "510000";
+				break;
+			default:
+				throw new IllegalArgumentException("Unsupported card type: " + cardType);
+		}
 
-        return CreditCardNumberGenerator.generateCreditCardNumber(iin, accountNumberLength);
-    }
+		return CreditCardNumberGenerator.generateCreditCardNumber(iin, accountNumberLength);
+	}
 
 	public List<CreditCard> getCreditCardsByUsername(String username) {
 		User user = userService.getUserByUsername(username)
@@ -123,12 +129,10 @@ public class CreditCardService {
 
 		return convertToDTO(
 				processTransaction(
-					creditCardId, 
-					amount, 
-					"Purchase from " + merchantName,
-					mcc
-				)
-		);
+						creditCardId,
+						amount,
+						"Purchase from " + merchantName,
+						mcc));
 	}
 
 	public List<CreditCard> getAllCreditCards() {
@@ -145,9 +149,8 @@ public class CreditCardService {
 		return creditCard.getCreditCardTransactions().stream().map(t -> convertToDTO(t)).collect(Collectors.toList());
 	}
 
-	public List<CreditCardTransaction> getLastMonthTransactionsByCreditCard(CreditCard c) {
-		return creditCardTransactionRepository.findByCreditCardAndCreatedAtBetween(c,
-				LocalDateTime.now().minusMonths(1), LocalDateTime.now());
+	public List<CreditCardTransaction> getTransactionsToBeBilledByCreditCard(CreditCard c) {
+		return creditCardTransactionRepository.findByCreditCardAndBillIsNull(c);
 	}
 
 	public CreditCardTransactionDTO convertToDTO(CreditCardTransaction transaction) {
@@ -194,17 +197,15 @@ public class CreditCardService {
 
 	public CreditCard payCreditWithCashback(CreditCard creditCard) {
 		double accumulatedCashback = creditCard.getCashback();
-		
+
 		creditCard.setOutstandingBalance(
-			creditCard.getOutstandingBalance() - accumulatedCashback
-		);
+				creditCard.getOutstandingBalance() - accumulatedCashback);
 
 		creditCard.setAvailableCredit(
-			creditCard.getAvailableCredit() + accumulatedCashback
-		);
+				creditCard.getAvailableCredit() + accumulatedCashback);
 
 		creditCard.setCashback(0);
-		
+
 		CreditCardTransaction transaction = new CreditCardTransaction();
 		transaction.setAmount(accumulatedCashback * -1);
 		transaction.setCreatedAt(LocalDateTime.now());
@@ -217,4 +218,54 @@ public class CreditCardService {
 
 		return creditCardRepository.save(creditCard);
 	}
+
+	// To be done with schedular
+	public void generateLatePaymentCharge() {
+		List<CreditCard> creditCards = this.getAllCreditCards();
+		for (CreditCard creditCard : creditCards) {
+			Bill bill = billRepository.findFirstByCreditCardOrderByIssueDateDesc(creditCard);
+			double balanceDue = bill.getBalanceDue();
+			double totalRepaymentAmount = bill.getTotalRepaymentAmount();
+			double minimumPayment = bill.getMinimumPayment();
+
+			double interestCharge = (balanceDue - totalRepaymentAmount) * 0.02;
+			double interestAndPenaltyCharge = (balanceDue - totalRepaymentAmount) * (0.02 + 0.04);
+
+			if (totalRepaymentAmount < balanceDue) {
+				CreditCardTransaction transaction = new CreditCardTransaction();
+
+				if (totalRepaymentAmount >= minimumPayment) {
+					transaction.setAmount(interestCharge);
+					transaction.setCreatedAt(LocalDateTime.now());
+					transaction.setCreditCard(creditCard);
+					transaction.setDescription("Overdue Interest Charge");
+					transaction.setMcc(0);
+					transaction.setMerchantCategory(UNKNOWN);
+
+					creditCard.setOutstandingBalance(
+							creditCard.getOutstandingBalance() + interestCharge);
+
+					creditCard.setAvailableCredit(
+							creditCard.getAvailableCredit() - interestCharge);
+				} else {
+					transaction.setAmount(interestAndPenaltyCharge);
+					transaction.setCreatedAt(LocalDateTime.now());
+					transaction.setCreditCard(creditCard);
+					transaction.setDescription("Overdue Interest Charge and Extra Penalty");
+					transaction.setMcc(0);
+					transaction.setMerchantCategory(UNKNOWN);
+
+					creditCard.setOutstandingBalance(
+							creditCard.getOutstandingBalance() + interestAndPenaltyCharge);
+
+					creditCard.setAvailableCredit(
+							creditCard.getAvailableCredit() - interestAndPenaltyCharge);
+				}
+
+				creditCardTransactionRepository.save(transaction);
+				creditCardRepository.save(creditCard);
+			}
+		}
+	}
+
 }

@@ -28,7 +28,7 @@ public class Bill {
 	@JoinColumn(name = "credit_card_id", nullable = false)
 	private CreditCard creditCard;
 
-	@OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "bill")
 	private List<CreditCardTransaction> billedTransactions;
 
 	public Bill() {
