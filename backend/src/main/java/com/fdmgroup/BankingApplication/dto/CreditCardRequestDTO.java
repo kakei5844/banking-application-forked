@@ -31,6 +31,12 @@ public class CreditCardRequestDTO {
         this.cardType = cardType;
     }
 
-    
+    @Override
+    public String toString() {
+        return "CreditCardRequestDTO{" +
+                "annualSalary=" + annualSalary +
+                ", cardType='" + cardType + '\'' +
+                '}';
+    }
 
 }

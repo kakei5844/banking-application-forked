@@ -17,8 +17,12 @@ import com.fdmgroup.BankingApplication.security.Role;
 import com.fdmgroup.BankingApplication.util.BankAccountNumberGenerator;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
+@Slf4j
 public class UserService {
 
     @Autowired
@@ -47,6 +51,8 @@ public class UserService {
         user.setLastName(req.getLastName());
         user.setPhoneNumber(req.getPhoneNumber());
         user.setRole(req.getRole());
+        
+//        log.
 
         if (user.getRole() == Role.USER) {
             BankAccount bankAccount = new BankAccount();

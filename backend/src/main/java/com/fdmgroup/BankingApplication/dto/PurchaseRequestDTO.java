@@ -15,5 +15,14 @@ public record PurchaseRequestDTO(long creditCardId, double amount, String mercha
     // 9000–9999: Government services
 
     // not checking cvv, expiry date for now
-
+	
+	@Override
+    public String toString() {
+        return "PurchaseRequestDTO{" +
+                "creditCardId=" + creditCardId +
+                ", amount=" + amount +
+                ", merchantName='" + merchantName + '\'' +
+                ", mcc=" + mcc +
+                '}';
+    }
 }

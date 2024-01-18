@@ -20,8 +20,10 @@ import com.fdmgroup.BankingApplication.repository.BankAccountRepository;
 import com.fdmgroup.BankingApplication.repository.BankAccountTransactionRepository;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class BankAccountService {
 
 	@Autowired

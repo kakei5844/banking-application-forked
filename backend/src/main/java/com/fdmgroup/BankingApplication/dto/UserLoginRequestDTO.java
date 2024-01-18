@@ -29,4 +29,11 @@ public class UserLoginRequestDTO {
 		this.password = password;
 	}
 	
+	@Override
+	public String toString() {
+	    return "UserLoginRequestDTO{" +
+	            "username='" + username + '\'' +
+	            ", password='" + password + '\'' +
+	            '}';
+	}
 }

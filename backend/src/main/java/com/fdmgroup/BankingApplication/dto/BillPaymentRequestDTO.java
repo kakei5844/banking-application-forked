@@ -8,8 +8,7 @@ public class BillPaymentRequestDTO {
     @Min(value = 1, message = "Invalid credit card id")
     private long creditCardId;
 
-    @Min(value = 1, message = "Invalid bank account id")
-    private long bankAccountId;
+    private String bankAccountNumber;
 
     @DecimalMin(value = "0.01", message = "Amount must be greater than zero")
     private double amount;
@@ -18,10 +17,10 @@ public class BillPaymentRequestDTO {
     }
 
     public BillPaymentRequestDTO(@Min(value = 1, message = "Invalid bill id") long creditCardId,
-            @Min(value = 1, message = "Invalid bank account id") long bankAccountId,
+    		String bankAccountNumber,
             @DecimalMin(value = "0.01", message = "Amount must be greater than zero") double amount) {
         this.creditCardId = creditCardId;
-        this.bankAccountId = bankAccountId;
+        this.bankAccountNumber = bankAccountNumber;
         this.amount = amount;
     }
 
@@ -33,15 +32,15 @@ public class BillPaymentRequestDTO {
         this.creditCardId = creditCardId;
     }
 
-    public long getBankAccountId() {
-        return bankAccountId;
-    }
+    public String getBankAccountNumber() {
+		return bankAccountNumber;
+	}
 
-    public void setBankAccountId(long bankAccountId) {
-        this.bankAccountId = bankAccountId;
-    }
+	public void setBankAccountNumber(String bankAccountNumber) {
+		this.bankAccountNumber = bankAccountNumber;
+	}
 
-    public double getAmount() {
+	public double getAmount() {
         return amount;
     }
 
@@ -49,4 +48,12 @@ public class BillPaymentRequestDTO {
         this.amount = amount;
     }
 
+    @Override
+    public String toString() {
+        return "BillPaymentRequestDTO{" +
+                "creditCardId=" + creditCardId +
+                ", bankAccountNumber='" + bankAccountNumber + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
 }

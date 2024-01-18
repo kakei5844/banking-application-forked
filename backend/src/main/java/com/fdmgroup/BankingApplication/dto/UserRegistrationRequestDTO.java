@@ -98,5 +98,18 @@ public class UserRegistrationRequestDTO {
 	public void setInitialBalance(double initialBalance) {
 		this.initialBalance = initialBalance;
 	}
+	
+	@Override
+	public String toString() {
+	    return "UserRegistrationRequestDTO{" +
+	            "username='" + username + '\'' +
+	            ", password='" + password + '\'' +
+	            ", firstName='" + firstName + '\'' +
+	            ", lastName='" + lastName + '\'' +
+	            ", phoneNumber='" + phoneNumber + '\'' +
+	            ", role=" + role +
+	            ", initialBalance=" + initialBalance +
+	            '}';
+	}
 
 }
