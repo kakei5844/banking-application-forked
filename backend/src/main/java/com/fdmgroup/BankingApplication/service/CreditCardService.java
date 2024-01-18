@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -133,6 +134,24 @@ public class CreditCardService {
 		CreditCard creditCard = findCreditCardByIdAndUsername(id, username);
 		return creditCard.getCreditCardTransactions().stream().map(t -> convertToDTO(t)).collect(Collectors.toList());
 	}
+	
+    public List<CreditCardTransactionDTO> getTransactionsByMonthAndYear(Long creditCardId, int month, int year, String username) {
+        CreditCard creditCard = findCreditCardByIdAndUsername(creditCardId, username);
+        LocalDateTime startOfMonth = LocalDateTime.of(year, month, 1, 0, 0);
+        LocalDateTime endOfMonth = startOfMonth.with(TemporalAdjusters.lastDayOfMonth()).withHour(23).withMinute(59).withSecond(59);
+
+        List<CreditCardTransaction> transactions = creditCardTransactionRepository.findByCreditCardAndCreatedAtBetweenOrderByCreatedAtDesc(creditCard, startOfMonth, endOfMonth);
+        return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    public List<CreditCardTransactionDTO> getTransactionsByYear(Long creditCardId, int year, String username) {
+        CreditCard creditCard = findCreditCardByIdAndUsername(creditCardId, username);
+        LocalDateTime startOfYear = LocalDateTime.of(year, 1, 1, 0, 0);
+        LocalDateTime endOfYear = LocalDateTime.of(year, 12, 31, 23, 59, 59);
+
+        List<CreditCardTransaction> transactions = creditCardTransactionRepository.findByCreditCardAndCreatedAtBetweenOrderByCreatedAtDesc(creditCard, startOfYear, endOfYear);
+        return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
 
 	public List<CreditCard> getAllCreditCards() {
 		return creditCardRepository.findAll();

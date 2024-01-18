@@ -1,5 +1,6 @@
 package com.fdmgroup.BankingApplication.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +13,8 @@ import com.fdmgroup.BankingApplication.model.CreditCardTransaction;
 public interface CreditCardTransactionRepository extends JpaRepository<CreditCardTransaction, Long> {
 
     List<CreditCardTransaction> findByCreditCardAndBillIsNull(CreditCard c);
+    
+    List<CreditCardTransaction> findByCreditCardAndCreatedAtBetweenOrderByCreatedAtDesc(CreditCard creditCard, LocalDateTime startDate, LocalDateTime endDate);
+
 
 }
