@@ -51,7 +51,8 @@ const TransferPage = () => {
         const response = await bankingApi.transfer(
           userDb.bankAccount.accountNumber,
           accountNumber,
-          amount
+          amount,
+          user
         );
         console.log(response.data);
         setErrorMessage("");

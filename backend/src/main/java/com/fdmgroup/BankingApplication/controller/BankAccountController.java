@@ -40,20 +40,20 @@ public class BankAccountController {
 	}
 
 	@PostMapping("/deposit")
-	public ResponseEntity<?> deposit(@Valid @RequestBody DepositRequestDTO req) {
-		BankAccountTransactionDTO savedBankAccountTransaction = bankAccountService.deposit(req);
+	public ResponseEntity<?> deposit(@Valid @RequestBody DepositRequestDTO req, @AuthenticationPrincipal UserPrincipal currentUser) {
+		BankAccountTransactionDTO savedBankAccountTransaction = bankAccountService.deposit(req.getBankAccountNumber(), req.getAmount(), currentUser.getUsername());
 		return new ResponseEntity<>(savedBankAccountTransaction, HttpStatus.OK);
 	}
 
 	@PostMapping("/withdraw")
-	public ResponseEntity<?> withdraw(@Valid @RequestBody WithdrawRequestDTO req) {
-		BankAccountTransactionDTO savedBankAccountTransaction = bankAccountService.withdraw(req);
+	public ResponseEntity<?> withdraw(@Valid @RequestBody WithdrawRequestDTO req, @AuthenticationPrincipal UserPrincipal currentUser) {
+		BankAccountTransactionDTO savedBankAccountTransaction = bankAccountService.withdraw(req.getBankAccountNumber(), req.getAmount(), currentUser.getUsername());
 		return new ResponseEntity<>(savedBankAccountTransaction, HttpStatus.OK);
 	}
 
 	@PostMapping("/transfer")
-	public ResponseEntity<?> transfer(@Valid @RequestBody TransferRequestDTO req) {
-		BankAccountTransactionDTO response = bankAccountService.transfer(req);
+	public ResponseEntity<?> transfer(@Valid @RequestBody TransferRequestDTO req, @AuthenticationPrincipal UserPrincipal currentUser) {
+		BankAccountTransactionDTO response = bankAccountService.transfer(req.getFromBankAccountNumber(), req.getToBankAccountNumber(), req.getAmount(), currentUser.getUsername());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

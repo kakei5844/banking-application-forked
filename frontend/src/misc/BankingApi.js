@@ -52,32 +52,32 @@ function getTransactions(bankAccountId, user) {
   });
 }
 
-function withdraw(bankAccountNumber, amount) {
+function withdraw(bankAccountNumber, amount, user) {
   return instance.post('api/v1/bank-accounts/withdraw', {
     'bankAccountNumber': bankAccountNumber,
     'amount': amount
   }, {
-    withCredentials: true
+    headers: { 'Authorization': basicAuth(user) }
   })
 
 }
 
-function deposit(bankAccountNumber, amount) {
+function deposit(bankAccountNumber, amount, user) {
   return instance.post('api/v1/bank-accounts/deposit', {
     'bankAccountNumber': bankAccountNumber,
     'amount': amount
   }, {
-    withCredentials: true
+    headers: { 'Authorization': basicAuth(user) }
   })
 }
 
-function transfer(fromBankAccountNumber, toBankAccountNumber, amount) {
+function transfer(fromBankAccountNumber, toBankAccountNumber, amount, user) {
   return instance.post('/api/v1/bank-accounts/transfer', {
     'fromBankAccountNumber': fromBankAccountNumber,
     'toBankAccountNumber': toBankAccountNumber,
     "amount": amount
   }, {
-    withCredentials: true
+    headers: { 'Authorization': basicAuth(user) }
   })
 }
 

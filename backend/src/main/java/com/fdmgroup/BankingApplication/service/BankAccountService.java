@@ -32,24 +32,27 @@ public class BankAccountService {
 	private BankAccountTransactionRepository bankAccountTransactionRepository;
 
 	@Transactional
-	public BankAccountTransactionDTO deposit(DepositRequestDTO req) {
-		BankAccountTransaction transaction = processTransaction(req.getBankAccountNumber(), req.getAmount(), "Deposit");
+	public BankAccountTransactionDTO deposit(String bankAccountNumber, double amount, String username) {
+		BankAccount bankAccount = findBankAccountByNumberAndUsername(bankAccountNumber, username);
+		BankAccountTransaction transaction = processTransaction(bankAccount, amount, "Deposit");
 		return convertToDTO(transaction);
 	}
 
 	@Transactional
-	public BankAccountTransactionDTO withdraw(WithdrawRequestDTO req) {
-		BankAccountTransaction transaction = processTransaction(req.getBankAccountNumber(), -req.getAmount(),
-				"Withdrawal");
+	public BankAccountTransactionDTO withdraw(String bankAccountNumber, double amount, String username) {
+		BankAccount bankAccount = findBankAccountByNumberAndUsername(bankAccountNumber, username);
+		BankAccountTransaction transaction = processTransaction(bankAccount, amount * -1, "Withdrawal");
 		return convertToDTO(transaction);
 	}
 
 	@Transactional
-	public BankAccountTransactionDTO transfer(TransferRequestDTO req) {
-		processTransaction(req.getToBankAccountNumber(), req.getAmount(),
-				"Transferred from account " + req.getFromBankAccountNumber());
-		BankAccountTransaction fromTransaction = processTransaction(req.getFromBankAccountNumber(), -req.getAmount(),
-				"Transfer to account " + req.getToBankAccountNumber());
+	public BankAccountTransactionDTO transfer(String fromAccountNumber, String toAccountNumber, double amount, String username) {
+		BankAccount fromBankAccount = findBankAccountByNumberAndUsername(fromAccountNumber, username);
+		BankAccountTransaction fromTransaction = processTransaction(fromBankAccount, amount * -1, "Transfer to account " + toAccountNumber);
+
+		BankAccount toBankAccount = findBankAccountByNumber(toAccountNumber);
+		processTransaction(toBankAccount, amount, "Transferred from account " + fromAccountNumber);
+		
 		return convertToDTO(fromTransaction);
 	}
 
@@ -85,8 +88,7 @@ public class BankAccountService {
 				.orElseThrow(() -> new BankAccountNotFoundException("Bank account not found for ID: " + id));
 	}
 
-	public BankAccountTransaction processTransaction(String bankAccountNumber, double amount, String description) {
-		BankAccount bankAccount = findBankAccountByNumber(bankAccountNumber);
+	public BankAccountTransaction processTransaction(BankAccount bankAccount, double amount, String description) {
 		checkSufficientBalance(bankAccount, amount);
 
 		double newBalance = bankAccount.getBalance() + amount;
@@ -102,7 +104,7 @@ public class BankAccountService {
 		return bankAccountTransactionRepository.save(bankAccountTransaction);
 	}
 
-	public BankAccount findBankAccountByNumber(String accountNumber) {
+	private BankAccount findBankAccountByNumber(String accountNumber) {
 		return bankAccountRepository.findByAccountNumber(accountNumber).orElseThrow(
 				() -> new BankAccountNotFoundException("Bank account not found for account number: " + accountNumber));
 	}
@@ -133,4 +135,11 @@ public class BankAccountService {
 		return bankAccount;
     }
 
+	public BankAccount findBankAccountByNumberAndUsername(String bankAccountNumber, String username) {
+		BankAccount bankAccount = findBankAccountByNumber(bankAccountNumber);
+		if (!bankAccount.getUser().getUsername().equals(username)) {
+			throw new AccessDeniedException("Access Denied: You are not the owner of this bank account Number: " + bankAccountNumber);
+		}
+		return bankAccount;
+	}
 }
