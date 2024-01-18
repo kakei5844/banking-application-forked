@@ -12,7 +12,9 @@ import com.fdmgroup.BankingApplication.model.CreditCardTransaction;
 @Repository
 public interface CreditCardTransactionRepository extends JpaRepository<CreditCardTransaction, Long> {
 
-    List<CreditCardTransaction> findByCreditCardAndCreatedAtBetween(CreditCard c, LocalDateTime minusMonths,
-            LocalDateTime now);
+    List<CreditCardTransaction> findByCreditCardAndBillIsNull(CreditCard c);
+    
+    List<CreditCardTransaction> findByCreditCardAndCreatedAtBetweenOrderByCreatedAtDesc(CreditCard creditCard, LocalDateTime startDate, LocalDateTime endDate);
+
 
 }

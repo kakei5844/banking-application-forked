@@ -10,7 +10,7 @@ function Login() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isError, setIsError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ function Login() {
   const formValidation = () => {
     // Check all inputs
     if (!username || !password) {
-      setIsError(true)
+      setErrorMessage("Please provide username and password")
       return false;
     }
     return true;
@@ -38,10 +38,9 @@ function Login() {
 
       setUsername('')
       setPassword('')
-      setIsError(false)
     } catch (error) {
       handleLogError(error)
-      setIsError(true)
+      setErrorMessage(error.response.data.message)
     }
   };
 
@@ -105,6 +104,9 @@ function Login() {
                       Login
                     </button>
                   </div>
+                  {errorMessage && (
+                    <div className="error-message">{errorMessage}</div>
+                  )}
                 </form>
                 <div className="mt-4 pt-2">
                   <button

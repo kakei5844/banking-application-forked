@@ -23,11 +23,12 @@ public class CreditCard {
 	private String cardNumber;
 	private String type;
 
-	private double outstandingBalance; // amount spent (changed from balance to availableBalance)
-	private double availableCredit; // available credit balance (changed from availableLimit to availableCredit)
+	private double outstandingBalance;
+	private double availableCredit;
 	private double creditLimit;
 
 	private LocalDate issueDate;
+	private double cashback;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "creditCard", cascade = CascadeType.ALL)
@@ -48,7 +49,7 @@ public class CreditCard {
 
 	public CreditCard(Long id, String cardNumber, String type, double outstandingBalance, double availableCredit,
 			double creditLimit, LocalDate issueDate, List<CreditCardTransaction> creditCardTransactions, User user,
-			List<Bill> bills) {
+			List<Bill> bills, double cashback) {
 		super();
 		this.id = id;
 		this.cardNumber = cardNumber;
@@ -60,6 +61,7 @@ public class CreditCard {
 		this.creditCardTransactions = creditCardTransactions;
 		this.user = user;
 		this.bills = bills;
+		this.cashback = cashback;
 	}
 
 	public long getId() {
@@ -140,6 +142,14 @@ public class CreditCard {
 
 	public void setBills(List<Bill> bills) {
 		this.bills = bills;
+	}
+
+	public double getCashback() {
+		return cashback;
+	}
+
+	public void setCashback(double cashback) {
+		this.cashback = cashback;
 	}
 
 }

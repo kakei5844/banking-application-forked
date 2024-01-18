@@ -34,7 +34,7 @@ public class BillController {
     BillService billService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/create") // SIMULATE AUTOMATIC BILL GENERATION
+    @PostMapping("/create")
     public  ResponseEntity<?> createBillsForAllCreditCards() {
         try {
         	LOGGER.info("BillController: Creating bills for all credit cards.");

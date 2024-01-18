@@ -20,7 +20,7 @@
     background-size: cover;
     padding: 25px;
     border-radius: 28px;
-    width: 380px;
+    width: 450px;
     /* width: 100%; */
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
@@ -35,6 +35,12 @@ header,
 .logo img {
     width: 48px;
     margin-right: 10px;
+}
+
+h4 {
+    font-weight: 400;
+    color: #fff;
+    padding-top: 8px;
 }
 
 h5 {
@@ -69,4 +75,5 @@ h5.number {
 
 h5.name {
     margin-top: 20px;
+    margin-bottom: 20px;
 }

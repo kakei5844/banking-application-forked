@@ -13,10 +13,10 @@ class DifferentBankAccountValidator implements ConstraintValidator<DifferentBank
 
     @Override
     public boolean isValid(TransferRequestDTO transferRequestDTO, ConstraintValidatorContext context) {
-        if (transferRequestDTO.getFromBankAccountId() == transferRequestDTO.getToBankAccountId()) {
+        if (transferRequestDTO.getFromBankAccountNumber() == transferRequestDTO.getToBankAccountNumber()) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(context.getDefaultConstraintMessageTemplate())
-                    .addPropertyNode("toBankAccountId")
+                    .addPropertyNode("toBankAccountNumber")
                     .addConstraintViolation();
             return false;
         }

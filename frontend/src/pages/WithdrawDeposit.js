@@ -19,24 +19,6 @@ export default function WithdrawDeposit() {
     setActiveTab(tab);
   };
 
-  const withdraw = async (bankAccountId, amount) => {
-    try {
-      const response = await bankingApi.withdraw(bankAccountId, amount);
-      console.log(response.data);
-    } catch (error) {
-      handleLogError(error);
-    }
-  };
-
-  const deposit = async (bankAccountId, amount) => {
-    try {
-      const response = await bankingApi.deposit(bankAccountId, amount);
-      console.log(response.data);
-    } catch (error) {
-      handleLogError(error);
-    }
-  };
-
   useEffect(() => {
     loadUserDb();
   }, []);
@@ -44,7 +26,8 @@ export default function WithdrawDeposit() {
   const loadUserDb = async () => {
     try {
       const response = await bankingApi.getUser(user);
-      console.log(response.data);
+      // console.log(response.data)
+      console.log(response.data.bankAccount.accountNumber); // use bankAccount number instead of bankAccount id for bank account operations (deposit, withdraw)
       setUserDb(response.data);
     } catch (error) {
       handleLogError(error);
@@ -86,15 +69,9 @@ export default function WithdrawDeposit() {
           <div className="row mt-3">
             <div className="col-12">
               {activeTab === "withdraw" ? (
-                <Withdraw
-                  bankAccountId={userDb.bankAccount.id}
-                  apiCall={withdraw}
-                />
+                <Withdraw bankAccountId={userDb.bankAccount.accountNumber} />
               ) : (
-                <Deposit
-                  bankAccountId={userDb.bankAccount.id}
-                  apiCall={deposit}
-                />
+                <Deposit bankAccountId={userDb.bankAccount.accountNumber} />
               )}
             </div>
           </div>

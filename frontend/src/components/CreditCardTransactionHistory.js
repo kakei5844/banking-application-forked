@@ -1,14 +1,6 @@
-// TransactionHistory.js
 import React, { useState } from 'react';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import '../styles/components/CreditCardTransactionHistory.css'; 
-
-const revealLastFourDigits = (cardNumber) => {
-  const hiddenDigits = cardNumber.slice(0, -4).replace(/\d/g, '*');
-  const lastFourDigits = cardNumber.slice(-4);
-  return `${hiddenDigits}${lastFourDigits}`;
-};
+import '../styles/components/CreditCardTransactionHistory.css';
 
 const CreditCardTransaction = ({ selectedCard, transactions, cards }) => {
 
@@ -18,20 +10,26 @@ const CreditCardTransaction = ({ selectedCard, transactions, cards }) => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
 
-  // Generate an array of months (1 to 12)
   const months = Array.from({ length: 12 }, (_, index) => index + 1);
-
-  // Generate an array of years (current year and the past 3 years)
   const years = Array.from({ length: 4 }, (_, index) => currentYear - index);
 
-  const selectedTransactions = transactions.filter(
-    (transaction) =>
-      transaction.cardNumber === cards[selectedCard].number &&
-      (!selectedMonth || new Date(transaction.datetime).getMonth() + 1 === parseInt(selectedMonth, 10)) &&
-      (!selectedYear || new Date(transaction.datetime).getFullYear() === parseInt(selectedYear, 10))
-  );
+  const selectedTransactions = transactions
+    .filter(
+      (transaction) =>
+        transaction.creditCardId === (cards[selectedCard]?.id || null) &&
+        (!selectedMonth || new Date(transaction.datetime).getMonth() + 1 === parseInt(selectedMonth, 10)) &&
+        (!selectedYear || new Date(transaction.datetime).getFullYear() === parseInt(selectedYear, 10))
+    )
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  
+  const checkColor = (amount) => {
+    if (amount < 0) {
+      return "green";
+    } else {
+      return "red";
+    }
+  }
+
   const handleResetFilters = () => {
     setSelectedMonth('');
     setSelectedYear('');
@@ -75,25 +73,17 @@ const CreditCardTransaction = ({ selectedCard, transactions, cards }) => {
         <table className="transaction-table">
           <thead>
             <tr>
-              <th>Payment Type</th>
+              <th>Date and Time</th>
+              <th>Description</th>
               <th>Amount</th>
-              <th>Merchant Code</th>
-              <th>Status</th>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Card Number</th>
             </tr>
           </thead>
           <tbody>
             {selectedTransactions.map((transaction) => (
-              <tr key={transaction.id}>
-                <td>{transaction.paymentType}</td>
-                <td>{transaction.amount}</td>
-                <td>{transaction.merchantCode}</td>
-                <td>{transaction.status}</td>
-                <td>{new Date(transaction.datetime).toLocaleDateString()}</td>
-                <td>{new Date(transaction.datetime).toLocaleTimeString()}</td>
-                <td>{revealLastFourDigits(transaction.cardNumber)}</td>
+              <tr key={`${transaction.id}-${transaction.creditCardId}`}>
+                <td>{new Date(transaction.date).toLocaleString()}</td>
+                <td>{transaction.description}</td>
+                <td style={{ color: `${checkColor(transaction.amount)}` }}>{Math.abs(transaction.amount)}</td>
               </tr>
             ))}
           </tbody>

@@ -1,24 +1,42 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from '../misc/AuthContext';
+import { bankingApi } from '../misc/BankingApi';
+import { handleLogError } from '../misc/Helpers';
 
 function Registration() {
+  const Auth = useAuth();
+  const isLoggedIn = Auth.userIsAuthenticated();
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [initialBalance, setinitialBalance] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const navigate = useNavigate();
 
-  const createUser = () => {
-    // TODO: Create new user in DB by post request
+  const createUser = async () => {
+    try {
+      const user = {
+        firstName,
+        lastName,
+        phoneNumber,
+        username,
+        initialBalance,
+        password,
+        role: 'USER', 
+      };
+      
+      const response = await bankingApi.register(user);
+      console.log(response.data);
+    } catch (error) {
+      handleLogError(error);
+    }
   };
-
-  const checkUserExistence = () => {
-    // TODO: Check if user exist in DB
-  };
+  
 
   const formValidation = () => {
     // Check all inputs
@@ -26,7 +44,7 @@ function Registration() {
       !firstName ||
       !lastName ||
       !phoneNumber ||
-      !email ||
+      !username ||
       !initialBalance ||
       !password ||
       !confirmPassword
@@ -46,21 +64,25 @@ function Registration() {
     return true;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!formValidation()) return;
-
-    let userExist = false;
-    checkUserExistence();
-    if (userExist === false) {
-      createUser();
+  
+    try {
+      // Create user
+      await createUser();
+  
       alert("Account created successfully!");
       navigate("/login");
-    } else {
-      alert("User already exist. Please proceed to the login page!");
-      return;
+    } catch (error) {
+      handleLogError(error);
+      alert("Error creating user. Please try again.");
     }
+  };
+  
+  if (isLoggedIn) {
+    return <Navigate to='/home' />
   };
 
   return (
@@ -128,39 +150,23 @@ function Registration() {
                         </label>
                       </div>
                     </div>
-                    <div className="col-md-6 mb-4">
-                      <div className="form-floating">
-                        <input
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          type="email"
-                          id="email"
-                          className="form-control form-control-lg"
-                          placeholder="Email"
-                        />
-                        <label className="form-label" htmlFor="email">
-                          Email
-                        </label>
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="row">
                     <div className="col-md-6 mb-4">
                       <div className="form-floating">
                         <input
-                          value={initialBalance}
-                          onChange={(e) => setinitialBalance(e.target.value)}
-                          type="tel"
-                          id="initialBalance"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          type="text"
+                          id="username"
                           className="form-control form-control-lg"
-                          placeholder="Initial Balance"
+                          placeholder="Username"
                         />
-                        <label className="form-label" htmlFor="initialBalance">
-                          Initial Balance
+                        <label className="form-label" htmlFor="username">
+                          Username
                         </label>
                       </div>
                     </div>
+                    
                   </div>
 
                   <div className="row">
@@ -191,6 +197,25 @@ function Registration() {
                         />
                         <label className="form-label" htmlFor="confirmPassword">
                           Confirm Password
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6 mb-4">
+                      <div className="form-floating">
+                        <input
+                          value={initialBalance}
+                          onChange={(e) => setinitialBalance(e.target.value)}
+                          type="number"
+                          step="1000"
+                          id="initialBalance"
+                          className="form-control form-control-lg"
+                          placeholder="Initial Balance"
+                        />
+                        <label className="form-label" htmlFor="initialBalance">
+                          Initial Balance
                         </label>
                       </div>
                     </div>

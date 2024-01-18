@@ -1,13 +1,13 @@
 package com.fdmgroup.BankingApplication.service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fdmgroup.BankingApplication.dto.BankAccountDTO;
 import com.fdmgroup.BankingApplication.dto.BankAccountTransactionDTO;
 import com.fdmgroup.BankingApplication.dto.DepositRequestDTO;
 import com.fdmgroup.BankingApplication.dto.TransferRequestDTO;
@@ -32,12 +32,53 @@ public class BankAccountService {
 	@Autowired
 	private BankAccountTransactionRepository bankAccountTransactionRepository;
 
-	public List<BankAccountDTO> getBankAccountsForUser(Long userId) {
-		return bankAccountRepository.findByUserId(userId).stream().map(this::convertToDTO).collect(Collectors.toList());
+	@Transactional
+	public BankAccountTransactionDTO deposit(DepositRequestDTO req) {
+		BankAccountTransaction transaction = processTransaction(req.getBankAccountNumber(), req.getAmount(), "Deposit");
+		return convertToDTO(transaction);
 	}
 
-	private BankAccountDTO convertToDTO(BankAccount bankAccount) {
-		return new BankAccountDTO(bankAccount.getId(), bankAccount.getBalance());
+	@Transactional
+	public BankAccountTransactionDTO withdraw(WithdrawRequestDTO req) {
+		BankAccountTransaction transaction = processTransaction(req.getBankAccountNumber(), -req.getAmount(),
+				"Withdrawal");
+		return convertToDTO(transaction);
+	}
+
+	@Transactional
+	public BankAccountTransactionDTO transfer(TransferRequestDTO req) {
+		processTransaction(req.getToBankAccountNumber(), req.getAmount(),
+				"Transferred from account " + req.getFromBankAccountNumber());
+		BankAccountTransaction fromTransaction = processTransaction(req.getFromBankAccountNumber(), -req.getAmount(),
+				"Transfer to account " + req.getToBankAccountNumber());
+		return convertToDTO(fromTransaction);
+	}
+
+	public List<BankAccountTransactionDTO> getTransactionsById(Long id) {
+		BankAccount bankAccount = findBankAccountById(id);
+		List<BankAccountTransaction> transactions = bankAccountTransactionRepository
+				.findByBankAccountOrderByCreatedAtDesc(bankAccount);
+		return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
+	}
+
+	public List<BankAccountTransactionDTO> getTransactionsByMonthAndYear(Long id, int month, int year) {
+		BankAccount bankAccount = findBankAccountById(id);
+		LocalDateTime startOfMonth = LocalDateTime.of(year, month, 1, 0, 0);
+		LocalDateTime endOfMonth = startOfMonth.with(TemporalAdjusters.lastDayOfMonth()).withHour(23).withMinute(59)
+				.withSecond(59);
+
+		List<BankAccountTransaction> transactions = bankAccountTransactionRepository
+				.findByBankAccountAndCreatedAtBetweenOrderByCreatedAtDesc(bankAccount, startOfMonth, endOfMonth);
+		return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
+	}
+	
+	public List<BankAccountTransactionDTO> getTransactionsByYear(Long id, int year) {
+	    BankAccount bankAccount = findBankAccountById(id);
+	    LocalDateTime startOfYear = LocalDateTime.of(year, 1, 1, 0, 0);
+	    LocalDateTime endOfYear = LocalDateTime.of(year, 12, 31, 23, 59, 59);
+
+	    List<BankAccountTransaction> transactions = bankAccountTransactionRepository.findByBankAccountAndCreatedAtBetweenOrderByCreatedAtDesc(bankAccount, startOfYear, endOfYear);
+	    return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
 
 	public BankAccount findBankAccountById(Long id) {
@@ -45,51 +86,14 @@ public class BankAccountService {
 				.orElseThrow(() -> new BankAccountNotFoundException("Bank account not found for ID: " + id));
 	}
 
-	@Transactional
-	public BankAccountTransactionDTO deposit(DepositRequestDTO req) {
-		BankAccountTransaction transaction = processTransaction(req.getBankAccountId(), req.getAmount(), "Deposit");
-		return convertToDTO(transaction);
-	}
+	public BankAccountTransaction processTransaction(String bankAccountNumber, double amount, String description) {
+		BankAccount bankAccount = findBankAccountByNumber(bankAccountNumber);
+		checkSufficientBalance(bankAccount, amount);
 
-	@Transactional
-	public BankAccountTransactionDTO withdraw(WithdrawRequestDTO req) {
-		checkSufficientBalance(req.getBankAccountId(), req.getAmount());
-		BankAccountTransaction transaction = processTransaction(req.getBankAccountId(), -req.getAmount(), "Withdrawal");
-		return convertToDTO(transaction);
-	}
-
-	@Transactional
-	public BankAccountTransactionDTO transfer(TransferRequestDTO req) {
-		checkSufficientBalance(req.getFromBankAccountId(), req.getAmount());
-		processTransaction(req.getToBankAccountId(), req.getAmount(),
-				"Transfer from account " + req.getFromBankAccountId());
-		BankAccountTransaction fromTransaction = processTransaction(req.getFromBankAccountId(), -req.getAmount(),
-				"Transfer to account " + req.getToBankAccountId());
-		return convertToDTO(fromTransaction);
-	}
-
-	public List<BankAccountTransactionDTO> getTransactionsById(Long id) {
-		BankAccount bankAccount = findBankAccountById(id);
-		List<BankAccountTransaction> transactions = bankAccount.getBankAccountTransactions();
-		return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
-	}
-
-	private void checkSufficientBalance(long bankAccountId, double amount) {
-		BankAccount bankAccount = findBankAccountById(bankAccountId);
-		if (bankAccount.getBalance() < amount) {
-			throw new InsufficientBalanceException("Insufficient balance for transaction.");
-		}
-	}
-
-	public BankAccountTransaction processTransaction(long bankAccountId, double amount, String description) {
-		BankAccount bankAccount = findBankAccountById(bankAccountId);
-
-		// Update the balance
 		double newBalance = bankAccount.getBalance() + amount;
 		bankAccount.setBalance(newBalance);
-		bankAccountRepository.save(bankAccount); // Save the updated bank account
+		bankAccountRepository.save(bankAccount);
 
-		// Create and save transaction with updated balance
 		BankAccountTransaction bankAccountTransaction = new BankAccountTransaction();
 		bankAccountTransaction.setBankAccount(bankAccount);
 		bankAccountTransaction.setAmount(amount);
@@ -99,10 +103,22 @@ public class BankAccountService {
 		return bankAccountTransactionRepository.save(bankAccountTransaction);
 	}
 
+	public BankAccount findBankAccountByNumber(String accountNumber) {
+		return bankAccountRepository.findByAccountNumber(accountNumber).orElseThrow(
+				() -> new BankAccountNotFoundException("Bank account not found for account number: " + accountNumber));
+	}
+
+	private boolean checkSufficientBalance(BankAccount bankAccount, double amount) {
+		if (bankAccount.getBalance() + amount < 0) {
+			throw new InsufficientBalanceException("Insufficient balance for transaction.");
+		}
+		return true;
+	}
+
 	private BankAccountTransactionDTO convertToDTO(BankAccountTransaction transaction) {
 		BankAccountTransactionDTO dto = new BankAccountTransactionDTO();
 		dto.setId(transaction.getId());
-		dto.setBankAccountId(transaction.getBankAccount().getId());
+		dto.setBankAccountNumber(transaction.getBankAccount().getAccountNumber());
 		dto.setAmount(transaction.getAmount());
 		dto.setDescription(transaction.getDescription());
 		dto.setCreatedAt(transaction.getCreatedAt());

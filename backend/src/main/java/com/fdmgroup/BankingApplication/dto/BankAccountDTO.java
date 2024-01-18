@@ -3,7 +3,6 @@ package com.fdmgroup.BankingApplication.dto;
 public class BankAccountDTO {
 	private Long id;
 	private double balance;
-	// other fields
 	
 	public BankAccountDTO() {
 		super();

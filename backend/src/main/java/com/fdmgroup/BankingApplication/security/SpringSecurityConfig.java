@@ -2,7 +2,6 @@ package com.fdmgroup.BankingApplication.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -35,7 +34,7 @@ public class SpringSecurityConfig {
 		return http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
 					.requestMatchers("api/v1/credit-cards/purchase").permitAll()
-					.requestMatchers("/", "/api/v1/login", "/api/v1/logout", "/api/v1/register", "/h2/**", "/css/**", "/js/**", "/images/**")
+					.requestMatchers("/", "/swagger-ui.html","/api/v1/login", "/api/v1/logout", "/api/v1/register", "/h2/**", "/css/**", "/js/**", "/images/**")
 					.permitAll()
                     .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())

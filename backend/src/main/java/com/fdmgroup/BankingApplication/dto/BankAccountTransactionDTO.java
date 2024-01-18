@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class BankAccountTransactionDTO {
 	
 	private Long id;
-	private Long bankAccountId;
+	private String bankAccountNumber;
 	private double amount;
 	private double updatedBalance;
 	private String description;
@@ -15,11 +15,11 @@ public class BankAccountTransactionDTO {
 		super();
 	}
 	
-	public BankAccountTransactionDTO(Long id, Long bankAccountId, double amount, double updatedBalance,
+	public BankAccountTransactionDTO(Long id, String bankAccountNumber, double amount, double updatedBalance,
 			String description, LocalDateTime createdAt) {
 		super();
 		this.id = id;
-		this.bankAccountId = bankAccountId;
+		this.bankAccountNumber = bankAccountNumber;
 		this.amount = amount;
 		this.updatedBalance = updatedBalance;
 		this.description = description;
@@ -34,12 +34,12 @@ public class BankAccountTransactionDTO {
 		this.id = id;
 	}
 
-	public Long getBankAccountId() {
-		return bankAccountId;
+	public String getBankAccountNumber() {
+		return bankAccountNumber;
 	}
 
-	public void setBankAccountId(Long bankAccountId) {
-		this.bankAccountId = bankAccountId;
+	public void setBankAccountNumber(String bankAccountNumber) {
+		this.bankAccountNumber = bankAccountNumber;
 	}
 
 	public double getAmount() {

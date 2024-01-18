@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.BankingApplication.BankingApplication;
@@ -22,8 +23,6 @@ import com.fdmgroup.BankingApplication.dto.BankAccountTransactionDTO;
 import com.fdmgroup.BankingApplication.dto.DepositRequestDTO;
 import com.fdmgroup.BankingApplication.dto.TransferRequestDTO;
 import com.fdmgroup.BankingApplication.dto.WithdrawRequestDTO;
-import com.fdmgroup.BankingApplication.exception.InsufficientBalanceException;
-import com.fdmgroup.BankingApplication.exception.InvalidAmountException;
 import com.fdmgroup.BankingApplication.model.BankAccount;
 import com.fdmgroup.BankingApplication.service.BankAccountService;
 

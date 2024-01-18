@@ -11,7 +11,7 @@ const TransferPage = () => {
   const isLoggedIn = Auth.userIsAuthenticated();
   const [userDb, setUserDb] = useState(null);
 
-  const [accountId, setAccountId] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
   const [amount, setAmount] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -37,10 +37,10 @@ const TransferPage = () => {
   const handleTransfer = async (event) => {
     event.preventDefault();
 
-    if (!accountId && !amount) {
+    if (!accountNumber && !amount) {
       setErrorMessage("To and Amount fields are required");
       setSuccessMessage("");
-    } else if (!accountId) {
+    } else if (!accountNumber) {
       setErrorMessage("To field is required");
       setSuccessMessage("");
     } else if (!amount) {
@@ -49,17 +49,18 @@ const TransferPage = () => {
     } else {
       try {
         const response = await bankingApi.transfer(
-          userDb.bankAccount.id,
-          accountId,
+          userDb.bankAccount.accountNumber,
+          accountNumber,
           amount
         );
         console.log(response.data);
         setErrorMessage("");
         setSuccessMessage("Successfully transferred");
-        setAccountId("");
+        setAccountNumber("");
         setAmount("");
       } catch (error) {
         handleLogError(error);
+        setErrorMessage(error.response.data.message);
         setSuccessMessage("");
       }
     }
@@ -78,8 +79,8 @@ const TransferPage = () => {
 
         <form className="row justify-content-center" onSubmit={handleTransfer}>
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <div className="toBankAccount">
+            <div className="form-group mt-5">
+              <div className="toBankAccount mb-3">
                 <label className="toBA " htmlFor="to">
                   To:
                 </label>
@@ -87,8 +88,8 @@ const TransferPage = () => {
                   type="text"
                   id="toBank"
                   className="form-control mt-2"
-                  value={accountId}
-                  onChange={(e) => setAccountId(e.target.value)}
+                  value={accountNumber}
+                  onChange={(e) => setAccountNumber(e.target.value)}
                   placeholder="Bank Account Number"
                 />
               </div>
@@ -129,7 +130,7 @@ const TransferPage = () => {
               </button>
             </div>
 
-            <div>
+            <div className="text-center mt-3">
               <button className="btn btn-primary mt-3 btn-lg" type="submit">
                 Make Transfer
               </button>

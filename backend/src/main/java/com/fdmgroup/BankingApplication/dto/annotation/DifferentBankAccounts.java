@@ -15,7 +15,7 @@ import jakarta.validation.Payload;
 @Documented
 public @interface DifferentBankAccounts {
 
-    String message() default "From and to bank account IDs must be different";
+    String message() default "You cannot transfer to your own bank account.";
 
     Class<?>[] groups() default {};
 

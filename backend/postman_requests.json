@@ -67,6 +67,36 @@
 			"response": []
 		},
 		{
+			"name": "Register testUser2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"testUser2\",\r\n    \"password\": \"pw123\",\r\n    \"firstName\": \"firstname 3\",\r\n    \"lastName\": \"lastName 3\",\r\n    \"phoneNumber\": \"12345678\",\r\n    \"role\": \"USER\",\r\n    \"initialBalance\": 1000.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Login",
 			"protocolProfileBehavior": {
 				"followRedirects": true
@@ -134,174 +164,6 @@
 			"response": []
 		},
 		{
-			"name": "Withdraw",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "testUser1",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "pw123",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"bankAccountId\": 1,\r\n  \"amount\": 100\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/v1/bank-accounts/withdraw",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"bank-accounts",
-						"withdraw"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Deposit",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "testUser1",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "pw123",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"bankAccountId\": 1,\r\n  \"amount\": 100\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/v1/bank-accounts/deposit",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"bank-accounts",
-						"deposit"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Register testUser2",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"testUser2\",\r\n    \"password\": \"pw123\",\r\n    \"firstName\": \"firstname 3\",\r\n    \"lastName\": \"lastName 3\",\r\n    \"phoneNumber\": \"12345678\",\r\n    \"role\": \"USER\",\r\n    \"initialBalance\": 1000.0\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/v1/register",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"register"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Transfer",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "testUser1",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "pw123",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"fromBankAccountId\": 1,\r\n  \"toBankAccountId\": 2,\r\n  \"amount\": 500\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/v1/bank-accounts/transfer",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"bank-accounts",
-						"transfer"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Bank Account - testUser1",
 			"request": {
 				"auth": {
@@ -334,7 +196,187 @@
 						"bank-accounts",
 						"1"
 					]
-				}
+				},
+				"description": "bankAccountNumber to be used in operations (withdraw/deposit/transfer)"
+			},
+			"response": []
+		},
+		{
+			"name": "Bank Account - testUser2",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser2",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bank-accounts/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bank-accounts",
+						"2"
+					]
+				},
+				"description": "bankAccountNumber to be used in operations (withdraw/deposit/transfer)"
+			},
+			"response": []
+		},
+		{
+			"name": "Withdraw",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"bankAccountNumber\": 6252517205138130,\r\n  \"amount\": 100\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bank-accounts/withdraw",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bank-accounts",
+						"withdraw"
+					]
+				},
+				"description": "change the bankAccountNumber with that of testUser1"
+			},
+			"response": []
+		},
+		{
+			"name": "Deposit",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"bankAccountNumber\": 6252517205138130,\r\n  \"amount\": 100\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bank-accounts/deposit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bank-accounts",
+						"deposit"
+					]
+				},
+				"description": "change the bankAccountNumber with that of testUser1"
+			},
+			"response": []
+		},
+		{
+			"name": "Transfer",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "testUser1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pw123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"fromBankAccountNumber\": 6252517205138130,\r\n  \"toBankAccountNumber\": 5295846604181288,\r\n  \"amount\": 500\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/bank-accounts/transfer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"bank-accounts",
+						"transfer"
+					]
+				},
+				"description": "change the bankAccountNumber's with that of testUser1 and testUser2"
 			},
 			"response": []
 		},

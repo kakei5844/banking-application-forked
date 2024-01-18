@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.BankingApplication.BankingApplication;
 import com.fdmgroup.BankingApplication.dto.AuthResponse;
-import com.fdmgroup.BankingApplication.dto.UserDTO;
 import com.fdmgroup.BankingApplication.dto.UserLoginRequestDTO;
 import com.fdmgroup.BankingApplication.dto.UserRegistrationRequestDTO;
 import com.fdmgroup.BankingApplication.model.User;
@@ -65,14 +65,11 @@ public class UserManagementController {
 		Optional<User> userOptional = userService.validUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword());
 		
 		LOGGER.info("UserManagementController: login User request received with body : {}", loginRequest.toString());
-		
-		if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            LOGGER.info("UserManagementController: login User request approved with Response Status : {}", HttpStatus.OK);
-            return ResponseEntity.ok(new AuthResponse(user.getId(), user.getUsername(), user.getRole()));
-        }
-		LOGGER.error("UserManagementController: login User request rejected with Response Status : {}", HttpStatus.UNAUTHORIZED);
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // to be confirmed with FE what they need
+
+		User user = userService.validUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword())
+						.orElseThrow(() -> new AccessDeniedException("Incorrect username/ password"));
+		LOGGER.info("UserManagementController: login User request approved with Response Status : {}", HttpStatus.OK);
+		return ResponseEntity.ok(new AuthResponse(user.getId(), user.getUsername(), user.getRole()));
 	}
 
 	@PostMapping("/logout")
@@ -80,15 +77,12 @@ public class UserManagementController {
 			Authentication authentication) {
 		logoutHandler.logout(request, response, authentication);
 
-		// Invalidate the session and clear the security context
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			session.invalidate();
 		}
 		SecurityContextHolder.clearContext();
 
-		// Create a cookie with the same name as the session cookie but with a Max-Age
-		// of 0
 		Cookie cookie = new Cookie("JSESSIONID", null);
 		cookie.setPath(request.getContextPath());
 		cookie.setMaxAge(0);

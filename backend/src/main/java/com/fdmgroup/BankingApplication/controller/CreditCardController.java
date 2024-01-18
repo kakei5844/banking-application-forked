@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.BankingApplication.BankingApplication;
@@ -93,20 +94,26 @@ public class CreditCardController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('USER')")
-	@GetMapping("/{creditCardId}/history")
-	public ResponseEntity<?> getTransactionHistory(@PathVariable("creditCardId") Long id, @AuthenticationPrincipal UserPrincipal currentUser) {
-		try {
-			List<CreditCardTransactionDTO> history = creditCardService.getTransactionsByIdAndUsername(id, currentUser.getUsername());
-			LOGGER.info("CreditCardController: Get Transaction History request received for Credit Card ID: {} with history: {}", id, history.toString());
-			return new ResponseEntity<>(history, HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("CreditCardController: Error retrieving transaction history, {}",HttpStatus.INTERNAL_SERVER_ERROR, e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-		}
-	}
-
 	// TODO: get transaction history with filter (to be confirmed with FE what filter options are there)
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/{creditCardId}/history")
+    public ResponseEntity<?> getTransactionHistory(@PathVariable("creditCardId") Long id, 
+            @RequestParam(required = false) Integer month, 
+            @RequestParam(required = false) Integer year, 
+            @AuthenticationPrincipal UserPrincipal currentUser) {
 
+        List<CreditCardTransactionDTO> history;
+        if (year != null) {
+            if (month != null) {
+                history = creditCardService.getTransactionsByMonthAndYear(id, month, year, currentUser.getUsername());
+            } else {
+                history = creditCardService.getTransactionsByYear(id, year, currentUser.getUsername());
+            }
+        } else {
+            history = creditCardService.getTransactionsByIdAndUsername(id, currentUser.getUsername());
+        }
+		LOGGER.info("CreditCardController: Get Transaction History request received for Credit Card ID: {} with UserID: {}", id, currentUser.getId());
+        return new ResponseEntity<>(history, HttpStatus.OK);
+    }
 
 }

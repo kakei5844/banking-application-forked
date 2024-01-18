@@ -1,8 +1,13 @@
+import React, { useState, useEffect } from "react";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/js/dist/dropdown";
 import "../styles/components/Navbar.css";
+
 import { useAuth } from "../misc/AuthContext";
+import { bankingApi } from "../misc/BankingApi";
+import { handleLogError } from "../misc/Helpers";
 import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
@@ -10,13 +15,28 @@ const Navbar = () => {
   const userLogout = Auth.userLogout;
   const user = Auth.getUser();
   const isLoggedIn = Auth.userIsAuthenticated();
+  const [userDb, setUserDb] = useState(null);
+
+  useEffect(() => {
+    loadUserDb()
+  }, []);
+
+  const loadUserDb = async () => {
+    try {
+      const response = await bankingApi.getUser(user)
+      // console.log("Navbar >>>", response.data)
+      setUserDb(response.data)
+    } catch (error) {
+      handleLogError(error)
+    }
+  };
 
   const logout = () => {
     userLogout();
   };
 
   return (
-    isLoggedIn && (
+    isLoggedIn && userDb && (
       <div className="container-fluid">
         <div className="bg-dark col-auto col-md-12 min-vh-100 d-flex justify-content-between flex-column">
           <div>
@@ -98,7 +118,7 @@ const Navbar = () => {
               aria-expanded="false"
             >
               <i className="bi bi-person-circle"></i>
-              <span className="ms-2">User123</span>
+              <span className="ms-2">{userDb.firstName} {userDb.lastName}</span>
             </a>
             <div className="dropdown-menu" aria-labelledby="triggerId">
               <a className="dropdown-item" href="#">
