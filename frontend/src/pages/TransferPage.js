@@ -79,8 +79,8 @@ const TransferPage = () => {
 
         <form className="row justify-content-center" onSubmit={handleTransfer}>
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <div className="toBankAccount">
+            <div className="form-group mt-5">
+              <div className="toBankAccount mb-3">
                 <label className="toBA " htmlFor="to">
                   To:
                 </label>
@@ -130,7 +130,7 @@ const TransferPage = () => {
               </button>
             </div>
 
-            <div>
+            <div className="text-center mt-3">
               <button className="btn btn-primary mt-3 btn-lg" type="submit">
                 Make Transfer
               </button>

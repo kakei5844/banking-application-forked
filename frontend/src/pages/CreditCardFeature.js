@@ -58,6 +58,12 @@ const CreditCardFeature = () => {
     setCashbackVisible(false);
   };
 
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  useEffect(() => {
+    setIsButtonDisabled(cards.length === 0);
+  }, [cards]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -88,8 +94,9 @@ const CreditCardFeature = () => {
                 name: `${userResponse.data.firstName} ${userResponse.data.lastName}`,
                 expiry: `${(new Date(creditCard.issueDate).getMonth() + 1)
                   .toString()
-                  .padStart(2, "0")}/${(new Date(creditCard.issueDate).getFullYear() + 2) % 100
-                  }`,
+                  .padStart(2, "0")}/${
+                  (new Date(creditCard.issueDate).getFullYear() + 2) % 100
+                }`,
                 transactions: formattedTransactions,
                 limit: creditCard.creditLimit,
                 spent: creditCard.outstandingBalance,
@@ -124,7 +131,7 @@ const CreditCardFeature = () => {
   return (
     userDb && (
       <div className="CreditCardPage">
-        <div className="middle">
+        <div className="middle2">
           <div className="card-display mt-5">
             {isLoading ? (
               <p>Loading...</p>
@@ -171,7 +178,12 @@ const CreditCardFeature = () => {
                 <span className="ms-2">Bill Payment</span>
               </ActionButton>
             </NavLink>
-            <NavLink to='/bill' element={<BillPage cards={cards} transactions={cards.transactions} />}>
+            <NavLink
+              to="/bill"
+              element={
+                <BillPage cards={cards} transactions={cards.transactions} />
+              }
+            >
               <ActionButton>
                 <i className="bi bi-receipt" />
                 <span className="ms-2">Statement</span>
@@ -180,6 +192,7 @@ const CreditCardFeature = () => {
             <button
               className="btn btn-dark custom-button"
               onClick={handleCashbackClick}
+              disabled={isButtonDisabled}
             >
               <i className="bi bi-gift" />
               <span className="ms-2">Cashback</span>
