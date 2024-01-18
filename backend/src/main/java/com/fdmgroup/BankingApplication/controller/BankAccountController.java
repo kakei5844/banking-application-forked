@@ -65,7 +65,8 @@ public class BankAccountController {
 		BankAccountTransactionDTO response = bankAccountService.transfer(req.getFromBankAccountNumber(), req.getToBankAccountNumber(), req.getAmount(), currentUser.getUsername());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-
+	
+	@GetMapping("/{bankAccountId}/history")
 	public ResponseEntity<?> getTransactionHistory(
 			@PathVariable("bankAccountId") Long id,
 			@RequestParam(required = false) Integer month, 
