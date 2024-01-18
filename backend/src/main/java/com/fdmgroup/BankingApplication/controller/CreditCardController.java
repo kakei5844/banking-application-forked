@@ -77,4 +77,10 @@ public class CreditCardController {
         return new ResponseEntity<>(history, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/late-charge")
+    public  ResponseEntity<?> latePaymentCharge() {
+        creditCardService.generateLatePaymentCharge();
+        return ResponseEntity.ok("Successfully generated late payment charges");
+    }
 }
