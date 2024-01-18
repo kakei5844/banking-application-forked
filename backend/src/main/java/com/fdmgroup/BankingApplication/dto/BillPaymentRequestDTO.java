@@ -48,4 +48,12 @@ public class BillPaymentRequestDTO {
         this.amount = amount;
     }
 
+    @Override
+    public String toString() {
+        return "BillPaymentRequestDTO{" +
+                "creditCardId=" + creditCardId +
+                ", bankAccountNumber='" + bankAccountNumber + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
 }

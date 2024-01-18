@@ -27,8 +27,16 @@ public class CreditCardRequestDTO {
 		return cardType;
 	}
 
-	public void setCardType(String cardType) {
-		this.cardType = cardType;
-	}
+    public void setCardType(String cardType) {
+        this.cardType = cardType;
+    }
+
+    @Override
+    public String toString() {
+        return "CreditCardRequestDTO{" +
+                "annualSalary=" + annualSalary +
+                ", cardType='" + cardType + '\'' +
+                '}';
+    }
 
 }

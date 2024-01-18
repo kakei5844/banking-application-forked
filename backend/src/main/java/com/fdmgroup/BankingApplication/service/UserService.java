@@ -24,8 +24,8 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Autowired
-	private BankAccountRepository bankAccountRepository;
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
