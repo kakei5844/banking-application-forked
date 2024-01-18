@@ -162,7 +162,7 @@ public class CreditCardService {
 		MerchantTypeCategory merchantCategory = MerchantTypeCategory.findByMcc(mcc);
 
 		if (merchantCategory != UNKNOWN && merchantCategory.getCashbackRate() != 0) {
-			double cashBack = new BigDecimal(merchantCategory.getCashbackRate() * amount).setScale(2, RoundingMode.HALF_UP).doubleValue();
+			double cashBack = toTwoDecimalPlaces(merchantCategory.getCashbackRate() * amount);
 			creditCard.setCashback(creditCard.getCashback() + cashBack);
 			description = description.concat("\n" + cashBack + " cashbacks earned");
 		}
@@ -175,9 +175,9 @@ public class CreditCardService {
 		creditCardTransaction.setMcc(mcc);
 		creditCardTransaction.setMerchantCategory(merchantCategory);
 
-		double newOutstandingBalance = creditCard.getOutstandingBalance() + amount;
+		double newOutstandingBalance = toTwoDecimalPlaces(creditCard.getOutstandingBalance() + amount);
 		creditCard.setOutstandingBalance(newOutstandingBalance);
-		double newAvailableCredit = creditCard.getAvailableCredit() - amount;
+		double newAvailableCredit = creditCard.getCreditLimit() - creditCard.getOutstandingBalance();
 		creditCard.setAvailableCredit(newAvailableCredit);
 
 		return creditCardTransactionRepository.save(creditCardTransaction);
@@ -185,10 +185,11 @@ public class CreditCardService {
 
 	public CreditCard payCreditWithCashback(CreditCard creditCard) {
 		double accumulatedCashback = creditCard.getCashback();
+		if (accumulatedCashback == 0) { return creditCard; }
 
-		creditCard.setOutstandingBalance(creditCard.getOutstandingBalance() - accumulatedCashback);
+		creditCard.setOutstandingBalance(toTwoDecimalPlaces(creditCard.getOutstandingBalance() - accumulatedCashback));
 
-		creditCard.setAvailableCredit(creditCard.getAvailableCredit() + accumulatedCashback);
+		creditCard.setAvailableCredit(creditCard.getCreditLimit() - creditCard.getOutstandingBalance());
 
 		creditCard.setCashback(0);
 
@@ -249,4 +250,7 @@ public class CreditCardService {
 		}
 	}
 
+	private double toTwoDecimalPlaces(double value) {
+		return new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
+	}
 }

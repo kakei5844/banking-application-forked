@@ -1,5 +1,7 @@
 package com.fdmgroup.BankingApplication.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,9 +38,14 @@ public class BillService {
 			List<CreditCardTransaction> transactions = creditCardService
 					.getTransactionsToBeBilledByCreditCard(creditCard);
 
-			Bill bill = new Bill(LocalDate.now(), LocalDate.now().plusDays(25),
-					creditCard.getOutstandingBalance(), creditCard.getOutstandingBalance() * 0.02, 0, creditCard,
-					transactions);
+			Bill bill = new Bill(
+				LocalDate.now(), 
+				LocalDate.now().plusDays(25),
+				creditCard.getOutstandingBalance(), 
+				toTwoDecimalPlaces(creditCard.getOutstandingBalance() * 0.02),
+				0, 
+				creditCard,
+				transactions);
 
 			transactions.stream().forEach(t -> {
 				t.setBill(bill);
@@ -81,6 +88,10 @@ public class BillService {
 		bill.setTotalRepaymentAmount(bill.getTotalRepaymentAmount() + amount);
 		billRepository.save(bill);
 
+	}
+
+	private double toTwoDecimalPlaces(double value) {
+		return new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
 	}
 
 }
