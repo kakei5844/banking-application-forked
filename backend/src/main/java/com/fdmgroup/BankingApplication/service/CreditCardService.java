@@ -163,7 +163,7 @@ public class CreditCardService {
 
 		if (merchantCategory != UNKNOWN && merchantCategory.getCashbackRate() != 0) {
 			double cashBack = toTwoDecimalPlaces(merchantCategory.getCashbackRate() * amount);
-			creditCard.setCashback(creditCard.getCashback() + cashBack);
+			creditCard.setCashback(toTwoDecimalPlaces(creditCard.getCashback() + cashBack));
 			description = description.concat("\n" + cashBack + " cashbacks earned");
 		}
 
