@@ -1,0 +1,111 @@
+.credit-card-bill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    width: 400px;
+    margin: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .bill-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 10px; 
+  }
+  
+
+  .payment-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px; 
+  }
+  
+
+  .statement-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px; 
+  }
+  
+
+  .previous-statement {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px; 
+  }
+  
+  .field-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .field-value {
+    font-size: 18px;
+  }
+  
+  .field-value a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .field-value a:hover {
+    text-decoration: underline;
+  }
+
+  .year-dropdown {
+    width: 100%;
+    padding: 8px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  .dropdown-container label {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .month-dropdown,
+.year-dropdown {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.generate-button {
+    padding: 8px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+  }
+
+  .view-transactions-button {
+    padding: 8px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+  }
+  
