@@ -15,7 +15,6 @@ export default function WithdrawDeposit() {
   const isLoggedIn = Auth.userIsAuthenticated();
   const [userDb, setUserDb] = useState(null);
 
-
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -26,10 +25,10 @@ export default function WithdrawDeposit() {
 
   const loadUserDb = async () => {
     try {
-        const response = await bankingApi.getUser(user)
-        // console.log(response.data)
-        console.log(response.data.bankAccount.accountNumber) // use bankAccount number instead of bankAccount id for bank account operations (deposit, withdraw)
-        setUserDb(response.data)
+      const response = await bankingApi.getUser(user);
+      // console.log(response.data)
+      console.log(response.data.bankAccount.accountNumber); // use bankAccount number instead of bankAccount id for bank account operations (deposit, withdraw)
+      setUserDb(response.data);
     } catch (error) {
       handleLogError(error);
     }
@@ -70,13 +69,9 @@ export default function WithdrawDeposit() {
           <div className="row mt-3">
             <div className="col-12">
               {activeTab === "withdraw" ? (
-                <Withdraw
-                  bankAccountId={userDb.bankAccount.accountNumber}
-                />
+                <Withdraw bankAccountId={userDb.bankAccount.accountNumber} />
               ) : (
-                <Deposit
-                  bankAccountId={userDb.bankAccount.accountNumber}
-                />
+                <Deposit bankAccountId={userDb.bankAccount.accountNumber} />
               )}
             </div>
           </div>
@@ -85,4 +80,3 @@ export default function WithdrawDeposit() {
     )
   );
 }
-

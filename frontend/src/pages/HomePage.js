@@ -65,18 +65,18 @@ const HomePage = () => {
     userDb && (
       <div className="home-page">
         <div className="top">
-            <div className="credit-apply-div">
-              <NavLink to="/application">
-                <button className="credit-apply-btn">
-                  Apply To Credit Card
-                </button>
-              </NavLink>
-            </div>
-          <h1>Bank Account</h1>
+          <div className="credit-apply-div">
+            <NavLink to="/application">
+              <button className="credit-apply-btn mb-3">
+                Apply To Credit Card
+              </button>
+            </NavLink>
+          </div>
+          <h1 className="mb-5">Bank Account</h1>
         </div>
 
-        <div className="middle">
-          <div className="card-display">
+        <div className="middle1">
+          <div className="card-display1">
             <CardDisplay
               firstName={userDb.firstName}
               lastName={userDb.lastName}
@@ -84,7 +84,7 @@ const HomePage = () => {
               balance={userDb.bankAccount.balance}
             />
           </div>
-          <div className="button-list">
+          <div className="button-list1">
             <NavLink to="/withdraw-deposit">
               <ActionButton>
                 <i className="bi bi-cash-coin" />

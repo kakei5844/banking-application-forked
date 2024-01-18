@@ -26,8 +26,12 @@ const RepaymentPage = () => {
 
     if (creditCardDetails[selectedCreditCardId]) {
       setToCreditCard(selectedCreditCardId);
-      setRemainingBalance(creditCardDetails[selectedCreditCardId].remainingBalance || "");
-      setMinimumPayment(creditCardDetails[selectedCreditCardId].minimumPayment || "");
+      setRemainingBalance(
+        creditCardDetails[selectedCreditCardId].remainingBalance || ""
+      );
+      setMinimumPayment(
+        creditCardDetails[selectedCreditCardId].minimumPayment || ""
+      );
     }
   };
 
@@ -57,13 +61,20 @@ const RepaymentPage = () => {
       try {
         const creditCardId = toCreditCard;
         const bankAccountNumber = fromAccount;
-        console.log("id:", creditCardId, "BAN", bankAccountNumber, "amount", amount);
+        console.log(
+          "id:",
+          creditCardId,
+          "BAN",
+          bankAccountNumber,
+          "amount",
+          amount
+        );
 
         const response = await bankingApi.payBill(
           creditCardId,
           bankAccountNumber,
           amount,
-          user,
+          user
         );
 
         console.log("Repayment response:", response);
@@ -84,49 +95,71 @@ const RepaymentPage = () => {
     try {
       const userResponse = await bankingApi.getUser(user);
       setUserDb(userResponse.data);
-  
+
       if (userResponse.data && userResponse.data.bankAccount) {
         setFromAccount(userResponse.data.bankAccount.accountNumber);
       }
-  
+
       if (userResponse.data && userResponse.data.creditCards) {
-        const creditCardDetailsPromises = userResponse.data.creditCards.map(async (creditCard) => {
-          try {
-            const billResponse = await bankingApi.getBill(creditCard.id, user);
-        
-            if (billResponse.data && billResponse.data.length > 0) {
-              const latestBill = billResponse.data[0];
-              const remainingBalance = latestBill.remainingBalance;
-              const minimumPayment = latestBill.minimumPayment;
-        
-              console.log("Data for creditCardId", creditCard.id, ":", remainingBalance, "|", minimumPayment);
-        
+        const creditCardDetailsPromises = userResponse.data.creditCards.map(
+          async (creditCard) => {
+            try {
+              const billResponse = await bankingApi.getBill(
+                creditCard.id,
+                user
+              );
+
+              if (billResponse.data && billResponse.data.length > 0) {
+                const latestBill = billResponse.data[0];
+                const remainingBalance = latestBill.remainingBalance;
+                const minimumPayment = latestBill.minimumPayment;
+
+                console.log(
+                  "Data for creditCardId",
+                  creditCard.id,
+                  ":",
+                  remainingBalance,
+                  "|",
+                  minimumPayment
+                );
+
+                return {
+                  creditCardId: creditCard.id,
+                  remainingBalance,
+                  minimumPayment,
+                };
+              } else {
+                console.log(
+                  "Invalid or missing bill data for creditCardId",
+                  creditCard.id
+                );
+                return {
+                  creditCardId: creditCard.id,
+                  remainingBalance: 0,
+                  minimumPayment: 0,
+                };
+              }
+            } catch (error) {
+              console.log(
+                "Error fetching bill for creditCardId",
+                creditCard.id,
+                ":",
+                error
+              );
               return {
                 creditCardId: creditCard.id,
-                remainingBalance,
-                minimumPayment,
-              };
-            } else {
-              console.log("Invalid or missing bill data for creditCardId", creditCard.id);
-              return {
-                creditCardId: creditCard.id,
-                remainingBalance: 0, 
+                remainingBalance: 0,
                 minimumPayment: 0,
               };
             }
-          } catch (error) {
-            console.log("Error fetching bill for creditCardId", creditCard.id, ":", error);
-            return {
-              creditCardId: creditCard.id,
-              remainingBalance: 0, 
-              minimumPayment: 0,
-            };
           }
-        });        
-  
-        const creditCardDetailsArray = await Promise.all(creditCardDetailsPromises);
+        );
+
+        const creditCardDetailsArray = await Promise.all(
+          creditCardDetailsPromises
+        );
         console.log("creditCardDetailsArray >", creditCardDetailsArray);
-  
+
         const updatedCreditCardDetails = creditCardDetailsArray.reduce(
           (acc, { creditCardId, remainingBalance, minimumPayment }) => ({
             ...acc,
@@ -134,9 +167,9 @@ const RepaymentPage = () => {
           }),
           {}
         );
-  
+
         console.log("updatedCreditCardDetails >", updatedCreditCardDetails);
-        
+
         setCreditCardDetails(updatedCreditCardDetails);
         setRemainingBalance(creditCardDetailsArray[0].remainingBalance);
         setMinimumPayment(creditCardDetailsArray[0].minimumPayment);
@@ -168,7 +201,7 @@ const RepaymentPage = () => {
           <h1>Pay Credit Card Bill</h1>
         </div>
 
-        <div className="card-body">
+        <div className="card-body ms-5 ps-5">
           <form style={{ width: "50%", marginLeft: "325px" }}>
             <div className="form-group">
               <label htmlFor="fromAccount" className="labelAmount mt-2">
@@ -256,7 +289,9 @@ const RepaymentPage = () => {
               </button>
             </div>
 
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
+            {errorMessage && (
+              <div className="error-message">{errorMessage}</div>
+            )}
             {successMessage && (
               <div className="success-message">{successMessage}</div>
             )}
