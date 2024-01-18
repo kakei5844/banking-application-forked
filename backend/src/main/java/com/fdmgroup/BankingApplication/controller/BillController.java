@@ -36,70 +36,41 @@ public class BillController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create")
     public  ResponseEntity<?> createBillsForAllCreditCards() {
-        try {
-        	LOGGER.info("BillController: Creating bills for all credit cards.");
-			billService.saveBills();
-			LOGGER.info("BillController: Successfully created bills for all credit cards.");
-			return ResponseEntity.ok("Successfully generated bills");
-		} catch (Exception e) {
-			LOGGER.error("BillController: Error creating bills with Status, {}",HttpStatus.INTERNAL_SERVER_ERROR, e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-		}
+        billService.saveBills();
+        LOGGER.info("BillController: Creating bills for all credit cards (ADMIN).");
+        return ResponseEntity.ok("Successfully generated bills");
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<?> getAllBills() {
-        try {
-        	LOGGER.info("BillController: Request recieved for Retrieving all bills.");
-			List<Bill> bills = billService.getAllBills();
-			LOGGER.info("BillController: Request approved for Retrieving all bills, {}", HttpStatus.OK);
-			return new ResponseEntity<>(bills, HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("BillController: Error retrieving all bills", e);
-            throw e;
-		}
+        List<Bill> bills = billService.getAllBills();
+        LOGGER.info("BillController: Request recieved for Retrieving all bills (ADMIN).");
+        return new ResponseEntity<>(bills, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/credit-card/{creditCardId}")
     public ResponseEntity<?> getBillsByCreditCardId(@PathVariable("creditCardId") Long id, @AuthenticationPrincipal UserPrincipal currentUser) {
-		try {
-			LOGGER.info("BillController: Request recieved for Retrieving bills for credit card ID: {} for user: {}", id, currentUser.getUsername());
-			List<BillDTO> bills = billService.getBillsByCreditCardId(id, currentUser.getUsername());
-			LOGGER.info("BillController: Request approved for Retrieve bills for credit card ID: {} for user: {}, {}", id, currentUser.getUsername(), HttpStatus.OK);
-			return new ResponseEntity<>(bills, HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("BillController: Error retrieving bills for credit card ID: {} for user: {}", id, currentUser.getUsername(), e);
-			throw e;
-		}
+		List<BillDTO> bills = billService.getBillsByCreditCardId(id, currentUser.getUsername());
+		LOGGER.info("BillController: Request recieved for Retrieving bills for credit card ID: {} for user: {}", id, currentUser.getId());
+		return new ResponseEntity<>(bills, HttpStatus.OK);
 	}
 
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/credit-card/{creditCardId}/latest")
     public ResponseEntity<?> getLatestBillByCreditCardId(@PathVariable("creditCardId") Long id, @AuthenticationPrincipal UserPrincipal currentUser) {
-		try {
-			LOGGER.info("BillController: Request recieved for Retrieving latest bill for credit card ID: {} for user: {}", id, currentUser.getUsername());
-			BillDTO bill = billService.getLatestBillByCreditCardId(id, currentUser.getUsername());
-			LOGGER.info("BillController: Request approved for Retrieve latest bill for credit card ID: {} for user: {}, {}", id, currentUser.getUsername(), HttpStatus.OK);
-			return new ResponseEntity<>(bill, HttpStatus.OK);
-		} catch (Exception e) {
-            throw e;
-		}
+		BillDTO bill = billService.getLatestBillByCreditCardId(id, currentUser.getUsername());
+		LOGGER.info("BillController: Request recieved for Retrieving latest bill for credit card ID: {} for user: {}", id, currentUser.getId());
+		return new ResponseEntity<>(bill, HttpStatus.OK);
 	}
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/payment")
     public ResponseEntity<?> payBill(@RequestBody BillPaymentRequestDTO req, @AuthenticationPrincipal UserPrincipal currentUser) {
-        try {
-        	LOGGER.info("BillController: Request recieved for Initiating payment for {}, for user: {}", req.toString(), currentUser.getUsername());
-			billService.payBill(req.getCreditCardId(), req.getBankAccountNumber(), req.getAmount(), currentUser.getUsername());
-			LOGGER.info("BillController: Request approved for Initiating payment for {}, for user: {}", req.toString(), currentUser.getUsername());
-			return ResponseEntity.ok("Successful payment");
-		} catch (Exception e) {
-			LOGGER.error("BillController: Error processing payment, {}",HttpStatus.INTERNAL_SERVER_ERROR, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-		}
+        billService.payBill(req.getCreditCardId(), req.getBankAccountNumber(), req.getAmount(), currentUser.getUsername());
+        LOGGER.info("BillController: Request recieved for Initiating payment for {}, for user: {}", req.toString(), currentUser.getId());
+        return ResponseEntity.ok("Successful payment");
     }
 
 }

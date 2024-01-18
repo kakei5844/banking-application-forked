@@ -41,57 +41,31 @@ public class CreditCardController {
 	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/apply")
 	public ResponseEntity<?> applyCreditCard(@Valid @RequestBody CreditCardRequestDTO req, @AuthenticationPrincipal UserPrincipal currentUser) {
-		try {
-			LOGGER.info("CreditCardController: Apply Credit Card request recieved for user: {}", currentUser.getUsername());
-			CreditCard savedCreditCard = creditCardService.createCreditCard(req.getAnnualSalary(), req.getCardType(), currentUser.getUsername());
-			LOGGER.info("CreditCardController: Apply Credit Card request approved with Credit Card body: {}", req.toString());
-			return new ResponseEntity<>(savedCreditCard, HttpStatus.CREATED);
-		} catch (Exception e) {
-			LOGGER.error("CreditCardController: Error applying credit card, {}",HttpStatus.INTERNAL_SERVER_ERROR);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-		}
+		CreditCard savedCreditCard = creditCardService.createCreditCard(req.getAnnualSalary(), req.getCardType(), currentUser.getUsername());
+		LOGGER.info("CreditCardController: Apply Credit Card request recieved for user: {}, {}", currentUser.getId(), currentUser.getUsername());
+		return new ResponseEntity<>(savedCreditCard, HttpStatus.CREATED);
 	}
 
 	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/me")
 	public List<CreditCard> getCreditCardsOfCurrentUser(@AuthenticationPrincipal UserPrincipal currentUser) {
-		LOGGER.info("CreditCardController: Get Credit Cards of Current User request with user Id: {}", currentUser.getId());
-		try {
-			List<CreditCard> creditCards = creditCardService.getCreditCardsByUsername(currentUser.getUsername());
-			LOGGER.info("CreditCardController: Get Credit Cards of Current User request approved");
-			return creditCards;
-		} catch (Exception e) {
-			LOGGER.error("CreditCardController: Error getting credit cards of current user, {}",HttpStatus.INTERNAL_SERVER_ERROR);
-            throw e;
-		}
+		LOGGER.info("CreditCardController: Get Credit Cards of Current User request with user Id: {}, {}", currentUser.getId(), currentUser.getUsername());
+		return creditCardService.getCreditCardsByUsername(currentUser.getUsername());
     }
 
 	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/{creditCardId}")
 	public ResponseEntity<?> getSingleCreditCardOfCurrentUser(@PathVariable("creditCardId") Long id, @AuthenticationPrincipal UserPrincipal currentUser) {
-		
-		LOGGER.info("CreditCardController: Get Single Credit Card request received with UserID and CreditCardID: {}, {}", currentUser.getId(),id);
-		
-		try {
-			CreditCard creditCard = creditCardService.findCreditCardByIdAndUsername(id, currentUser.getUsername());
-			LOGGER.info("CreditCardController: Get Single Credit Card request approved");
-			return new ResponseEntity<>(creditCard, HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("CreditCardController: Error retrieving single credit card, {}",HttpStatus.INTERNAL_SERVER_ERROR);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-		}
+		LOGGER.info("CreditCardController: Get Single Credit Card request received with User: {}, {}, and CreditCardID: {}", currentUser.getId(), currentUser.getUsername(),id);
+		CreditCard creditCard = creditCardService.findCreditCardByIdAndUsername(id, currentUser.getUsername());
+		return new ResponseEntity<>(creditCard, HttpStatus.OK);
 	}
 
 	@PostMapping("/purchase")
 	public ResponseEntity<?> purchase(@Valid @RequestBody PurchaseRequestDTO req) {
-		try {
-			CreditCardTransactionDTO savedTransaction = creditCardService.purchase(req.creditCardId(), req.amount(), req.merchantName(), req.mcc());
-			LOGGER.info("CreditCardController: Purchase request approved with Credit Card Transaction: {}", req.toString());
-			return new ResponseEntity<>(savedTransaction, HttpStatus.ACCEPTED);
-		} catch (Exception e) {
-			LOGGER.error("CreditCardController: Error processing purchase, {}",HttpStatus.INTERNAL_SERVER_ERROR, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-		}
+		CreditCardTransactionDTO savedTransaction = creditCardService.purchase(req.creditCardId(), req.amount(), req.merchantName(), req.mcc());
+		LOGGER.info("CreditCardController: Purchase request received with body: {}", req.toString());
+		return new ResponseEntity<>(savedTransaction, HttpStatus.ACCEPTED);
 	}
 
 	// TODO: get transaction history with filter (to be confirmed with FE what filter options are there)
@@ -106,13 +80,15 @@ public class CreditCardController {
         if (year != null) {
             if (month != null) {
                 history = creditCardService.getTransactionsByMonthAndYear(id, month, year, currentUser.getUsername());
+                LOGGER.info("CreditCardController: Get Transaction History request received for Credit Card ID: {}, month: {}, year: {}, userId: {}", id, month, year, currentUser.getId());
             } else {
                 history = creditCardService.getTransactionsByYear(id, year, currentUser.getUsername());
+                LOGGER.info("CreditCardController: Get Transaction History request received for Credit Card ID: {}, year: {}, userId: {}", id, year, currentUser.getId());
             }
         } else {
             history = creditCardService.getTransactionsByIdAndUsername(id, currentUser.getUsername());
+            LOGGER.info("CreditCardController: Get Transaction History request received for Credit Card ID: {}, userId: {}", id, currentUser.getId());
         }
-		LOGGER.info("CreditCardController: Get Transaction History request received for Credit Card ID: {} with UserID: {}", id, currentUser.getId());
         return new ResponseEntity<>(history, HttpStatus.OK);
     }
 

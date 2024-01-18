@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.BankingApplication.BankingApplication;
@@ -25,6 +26,7 @@ import com.fdmgroup.BankingApplication.dto.TransferRequestDTO;
 import com.fdmgroup.BankingApplication.dto.WithdrawRequestDTO;
 import com.fdmgroup.BankingApplication.model.BankAccount;
 import com.fdmgroup.BankingApplication.service.BankAccountService;
+import com.fdmgroup.BankingApplication.security.UserPrincipal;
 
 import jakarta.validation.Valid;
 
@@ -39,61 +41,32 @@ public class BankAccountController {
 	BankAccountService bankAccountService;
 
 	@GetMapping("/{bankAccountId}")
-	public ResponseEntity<?> getBankAccount(@PathVariable("bankAccountId") Long id) {
-
-		LOGGER.info("BankAccountController: Get Bank Account request received with Bank Account: {}", id);
-		try {
-			BankAccount bankAccount = bankAccountService.findBankAccountById(id);
-			LOGGER.info("BankAccountController: Get Bank Account request accepted with ResponseStatus: {}",  HttpStatus.OK);
-			return new ResponseEntity<>(bankAccount, HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("BankAccountController: Error retrieving Bank Account with ResponseStatus, {}",HttpStatus.INTERNAL_SERVER_ERROR);
-            return new ResponseEntity<>("Error retrieving Bank Account", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	public ResponseEntity<?> getBankAccount(@PathVariable("bankAccountId") Long id, @AuthenticationPrincipal UserPrincipal currentUser) {
+		BankAccount bankAccount = bankAccountService.findBankAccountByIdAndUsername(id, currentUser.getUsername());
+		LOGGER.info("BankAccountController: Get Bank Account request received with Bank Account: {}, and UserID: {}", currentUser.getId());
+		return new ResponseEntity<>(bankAccount, HttpStatus.OK);
 	}
 
-	@PostMapping("/deposit")
-	public ResponseEntity<?> deposit(@Valid @RequestBody DepositRequestDTO req) {
 
-		// LOGGER.info("BankAccountController: Deposit request received with body: {}", req.toString());
-		try {
-			BankAccountTransactionDTO savedBankAccountTransaction = bankAccountService.deposit(req);
-			LOGGER.info("BankAccountController: Deposit request approved with Bank Account Transaction: {}", req.toString());
-			return new ResponseEntity<>(savedBankAccountTransaction, HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("BankAccountController: Error processing deposit with Response Status: {}",HttpStatus.INTERNAL_SERVER_ERROR);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-		}
+	@PostMapping("/deposit")
+	public ResponseEntity<?> deposit(@Valid @RequestBody DepositRequestDTO req, @AuthenticationPrincipal UserPrincipal currentUser) {
+		LOGGER.info("BankAccountController: Deposit request received with body: {}", req.toString());
+		BankAccountTransactionDTO savedBankAccountTransaction = bankAccountService.deposit(req.getBankAccountNumber(), req.getAmount(), currentUser.getUsername());
+		return new ResponseEntity<>(savedBankAccountTransaction, HttpStatus.OK);
 	}
 
 	@PostMapping("/withdraw")
-	public ResponseEntity<?> withdraw(@Valid @RequestBody WithdrawRequestDTO req) {
-		try {
-			BankAccountTransactionDTO savedBankAccountTransaction = bankAccountService.withdraw(req);
-			LOGGER.info("BankAccountController: Withdraw request approved with Bank Account Transaction: {}", req.toString());
-			return new ResponseEntity<>(savedBankAccountTransaction, HttpStatus.OK);
-		} catch (InvalidAmountException | InsufficientBalanceException e) {
-            LOGGER.error("BankAccountController: Invalid or insufficient balance during withdraw: {}",HttpStatus.BAD_REQUEST);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            LOGGER.error("BankAccountController: Error processing withdraw, {}",HttpStatus.INTERNAL_SERVER_ERROR);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-        }
+	public ResponseEntity<?> withdraw(@Valid @RequestBody WithdrawRequestDTO req, @AuthenticationPrincipal UserPrincipal currentUser) {
+		LOGGER.info("BankAccountController: Withdraw request received with body: {}", req.toString());
+		BankAccountTransactionDTO savedBankAccountTransaction = bankAccountService.withdraw(req.getBankAccountNumber(), req.getAmount(), currentUser.getUsername());
+		return new ResponseEntity<>(savedBankAccountTransaction, HttpStatus.OK);
 	}
 
 	@PostMapping("/transfer")
-	public ResponseEntity<?> transfer(@Valid @RequestBody TransferRequestDTO req) {
-		try {
-			BankAccountTransactionDTO response = bankAccountService.transfer(req);
-			LOGGER.info("BankAccountController: Transfer request approved with Bank Account Transaction: {}", req.toString());
-			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (InvalidAmountException | InsufficientBalanceException e) {
-			LOGGER.error("BankAccountController: Invalid or insufficient balance. \nTransfer request rejected with Bank Account Transaction: {}", req.toString());
-	        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (Exception e) {
-			LOGGER.error("BankAccountController: Error processing transfer, {}",HttpStatus.INTERNAL_SERVER_ERROR);
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-		}
+	public ResponseEntity<?> transfer(@Valid @RequestBody TransferRequestDTO req, @AuthenticationPrincipal UserPrincipal currentUser) {
+		LOGGER.info("BankAccountController: Transfer request received with body: {}", req.toString());
+		BankAccountTransactionDTO response = bankAccountService.transfer(req.getFromBankAccountNumber(), req.getToBankAccountNumber(), req.getAmount(), currentUser.getUsername());
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@GetMapping("/{bankAccountId}/history")
@@ -106,6 +79,28 @@ public class BankAccountController {
 			LOGGER.error("BankAccountController: Error retrieving transaction history, {}.", HttpStatus.INTERNAL_SERVER_ERROR);
 	        return new ResponseEntity<>("Error retrieving transaction history", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	public ResponseEntity<?> getTransactionHistory(
+			@PathVariable("bankAccountId") Long id,
+			@RequestParam(required = false) Integer month, 
+			@RequestParam(required = false) Integer year, 
+			@AuthenticationPrincipal UserPrincipal currentUser) {
+
+		List<BankAccountTransactionDTO> history;
+		
+		if (year != null) {
+			if (month != null) {
+				LOGGER.info("BankAccountController: Get Transaction History request received for Bank Account ID: {}, month: {}, year: {}, userId: {}", id, month, year, currentUser.getId());
+				history = bankAccountService.getTransactionsByMonthAndYear(id, month, year, currentUser.getUsername());
+			} else {
+				LOGGER.info("BankAccountController: Get Transaction History request received for Bank Account ID: {}, year: {}, userId: {}", id, year, currentUser.getId());
+				history = bankAccountService.getTransactionsByYear(id, year, currentUser.getUsername());
+			}
+		} else {
+			LOGGER.info("BankAccountController: Get Transaction History request received for Bank Account ID: {}, userId: {}", id, currentUser.getId());
+			history = bankAccountService.getTransactionsById(id, currentUser.getUsername());
+		}
+		return new ResponseEntity<>(history, HttpStatus.OK);
 	}
 
 }

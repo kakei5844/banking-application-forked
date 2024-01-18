@@ -47,12 +47,4 @@ public class TransferRequestDTO {
         this.amount = amount;
     }
 
-    @Override
-    public String toString() {
-        return "TransferRequestDTO{" +
-                "fromBankAccountNumber='" + fromBankAccountNumber + '\'' +
-                ", toBankAccountNumber='" + toBankAccountNumber + '\'' +
-                ", amount=" + amount +
-                '}';
-    }
 }
