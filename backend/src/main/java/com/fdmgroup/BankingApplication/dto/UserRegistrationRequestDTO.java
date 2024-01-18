@@ -103,7 +103,7 @@ public class UserRegistrationRequestDTO {
 	public String toString() {
 	    return "UserRegistrationRequestDTO{" +
 	            "username='" + username + '\'' +
-	            ", password='" + password + '\'' +
+               ", password='******'" +
 	            ", firstName='" + firstName + '\'' +
 	            ", lastName='" + lastName + '\'' +
 	            ", phoneNumber='" + phoneNumber + '\'' +
