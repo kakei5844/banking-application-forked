@@ -80,15 +80,17 @@ const BillPage = (props) => {
   };
 
   return ( userDb &&
-    <CreditCardBill 
-      statementBalance={billData.balanceDue} 
-      minimumPayment={billData.minimumPayment}
-      dueDate={formatDate(billData.dueDate)} 
-      remainingBalance={billData.remainingBalance} 
-      balancePaid={billData.balancePaid} 
-      transactions={billedTransactions} 
-      cards={cards} 
-    />
+    <div className='billContainer' style={{ display: 'flex', justifyContent: 'center' }}>
+      <CreditCardBill 
+        statementBalance={billData.balanceDue} 
+        minimumPayment={billData.minimumPayment}
+        dueDate={formatDate(billData.dueDate)} 
+        remainingBalance={billData.remainingBalance} 
+        balancePaid={billData.balancePaid} 
+        transactions={billedTransactions} 
+        cards={cards} 
+      />
+    </div>
   );
 
 };
