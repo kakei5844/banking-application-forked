@@ -28,5 +28,12 @@ public class UserLoginRequestDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
+	@Override
+	public String toString() {
+	    return "UserLoginRequestDTO{" +
+	            "username='" + username + '\'' +
+	            ", password='" + password + '\'' +
+	            '}';
+	}
 }

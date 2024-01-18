@@ -17,15 +17,47 @@ import com.fdmgroup.BankingApplication.security.Role;
 import com.fdmgroup.BankingApplication.util.BankAccountNumberGenerator;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
+@Slf4j
 public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
 
+<<<<<<< HEAD
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
+    
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+    
+    private static final int ACCOUNT_NUMBER_LENGTH = 16;
+    private static final int MAX_ATTEMPTS = 10;
+    
+    @Transactional
+    public User saveUser(UserRegistrationRequestDTO req) throws UsernameAlreadyExistsException {
+    	
+    	if (userRepository.findByUsername(req.getUsername()).isPresent()) {
+            throw new UsernameAlreadyExistsException("Username already exists");
+        }
+    	
+        User user = new User();
+        user.setUsername(req.getUsername());
+        user.setPassword(passwordEncoder.encode(req.getPassword()));
+        user.setFirstName(req.getFirstName());
+        user.setLastName(req.getLastName());
+        user.setPhoneNumber(req.getPhoneNumber());
+        user.setRole(req.getRole());
+        
+//        log.
+=======
 	@Autowired
 	private BankAccountRepository bankAccountRepository;
+>>>>>>> origin
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
