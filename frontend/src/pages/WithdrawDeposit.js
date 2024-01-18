@@ -69,9 +69,9 @@ export default function WithdrawDeposit() {
           <div className="row mt-3">
             <div className="col-12">
               {activeTab === "withdraw" ? (
-                <Withdraw bankAccountId={userDb.bankAccount.accountNumber} />
+                <Withdraw bankAccountId={userDb.bankAccount.accountNumber} user={user}/>
               ) : (
-                <Deposit bankAccountId={userDb.bankAccount.accountNumber} />
+                <Deposit bankAccountId={userDb.bankAccount.accountNumber} user={user}/>
               )}
             </div>
           </div>

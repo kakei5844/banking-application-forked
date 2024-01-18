@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.BankingApplication.dto.BillDTO;
+import com.fdmgroup.BankingApplication.model.BankAccount;
 import com.fdmgroup.BankingApplication.model.Bill;
 import com.fdmgroup.BankingApplication.model.CreditCard;
 import com.fdmgroup.BankingApplication.model.CreditCardTransaction;
@@ -90,7 +91,8 @@ public class BillService {
 		CreditCard creditCard = creditCardService.findCreditCardByIdAndUsername(creditCardId, username);
 		creditCardService.processTransaction(creditCardId, amount * -1, "Credit Payment", 0);
 
-		bankAccountService.processTransaction(bankAccountNumber, amount * -1, "Credit Payment");
+		BankAccount bankAccount = bankAccountService.findBankAccountByNumberAndUsername(bankAccountNumber, username);
+		bankAccountService.processTransaction(bankAccount, amount * -1, "Credit Payment");
 
 		Bill bill = billRepository.findFirstByCreditCardOrderByIssueDateDesc(creditCard);
 		bill.setTotalRepaymentAmount(bill.getTotalRepaymentAmount() + amount);

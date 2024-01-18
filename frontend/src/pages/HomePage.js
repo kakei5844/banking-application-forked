@@ -26,7 +26,8 @@ const HomePage = () => {
 
         if (userResponse.data && userResponse.data.bankAccount) {
           const bankResponse = await bankingApi.getTransactions(
-            userResponse.data.bankAccount.id
+            userResponse.data.bankAccount.id,
+            user
           );
           console.log(bankResponse.data);
 

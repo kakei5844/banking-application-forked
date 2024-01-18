@@ -16,8 +16,21 @@ const BillPage = (props) => {
   const [billedTransactions, setBilledTransactions] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [creditCards, setCreditCards] = useState([]);
+  const [toCreditCard, setToCreditCard] = useState("");
+  const [selectedCard, setSelectedCard] = useState(null);
+
 
   const { cards, transactions } = props;
+
+  const handleToCreditCardChange = (event) => {
+    const selectedCreditCardId = event.target.value;
+    console.log("selectedCreditCardId>", selectedCreditCardId);
+    setToCreditCard(selectedCreditCardId);
+    const selectedCardInfo = creditCards.find((card) => card.id === selectedCreditCardId);
+    console.log("creditCards >>>", creditCards[toCreditCard])
+    setSelectedCard(selectedCardInfo);
+  };
 
   const loadUserDb = async () => {
     try {
@@ -56,10 +69,22 @@ const BillPage = (props) => {
         });
 
         const billDetailsArray = await Promise.all(billDetailsPromises);
-        console.log("billDetailsArray >", billDetailsArray[0]);
-        console.log("billedTransactionsDTO >", billDetailsArray[0]);
-        setBillData(billDetailsArray[0]);
+        console.log("billDetailsArray >", billDetailsArray);
+
+        const updatedBillDetails = billDetailsArray.reduce(
+          (acc, { creditCardId, balanceDue, remainingBalance, minimumPayment, dueDate, balancePaid }) => ({
+            ...acc,
+            [creditCardId]: { balanceDue, remainingBalance, minimumPayment, dueDate, balancePaid },
+          }),
+          {}
+        );
+
+        console.log("updatedBillDetails >", updatedBillDetails);
+        setBillData(updatedBillDetails);
         setBilledTransactions(billDetailsArray[0]?.billedTransactionsDTO || {});
+        setCreditCards(userResponse.data.creditCards);
+        console.log("creditCards >", userResponse.data.creditCards);
+        setToCreditCard(userResponse.data.creditCards[0].id);
       }
     } catch (error) {
       handleLogError(error);
@@ -79,16 +104,40 @@ const BillPage = (props) => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  return ( userDb &&
-    <CreditCardBill 
-      statementBalance={billData.balanceDue} 
-      minimumPayment={billData.minimumPayment}
-      dueDate={formatDate(billData.dueDate)} 
-      remainingBalance={billData.remainingBalance} 
-      balancePaid={billData.balancePaid} 
-      transactions={billedTransactions} 
-      cards={cards} 
-    />
+  
+
+  return (userDb &&
+    <div className='billContainer' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div>
+        <label htmlFor="toCreditCard" className="labelAmount mt-2">
+          Choose a card:
+        </label>
+        <select
+          id="toCreditCard"
+          value={toCreditCard}
+          onChange={handleToCreditCardChange}
+          className="form-control mt-2"
+        >
+          {creditCards.map((creditCard) => (
+            <option key={creditCard.cardNumber} value={creditCard.id}>
+              {creditCard.cardNumber}
+            </option>
+          ))}
+        </select>
+      </div>
+      {toCreditCard >= 0 && toCreditCard <= Math.max(...creditCards.map(card => card.id)) &&  (
+      <CreditCardBill
+        statementBalance={billData[toCreditCard].balanceDue}
+        minimumPayment={billData[toCreditCard].minimumPayment}
+        dueDate={formatDate(billData[toCreditCard].dueDate)}
+        remainingBalance={billData[toCreditCard].remainingBalance}
+        balancePaid={billData[toCreditCard].balancePaid}
+        transactions={billedTransactions}
+        cards={creditCards}
+        selectedCard={selectedCard}
+      />)}
+      
+    </div>
   );
 
 };
