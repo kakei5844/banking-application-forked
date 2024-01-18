@@ -1,6 +1,6 @@
 package com.fdmgroup.BankingApplication.service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +36,7 @@ public class BillService {
 			List<CreditCardTransaction> transactions = creditCardService
 					.getTransactionsToBeBilledByCreditCard(creditCard);
 
-			Bill bill = new Bill(LocalDateTime.now(), LocalDateTime.now().plusDays(25),
+			Bill bill = new Bill(LocalDate.now(), LocalDate.now().plusDays(25),
 					creditCard.getOutstandingBalance(), creditCard.getOutstandingBalance() * 0.02, 0, creditCard,
 					transactions);
 

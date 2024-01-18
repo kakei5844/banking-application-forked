@@ -1,9 +1,8 @@
 package com.fdmgroup.BankingApplication.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,8 +17,8 @@ public class Bill {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private LocalDateTime issueDate; // YYYY-MM-DD 23:59:59
-	private LocalDateTime dueDate; // YYYY-MM-DD 23:59:59
+	private LocalDate issueDate;
+	private LocalDate dueDate;
 	private double balanceDue;
 	private double minimumPayment;
 	private double totalRepaymentAmount;
@@ -34,7 +33,7 @@ public class Bill {
 	public Bill() {
 	}
 
-	public Bill(Long id, LocalDateTime issueDate, LocalDateTime dueDate, double balanceDue, double minimumPayment,
+	public Bill(Long id, LocalDate issueDate, LocalDate dueDate, double balanceDue, double minimumPayment,
 			double totalRepaymentAmount, CreditCard creditCard, List<CreditCardTransaction> billedTransactions) {
 		this.id = id;
 		this.issueDate = issueDate;
@@ -46,7 +45,7 @@ public class Bill {
 		this.billedTransactions = billedTransactions;
 	}
 
-	public Bill(LocalDateTime issueDate, LocalDateTime dueDate, double balanceDue, double minimumPayment,
+	public Bill(LocalDate issueDate, LocalDate dueDate, double balanceDue, double minimumPayment,
 			double totalRepaymentAmount, CreditCard creditCard, List<CreditCardTransaction> billedTransactions) {
 		this.issueDate = issueDate;
 		this.dueDate = dueDate;
@@ -65,19 +64,19 @@ public class Bill {
 		this.id = id;
 	}
 
-	public LocalDateTime getIssueDate() {
+	public LocalDate getIssueDate() {
 		return issueDate;
 	}
 
-	public void setIssueDate(LocalDateTime issueDate) {
+	public void setIssueDate(LocalDate issueDate) {
 		this.issueDate = issueDate;
 	}
 
-	public LocalDateTime getDueDate() {
+	public LocalDate getDueDate() {
 		return dueDate;
 	}
 
-	public void setDueDate(LocalDateTime dueDate) {
+	public void setDueDate(LocalDate dueDate) {
 		this.dueDate = dueDate;
 	}
 
