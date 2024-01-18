@@ -1,4 +1,3 @@
-// TransactionHistory.js
 import React, { useState, useEffect } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../styles/components/BillTransactionHistory.css'; 

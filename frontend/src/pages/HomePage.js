@@ -17,8 +17,6 @@ const HomePage = () => {
   const [userDb, setUserDb] = useState(null);
   const [transactions, setTransactions] = useState([]);
 
-  const [appliedToCreditCard, setAppliedToCreditCard] = useState(false);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -67,9 +65,6 @@ const HomePage = () => {
     userDb && (
       <div className="home-page">
         <div className="top">
-          {appliedToCreditCard ? (
-            () => null
-          ) : (
             <div className="credit-apply-div">
               <NavLink to="/application">
                 <button className="credit-apply-btn">
@@ -77,7 +72,6 @@ const HomePage = () => {
                 </button>
               </NavLink>
             </div>
-          )}
           <h1>Bank Account</h1>
         </div>
 
