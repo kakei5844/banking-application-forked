@@ -20,7 +20,6 @@ import com.fdmgroup.BankingApplication.BankingApplication;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
-	// Add logger later
 	private final Logger LOGGER = LogManager.getLogger(BankingApplication.class);
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)

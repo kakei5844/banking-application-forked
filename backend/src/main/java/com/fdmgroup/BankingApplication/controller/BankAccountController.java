@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.BankingApplication.BankingApplication;
@@ -28,14 +25,12 @@ import com.fdmgroup.BankingApplication.dto.WithdrawRequestDTO;
 import com.fdmgroup.BankingApplication.model.BankAccount;
 import com.fdmgroup.BankingApplication.security.UserPrincipal;
 import com.fdmgroup.BankingApplication.service.BankAccountService;
-import com.fdmgroup.BankingApplication.security.UserPrincipal;
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/bank-accounts")
 @PreAuthorize("hasAuthority('USER')")
-@Slf4j
 public class BankAccountController {
 	private static final Logger LOGGER = LogManager.getLogger(BankingApplication.class);
 
@@ -71,17 +66,6 @@ public class BankAccountController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@GetMapping("/{bankAccountId}/history")
-	public ResponseEntity<?> getTransactionHistory(@PathVariable("bankAccountId") Long id) {
-		try {
-			List<BankAccountTransactionDTO> history = bankAccountService.getTransactionsById(id);
-			LOGGER.info("BankAccountController: Get Transaction History request received for Bank Account ID: {}", id);
-			return new ResponseEntity<>(history, HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("BankAccountController: Error retrieving transaction history, {}.", HttpStatus.INTERNAL_SERVER_ERROR);
-	        return new ResponseEntity<>("Error retrieving transaction history", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
 	public ResponseEntity<?> getTransactionHistory(
 			@PathVariable("bankAccountId") Long id,
 			@RequestParam(required = false) Integer month, 

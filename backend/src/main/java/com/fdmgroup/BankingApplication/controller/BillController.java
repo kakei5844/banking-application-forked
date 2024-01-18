@@ -27,7 +27,6 @@ import com.fdmgroup.BankingApplication.service.BillService;
 
 @RestController
 @RequestMapping("/api/v1/bills")
-@Slf4j
 public class BillController {
 	private static final Logger LOGGER = LogManager.getLogger(BankingApplication.class);
     @Autowired

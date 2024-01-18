@@ -33,11 +33,11 @@ public class UserController {
     public User getCurrentUser(@AuthenticationPrincipal UserPrincipal currentUser) {
 		Optional<User> optionalUser = userService.getUserByUsername(currentUser.getUsername());
 		
-		LOGGER.info("UserController: User request getCurrentUser from the user with id: {}", currentUser.getId());
+		LOGGER.info("UserController: getCurrentUser request from the user with id: {}", currentUser.getId());
 		if (optionalUser.isPresent()) {
 			return optionalUser.get();
 		} else {
-			LOGGER.error("UserController: User request rejected with error: Username Not Found");
+			LOGGER.error("UserController: User not found for username: {}", currentUser.getUsername());
 			throw new UsernameNotFoundException("Username not found");
 		}
     }

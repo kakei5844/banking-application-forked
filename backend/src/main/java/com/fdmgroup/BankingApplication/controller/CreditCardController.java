@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +30,6 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/credit-cards")
-@Slf4j
 public class CreditCardController {
 	private static final Logger LOGGER = LogManager.getLogger(BankingApplication.class);
 	
@@ -68,7 +66,6 @@ public class CreditCardController {
 		return new ResponseEntity<>(savedTransaction, HttpStatus.ACCEPTED);
 	}
 
-	// TODO: get transaction history with filter (to be confirmed with FE what filter options are there)
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/{creditCardId}/history")
     public ResponseEntity<?> getTransactionHistory(@PathVariable("creditCardId") Long id, 
