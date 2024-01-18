@@ -72,10 +72,18 @@ public class BillService {
 	}
 
 	private BillDTO convertToDTO(Bill bill) {
-		return new BillDTO(bill.getId(), bill.getIssueDate(), bill.getDueDate(), bill.getBalanceDue(),
-				bill.getMinimumPayment(), bill.getTotalRepaymentAmount(),
-				bill.getBalanceDue() - bill.getTotalRepaymentAmount(), bill.getBilledTransactions().stream()
-						.map(t -> creditCardService.convertToDTO(t)).collect(Collectors.toList()));
+		return new BillDTO(
+					bill.getId(), 
+					bill.getIssueDate(), 
+					bill.getDueDate(), 
+					bill.getBalanceDue(),
+					bill.getMinimumPayment(), 
+					bill.getTotalRepaymentAmount(),
+					toTwoDecimalPlaces(bill.getBalanceDue() - bill.getTotalRepaymentAmount()), 
+					bill.getBilledTransactions()
+						.stream()
+						.map(t -> creditCardService.convertToDTO(t)).collect(Collectors.toList())
+		);
 	}
 
 	public void payBill(long creditCardId, String bankAccountNumber, double amount, String username) {
