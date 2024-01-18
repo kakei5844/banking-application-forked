@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.BankingApplication.dto.CreditCardRequestDTO;
@@ -56,14 +57,24 @@ public class CreditCardController {
 		return new ResponseEntity<>(savedTransaction, HttpStatus.ACCEPTED);
 	}
 
-	@PreAuthorize("hasAuthority('USER')")
-	@GetMapping("/{creditCardId}/history")
-	public ResponseEntity<?> getTransactionHistory(@PathVariable("creditCardId") Long id, @AuthenticationPrincipal UserPrincipal currentUser) {
-		List<CreditCardTransactionDTO> history = creditCardService.getTransactionsByIdAndUsername(id, currentUser.getUsername());
-		return new ResponseEntity<>(history, HttpStatus.OK);
-	}
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/{creditCardId}/history")
+    public ResponseEntity<?> getTransactionHistory(@PathVariable("creditCardId") Long id, 
+            @RequestParam(required = false) Integer month, 
+            @RequestParam(required = false) Integer year, 
+            @AuthenticationPrincipal UserPrincipal currentUser) {
 
-	// TODO: get transaction history with filter (to be confirmed with FE what filter options are there)
-
+        List<CreditCardTransactionDTO> history;
+        if (year != null) {
+            if (month != null) {
+                history = creditCardService.getTransactionsByMonthAndYear(id, month, year, currentUser.getUsername());
+            } else {
+                history = creditCardService.getTransactionsByYear(id, year, currentUser.getUsername());
+            }
+        } else {
+            history = creditCardService.getTransactionsByIdAndUsername(id, currentUser.getUsername());
+        }
+        return new ResponseEntity<>(history, HttpStatus.OK);
+    }
 
 }

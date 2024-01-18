@@ -1,5 +1,6 @@
 package com.fdmgroup.BankingApplication.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +13,8 @@ import com.fdmgroup.BankingApplication.model.BankAccountTransaction;
 public interface BankAccountTransactionRepository extends JpaRepository<BankAccountTransaction, Long> {
 
     List<BankAccountTransaction> findByBankAccountOrderByCreatedAtDesc(BankAccount bankAccount);
+
+	List<BankAccountTransaction> findByBankAccountAndCreatedAtBetweenOrderByCreatedAtDesc(BankAccount bankAccount,
+			LocalDateTime startOfMonth, LocalDateTime endOfMonth);
 
 }

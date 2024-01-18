@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.BankingApplication.dto.BankAccountTransactionDTO;
@@ -55,8 +56,19 @@ public class BankAccountController {
 	}
 
 	@GetMapping("/{bankAccountId}/history")
-	public ResponseEntity<?> getTransactionHistory(@PathVariable("bankAccountId") Long id) {
-		List<BankAccountTransactionDTO> history = bankAccountService.getTransactionsById(id);
+	public ResponseEntity<?> getTransactionHistory(@PathVariable("bankAccountId") Long id,
+			@RequestParam(required = false) Integer month, @RequestParam(required = false) Integer year) {
+
+		List<BankAccountTransactionDTO> history;
+		if (year != null) {
+			if (month != null) {
+				history = bankAccountService.getTransactionsByMonthAndYear(id, month, year);
+			} else {
+				history = bankAccountService.getTransactionsByYear(id, year);
+			}
+		} else {
+			history = bankAccountService.getTransactionsById(id);
+		}
 		return new ResponseEntity<>(history, HttpStatus.OK);
 	}
 
