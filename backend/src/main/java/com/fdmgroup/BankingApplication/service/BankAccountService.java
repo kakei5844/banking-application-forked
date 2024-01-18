@@ -1,6 +1,7 @@
 package com.fdmgroup.BankingApplication.service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,7 @@ public class BankAccountService {
 
 	@Autowired
 	private BankAccountTransactionRepository bankAccountTransactionRepository;
-	
+
 	@Transactional
 	public BankAccountTransactionDTO deposit(DepositRequestDTO req) {
 		BankAccountTransaction transaction = processTransaction(req.getBankAccountNumber(), req.getAmount(), "Deposit");
@@ -37,7 +38,8 @@ public class BankAccountService {
 
 	@Transactional
 	public BankAccountTransactionDTO withdraw(WithdrawRequestDTO req) {
-		BankAccountTransaction transaction = processTransaction(req.getBankAccountNumber(), -req.getAmount(), "Withdrawal");
+		BankAccountTransaction transaction = processTransaction(req.getBankAccountNumber(), -req.getAmount(),
+				"Withdrawal");
 		return convertToDTO(transaction);
 	}
 
@@ -49,20 +51,41 @@ public class BankAccountService {
 				"Transfer to account " + req.getToBankAccountNumber());
 		return convertToDTO(fromTransaction);
 	}
-	
+
 	public List<BankAccountTransactionDTO> getTransactionsById(Long id) {
 		BankAccount bankAccount = findBankAccountById(id);
-		List<BankAccountTransaction> transactions = bankAccountTransactionRepository.findByBankAccountOrderByCreatedAtDesc(bankAccount);
+		List<BankAccountTransaction> transactions = bankAccountTransactionRepository
+				.findByBankAccountOrderByCreatedAtDesc(bankAccount);
+		return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
+	}
+
+	public List<BankAccountTransactionDTO> getTransactionsByMonthAndYear(Long id, int month, int year) {
+		BankAccount bankAccount = findBankAccountById(id);
+		LocalDateTime startOfMonth = LocalDateTime.of(year, month, 1, 0, 0);
+		LocalDateTime endOfMonth = startOfMonth.with(TemporalAdjusters.lastDayOfMonth()).withHour(23).withMinute(59)
+				.withSecond(59);
+
+		List<BankAccountTransaction> transactions = bankAccountTransactionRepository
+				.findByBankAccountAndCreatedAtBetweenOrderByCreatedAtDesc(bankAccount, startOfMonth, endOfMonth);
 		return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
 	
+	public List<BankAccountTransactionDTO> getTransactionsByYear(Long id, int year) {
+	    BankAccount bankAccount = findBankAccountById(id);
+	    LocalDateTime startOfYear = LocalDateTime.of(year, 1, 1, 0, 0);
+	    LocalDateTime endOfYear = LocalDateTime.of(year, 12, 31, 23, 59, 59);
+
+	    List<BankAccountTransaction> transactions = bankAccountTransactionRepository.findByBankAccountAndCreatedAtBetweenOrderByCreatedAtDesc(bankAccount, startOfYear, endOfYear);
+	    return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
+	}
+
 	public BankAccount findBankAccountById(Long id) {
 		return bankAccountRepository.findById(id)
 				.orElseThrow(() -> new BankAccountNotFoundException("Bank account not found for ID: " + id));
 	}
-	
+
 	public BankAccountTransaction processTransaction(String bankAccountNumber, double amount, String description) {
-	    BankAccount bankAccount = findBankAccountByNumber(bankAccountNumber);
+		BankAccount bankAccount = findBankAccountByNumber(bankAccountNumber);
 		checkSufficientBalance(bankAccount, amount);
 
 		double newBalance = bankAccount.getBalance() + amount;
@@ -77,19 +100,19 @@ public class BankAccountService {
 		bankAccountTransaction.setUpdatedBalance(newBalance);
 		return bankAccountTransactionRepository.save(bankAccountTransaction);
 	}
-	
+
 	public BankAccount findBankAccountByNumber(String accountNumber) {
-	    return bankAccountRepository.findByAccountNumber(accountNumber)
-	            .orElseThrow(() -> new BankAccountNotFoundException("Bank account not found for account number: " + accountNumber));
+		return bankAccountRepository.findByAccountNumber(accountNumber).orElseThrow(
+				() -> new BankAccountNotFoundException("Bank account not found for account number: " + accountNumber));
 	}
-	
+
 	private boolean checkSufficientBalance(BankAccount bankAccount, double amount) {
 		if (bankAccount.getBalance() + amount < 0) {
 			throw new InsufficientBalanceException("Insufficient balance for transaction.");
 		}
 		return true;
 	}
-	
+
 	private BankAccountTransactionDTO convertToDTO(BankAccountTransaction transaction) {
 		BankAccountTransactionDTO dto = new BankAccountTransactionDTO();
 		dto.setId(transaction.getId());
@@ -100,5 +123,5 @@ public class BankAccountService {
 		dto.setUpdatedBalance(transaction.getUpdatedBalance());
 		return dto;
 	}
-	
+
 }
