@@ -44,11 +44,11 @@ function getUser(user) {
 }
 
 // -- Bank Account Features
-function getTransactions(bankAccountId) {
+function getTransactions(bankAccountId, user) {
   const url = `/api/v1/bank-accounts/${bankAccountId}/history`;
 
   return instance.get(url, {
-    withCredentials: true
+    headers: { 'Authorization': basicAuth(user) }
   });
 }
 

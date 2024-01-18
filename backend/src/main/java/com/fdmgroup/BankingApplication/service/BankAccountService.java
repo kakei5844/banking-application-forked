@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.BankingApplication.dto.BankAccountTransactionDTO;
@@ -52,15 +53,15 @@ public class BankAccountService {
 		return convertToDTO(fromTransaction);
 	}
 
-	public List<BankAccountTransactionDTO> getTransactionsById(Long id) {
-		BankAccount bankAccount = findBankAccountById(id);
+	public List<BankAccountTransactionDTO> getTransactionsById(Long id, String username) {
+		BankAccount bankAccount = findBankAccountByIdAndUsername(id, username);
 		List<BankAccountTransaction> transactions = bankAccountTransactionRepository
 				.findByBankAccountOrderByCreatedAtDesc(bankAccount);
 		return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
 
-	public List<BankAccountTransactionDTO> getTransactionsByMonthAndYear(Long id, int month, int year) {
-		BankAccount bankAccount = findBankAccountById(id);
+	public List<BankAccountTransactionDTO> getTransactionsByMonthAndYear(Long id, int month, int year, String username) {
+		BankAccount bankAccount = findBankAccountByIdAndUsername(id, username);
 		LocalDateTime startOfMonth = LocalDateTime.of(year, month, 1, 0, 0);
 		LocalDateTime endOfMonth = startOfMonth.with(TemporalAdjusters.lastDayOfMonth()).withHour(23).withMinute(59)
 				.withSecond(59);
@@ -70,8 +71,8 @@ public class BankAccountService {
 		return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
 	
-	public List<BankAccountTransactionDTO> getTransactionsByYear(Long id, int year) {
-	    BankAccount bankAccount = findBankAccountById(id);
+	public List<BankAccountTransactionDTO> getTransactionsByYear(Long id, int year, String username) {
+	    BankAccount bankAccount = findBankAccountByIdAndUsername(id, username);
 	    LocalDateTime startOfYear = LocalDateTime.of(year, 1, 1, 0, 0);
 	    LocalDateTime endOfYear = LocalDateTime.of(year, 12, 31, 23, 59, 59);
 
@@ -79,7 +80,7 @@ public class BankAccountService {
 	    return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
 
-	public BankAccount findBankAccountById(Long id) {
+	private BankAccount findBankAccountById(Long id) {
 		return bankAccountRepository.findById(id)
 				.orElseThrow(() -> new BankAccountNotFoundException("Bank account not found for ID: " + id));
 	}
@@ -123,5 +124,13 @@ public class BankAccountService {
 		dto.setUpdatedBalance(transaction.getUpdatedBalance());
 		return dto;
 	}
+
+    public BankAccount findBankAccountByIdAndUsername(Long id, String username) {
+		BankAccount bankAccount = findBankAccountById(id);
+		if (!bankAccount.getUser().getUsername().equals(username)) {
+			throw new AccessDeniedException("Access Denied: You are not the owner of this bank account ID: " + id);
+		}
+		return bankAccount;
+    }
 
 }
