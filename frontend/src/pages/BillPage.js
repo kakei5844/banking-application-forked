@@ -25,10 +25,10 @@ const BillPage = (props) => {
 
   const handleToCreditCardChange = (event) => {
     const selectedCreditCardId = event.target.value;
+    console.log("selectedCreditCardId>", selectedCreditCardId);
     setToCreditCard(selectedCreditCardId);
-    console.log(toCreditCard)
     const selectedCardInfo = creditCards.find((card) => card.id === selectedCreditCardId);
-    console.log(creditCards[toCreditCard])
+    console.log("creditCards >>>", creditCards[toCreditCard])
     setSelectedCard(selectedCardInfo);
   };
 
@@ -69,12 +69,21 @@ const BillPage = (props) => {
         });
 
         const billDetailsArray = await Promise.all(billDetailsPromises);
-        console.log("billDetailsArray >", billDetailsArray[0]);
-        console.log("billedTransactionsDTO >", billDetailsArray[0]);
-        setBillData(billDetailsArray[0]);
+        console.log("billDetailsArray >", billDetailsArray);
+
+        const updatedBillDetails = billDetailsArray.reduce(
+          (acc, { creditCardId, balanceDue, remainingBalance, minimumPayment, dueDate, balancePaid }) => ({
+            ...acc,
+            [creditCardId]: { balanceDue, remainingBalance, minimumPayment, dueDate, balancePaid },
+          }),
+          {}
+        );
+
+        console.log("updatedBillDetails >", updatedBillDetails);
+        setBillData(updatedBillDetails);
         setBilledTransactions(billDetailsArray[0]?.billedTransactionsDTO || {});
         setCreditCards(userResponse.data.creditCards);
-        console.log(creditCards)
+        console.log("creditCards >", userResponse.data.creditCards);
         setToCreditCard(userResponse.data.creditCards[0].id);
       }
     } catch (error) {
@@ -98,7 +107,7 @@ const BillPage = (props) => {
   
 
   return (userDb &&
-    <div>
+    <div className='billContainer' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <div>
         <label htmlFor="toCreditCard" className="labelAmount mt-2">
           Choose a card:
@@ -116,13 +125,13 @@ const BillPage = (props) => {
           ))}
         </select>
       </div>
-      {toCreditCard >= 0 && toCreditCard < creditCards.length && (
+      {toCreditCard >= 0 && toCreditCard <= Math.max(...creditCards.map(card => card.id)) &&  (
       <CreditCardBill
-        statementBalance={billData.balanceDue}
-        minimumPayment={billData.minimumPayment}
-        dueDate={formatDate(billData.dueDate)}
-        remainingBalance={billData.remainingBalance}
-        balancePaid={billData.balancePaid}
+        statementBalance={billData[toCreditCard].balanceDue}
+        minimumPayment={billData[toCreditCard].minimumPayment}
+        dueDate={formatDate(billData[toCreditCard].dueDate)}
+        remainingBalance={billData[toCreditCard].remainingBalance}
+        balancePaid={billData[toCreditCard].balancePaid}
         transactions={billedTransactions}
         cards={creditCards}
         selectedCard={selectedCard}

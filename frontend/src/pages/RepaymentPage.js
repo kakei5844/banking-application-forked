@@ -131,7 +131,7 @@ const RepaymentPage = () => {
               } else {
                 console.log(
                   "Invalid or missing bill data for creditCardId",
-                  creditCard.id
+                  creditCard.id,
                 );
                 return {
                   creditCardId: creditCard.id,
