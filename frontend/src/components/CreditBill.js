@@ -4,7 +4,7 @@ import { useState } from 'react';
 import ReactDOM from 'react-dom';
 import BillTransactionHistory from './BillTransactionHistory';
 
-const CreditCardBill = ({ statementBalance, minimumPayment, dueDate, remainingBalance, balancePaid, transactions, cards }) => {
+const CreditCardBill = ({ statementBalance, minimumPayment, dueDate, remainingBalance, balancePaid, transactions, cards, selectedCard }) => {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
