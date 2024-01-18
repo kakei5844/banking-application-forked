@@ -1,5 +1,7 @@
 package com.fdmgroup.BankingApplication.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -160,7 +162,7 @@ public class CreditCardService {
 		MerchantTypeCategory merchantCategory = MerchantTypeCategory.findByMcc(mcc);
 
 		if (merchantCategory != UNKNOWN && merchantCategory.getCashbackRate() != 0) {
-			double cashBack = merchantCategory.getCashbackRate() * amount;
+			double cashBack = new BigDecimal(merchantCategory.getCashbackRate() * amount).setScale(2, RoundingMode.HALF_UP).doubleValue();
 			creditCard.setCashback(creditCard.getCashback() + cashBack);
 			description = description.concat("\n" + cashBack + " cashbacks earned");
 		}
