@@ -31,9 +31,18 @@ function Registration() {
       };
       
       const response = await bankingApi.register(user);
-      console.log(response.data);
+  
+      // Check for successful response (status code 201)
+      if (response.status === 201) {
+        console.log("Registration successful: ", response.data);
+        return true; // Registration successful
+      } else {
+        console.log("Registration failed with status: ", response.status);
+        return false; // Registration failed
+      }
     } catch (error) {
       handleLogError(error);
+      return false; // Error occurred
     }
   };
   
@@ -69,15 +78,12 @@ function Registration() {
   
     if (!formValidation()) return;
   
-    try {
-      // Create user
-      await createUser();
-  
+    const userCreated = await createUser();
+    if (userCreated) {
       alert("Account created successfully!");
       navigate("/login");
-    } catch (error) {
-      handleLogError(error);
-      alert("Error creating user. Please try again.");
+    } else {
+      alert("Error creating user. Please check your details or try a different username.");
     }
   };
   
