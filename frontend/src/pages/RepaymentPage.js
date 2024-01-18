@@ -201,7 +201,6 @@ const RepaymentPage = () => {
               </select>
             </div>
 
-            {/* Display remaining balance */}
             <div className="form-group">
               <label htmlFor="remainingBalance" className="labelAmount mt-2">
                 Balance Due:

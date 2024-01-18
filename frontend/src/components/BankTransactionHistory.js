@@ -1,26 +1,24 @@
 import React, { useState } from "react";
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../styles/components/TransactionHistory.css';
 
 const BankTransactionHistory = ({ transactions }) => {
-    const [filterType, setFilterType] = useState('date');
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedMonth, setSelectedMonth] = useState('');
+    const [selectedYear, setSelectedYear] = useState('');
 
-    const handleDateChange = date => {
-        setSelectedDate(date);
-    };
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
 
-    const clearFilters = () => {
-        setSelectedDate(null);
-    };
+    const months = Array.from({ length: 12 }, (_, index) => index + 1);
+    const years = Array.from({ length: 4 }, (_, index) => currentYear - index);
 
-    const filteredTransactions = transactions.filter(transaction => {
-        if (filterType === 'date' && selectedDate) {
-            return transaction.date.includes(selectedDate.toISOString().split('T')[0]);
-        }
-        return true;
-    });
+    const filteredTransactions = transactions
+        .filter(
+            (transaction) =>
+                (!selectedMonth || new Date(transaction.datetime).getMonth() + 1 === parseInt(selectedMonth, 10)) &&
+                (!selectedYear || new Date(transaction.datetime).getFullYear() === parseInt(selectedYear, 10))
+        )
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
 
     const checkColor = (amount) => {
         if (amount < 0) {
@@ -28,33 +26,45 @@ const BankTransactionHistory = ({ transactions }) => {
         } else {
             return "green";
         }
-    }
+    };
+
+    const handleResetFilters = () => {
+        setSelectedMonth('');
+        setSelectedYear('');
+    };
 
     return (
         <div className="transaction-container">
-            <div className="filter-options">
-                <label>
-                    Filter by:
-                    <select value={filterType} onChange={e => setFilterType(e.target.value)}>
-                        <option value="date">Date</option>
-                    </select>
-                </label>
+            <h2>Transaction History</h2>
 
-                {filterType === 'date' && (
-                    <div className="date-filter">
-                        <label>Month and Year:</label>
-                        <DatePicker
-                            selected={selectedDate}
-                            onChange={handleDateChange}
-                            dateFormat="MM/yyyy"
-                            showMonthYearPicker
-                        />
-                    </div>
-                )}
+            <div className="filter-container">
+                <label>Filter by Month:</label>
+                <select
+                    value={selectedMonth}
+                    onChange={(e) => setSelectedMonth(e.target.value)}
+                >
+                    <option value="">All</option>
+                    {months.map((month) => (
+                        <option key={month} value={month}>
+                            {new Date(currentYear, month - 1, 1).toLocaleString('default', { month: 'long' })}
+                        </option>
+                    ))}
+                </select>
 
-                <div className="button-container">
-                    <button onClick={clearFilters}>Clear Filters</button>
-                </div>
+                <label>Filter by Year:</label>
+                <select
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                >
+                    <option value="">All</option>
+                    {years.map((year) => (
+                        <option key={year} value={year}>
+                            {year}
+                        </option>
+                    ))}
+                </select>
+
+                <button onClick={handleResetFilters}>Reset</button>
             </div>
 
             <table className="transaction-table">
