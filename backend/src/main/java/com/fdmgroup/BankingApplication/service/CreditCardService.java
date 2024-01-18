@@ -184,7 +184,7 @@ public class CreditCardService {
 	}
 
 	public CreditCard payCreditWithCashback(CreditCard creditCard) {
-		double accumulatedCashback = creditCard.getCashback();
+		double accumulatedCashback = toTwoDecimalPlaces(creditCard.getCashback());
 		if (accumulatedCashback == 0) { return creditCard; }
 
 		creditCard.setOutstandingBalance(toTwoDecimalPlaces(creditCard.getOutstandingBalance() - accumulatedCashback));
