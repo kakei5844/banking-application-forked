@@ -12,6 +12,7 @@ export const bankingApi = {
   getCreditCardTransactions,
   applyCreditCard,
   getBill,
+  getLatestBill,
   getAllBill,
   payBill
 }
@@ -108,8 +109,16 @@ function getBill(creditCardId, user) {
   });
 }
 
-function getAllBill(creditCardId, user) {
+function getLatestBill(creditCardId, user) {
   const url = `/api/v1/bills/credit-card/${creditCardId}`;
+
+  return instance.get(url, {
+    headers: { 'Authorization': basicAuth(user) }
+  });
+}
+
+function getAllBill(creditCardId, user) {
+  const url = `/api/v1/bills/credit-card/${creditCardId}/latest`;
 
   return instance.get(url, {
     headers: { 'Authorization': basicAuth(user) }
