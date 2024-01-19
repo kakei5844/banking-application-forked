@@ -19,6 +19,7 @@ const BillPage = (props) => {
   const [creditCards, setCreditCards] = useState([]);
   const [toCreditCard, setToCreditCard] = useState("");
   const [selectedCard, setSelectedCard] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
 
   const { cards, transactions } = props;
@@ -62,6 +63,7 @@ const BillPage = (props) => {
               };
             } else {
               console.log("Invalid or missing bill data for creditCardId", creditCard.id);
+
             }
           } catch (error) {
             console.log("Error fetching bill for creditCardId", creditCard.id, ":", error);
@@ -71,7 +73,9 @@ const BillPage = (props) => {
         const billDetailsArray = await Promise.all(billDetailsPromises);
         console.log("billDetailsArray >", billDetailsArray);
 
-        const updatedBillDetails = billDetailsArray.reduce(
+        const filteredBillDetailsArray = billDetailsArray.filter((billDetails) => billDetails);
+
+        const updatedBillDetails = filteredBillDetailsArray.reduce(
           (acc, { creditCardId, balanceDue, remainingBalance, minimumPayment, dueDate, balancePaid }) => ({
             ...acc,
             [creditCardId]: { balanceDue, remainingBalance, minimumPayment, dueDate, balancePaid },
@@ -80,11 +84,13 @@ const BillPage = (props) => {
         );
 
         console.log("updatedBillDetails >", updatedBillDetails);
-        setBillData(updatedBillDetails);
+        setBillData(updatedBillDetails || {});
+        console.log(billData)
         setBilledTransactions(billDetailsArray[0]?.billedTransactionsDTO || {});
         setCreditCards(userResponse.data.creditCards);
         console.log("creditCards >", userResponse.data.creditCards);
         setToCreditCard(userResponse.data.creditCards[0].id);
+        setIsLoading(false)
       }
     } catch (error) {
       handleLogError(error);
@@ -104,42 +110,52 @@ const BillPage = (props) => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  
 
-  return (userDb &&
-    <div className='billContainer' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <div>
-        <label htmlFor="toCreditCard" className="labelAmount mt-2">
-          Choose a card:
-        </label>
-        <select
-          id="toCreditCard"
-          value={toCreditCard}
-          onChange={handleToCreditCardChange}
-          className="form-control mt-2"
-        >
-          {creditCards.map((creditCard) => (
-            <option key={creditCard.cardNumber} value={creditCard.id}>
-              {creditCard.cardNumber}
-            </option>
-          ))}
-        </select>
+
+  return (
+    userDb && (
+      <div className='billContainer' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+         {isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+        <div>
+          <label htmlFor="toCreditCard" className="labelAmount mt-2">
+            Choose a card:
+          </label>
+          <select
+            id="toCreditCard"
+            value={toCreditCard}
+            onChange={handleToCreditCardChange}
+            className="form-control mt-2"
+          >
+            {creditCards.map((creditCard) => (
+              <option key={creditCard.cardNumber} value={creditCard.id}>
+                {creditCard.cardNumber}
+              </option>
+            ))}
+          </select>
+          
+        </div>
+        {toCreditCard >= 0 && toCreditCard <= Math.max(...creditCards.map((card) => card.id)) && billData[toCreditCard] ? (
+          <CreditCardBill
+            statementBalance={billData[toCreditCard].balanceDue}
+            minimumPayment={billData[toCreditCard].minimumPayment}
+            dueDate={formatDate(billData[toCreditCard].dueDate)}
+            remainingBalance={billData[toCreditCard].remainingBalance}
+            balancePaid={billData[toCreditCard].balancePaid}
+            transactions={billedTransactions}
+            cards={creditCards}
+            selectedCard={selectedCard}
+          />
+        ) : (
+          <div>No statement for this credit card.</div>
+        )}
+        </>)}
       </div>
-      {toCreditCard >= 0 && toCreditCard <= Math.max(...creditCards.map(card => card.id)) &&  (
-      <CreditCardBill
-        statementBalance={billData[toCreditCard].balanceDue}
-        minimumPayment={billData[toCreditCard].minimumPayment}
-        dueDate={formatDate(billData[toCreditCard].dueDate)}
-        remainingBalance={billData[toCreditCard].remainingBalance}
-        balancePaid={billData[toCreditCard].balancePaid}
-        transactions={billedTransactions}
-        cards={creditCards}
-        selectedCard={selectedCard}
-      />)}
       
-    </div>
+    )
   );
-
 };
 
 export default BillPage;
