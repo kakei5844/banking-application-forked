@@ -233,8 +233,8 @@ public class CreditCardService {
 			double totalRepaymentAmount = bill.getTotalRepaymentAmount();
 			double minimumPayment = bill.getMinimumPayment();
 
-			double interestCharge = (balanceDue - totalRepaymentAmount) * 0.02;
-			double interestAndPenaltyCharge = (balanceDue - totalRepaymentAmount) * (0.02 + 0.04);
+			double interestCharge = toTwoDecimalPlaces((balanceDue - totalRepaymentAmount) * 0.02);
+			double interestAndPenaltyCharge = toTwoDecimalPlaces((balanceDue - totalRepaymentAmount) * (0.02 + 0.04));
 
 			if (totalRepaymentAmount < balanceDue) {
 				CreditCardTransaction transaction = new CreditCardTransaction();
@@ -247,9 +247,9 @@ public class CreditCardService {
 					transaction.setMcc(0);
 					transaction.setMerchantCategory(UNKNOWN);
 
-					creditCard.setOutstandingBalance(creditCard.getOutstandingBalance() + interestCharge);
+					creditCard.setOutstandingBalance(toTwoDecimalPlaces(creditCard.getOutstandingBalance() + interestCharge));
 
-					creditCard.setAvailableCredit(creditCard.getAvailableCredit() - interestCharge);
+					creditCard.setAvailableCredit(creditCard.getCreditLimit() - creditCard.getOutstandingBalance());
 				} else {
 					transaction.setAmount(interestAndPenaltyCharge);
 					transaction.setCreatedAt(LocalDateTime.now());
@@ -258,9 +258,9 @@ public class CreditCardService {
 					transaction.setMcc(0);
 					transaction.setMerchantCategory(UNKNOWN);
 
-					creditCard.setOutstandingBalance(creditCard.getOutstandingBalance() + interestAndPenaltyCharge);
+					creditCard.setOutstandingBalance(toTwoDecimalPlaces(creditCard.getOutstandingBalance() + interestAndPenaltyCharge));
 
-					creditCard.setAvailableCredit(creditCard.getAvailableCredit() - interestAndPenaltyCharge);
+					creditCard.setAvailableCredit(creditCard.getCreditLimit() - creditCard.getOutstandingBalance());
 				}
 
 				creditCardTransactionRepository.save(transaction);
