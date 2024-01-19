@@ -15,8 +15,8 @@ const BankTransactionHistory = ({ transactions }) => {
     const filteredTransactions = transactions
         .filter(
             (transaction) =>
-                (!selectedMonth || new Date(transaction.datetime).getMonth() + 1 === parseInt(selectedMonth, 10)) &&
-                (!selectedYear || new Date(transaction.datetime).getFullYear() === parseInt(selectedYear, 10))
+                (!selectedMonth || new Date(transaction.date).getMonth() + 1 === parseInt(selectedMonth, 10)) &&
+                (!selectedYear || new Date(transaction.date).getFullYear() === parseInt(selectedYear, 10))
         )
         .sort((a, b) => new Date(b.date) - new Date(a.date));
 
@@ -35,7 +35,7 @@ const BankTransactionHistory = ({ transactions }) => {
 
     return (
         <div className="transaction-container">
-            <h2>Transaction History</h2>
+            <h2 style={{ textAlign: 'center' }}>Transaction History</h2>
 
             <div className="filter-container">
                 <label>Filter by Month:</label>

@@ -29,6 +29,7 @@ const RepaymentPage = () => {
       setRemainingBalance(
         creditCardDetails[selectedCreditCardId].remainingBalance || ""
       );
+      console.log("remaining balance>", creditCardDetails[selectedCreditCardId].remainingBalance)
       setMinimumPayment(
         creditCardDetails[selectedCreditCardId].minimumPayment || ""
       );
@@ -104,10 +105,11 @@ const RepaymentPage = () => {
         const creditCardDetailsPromises = userResponse.data.creditCards.map(
           async (creditCard) => {
             try {
-              const billResponse = await bankingApi.getBill(
+              const billResponse = await bankingApi.getLatestBill(
                 creditCard.id,
                 user
               );
+              console.log("Latest Bill >", billResponse.data);
 
               if (billResponse.data && billResponse.data.length > 0) {
                 const latestBill = billResponse.data[0];

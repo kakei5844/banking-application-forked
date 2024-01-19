@@ -110,7 +110,6 @@ const HomePage = () => {
         <div className="bottom">
           <div className="bottom-left">
             <div className="bottom-left-2">
-              <h2>Transaction History</h2>
               <BankTransactionHistory transactions={transactions} />
             </div>
           </div>
