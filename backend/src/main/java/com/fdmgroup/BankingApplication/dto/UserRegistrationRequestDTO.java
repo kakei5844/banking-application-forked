@@ -23,6 +23,9 @@ public class UserRegistrationRequestDTO {
 	@NotBlank(message = "Phone number must not be blank")
 	private String phoneNumber;
 
+	@NotBlank(message = "Email must not be blank")
+	private String email;
+
 	private Role role;
 
 	private double initialBalance;
@@ -32,13 +35,14 @@ public class UserRegistrationRequestDTO {
 	}
 
 	public UserRegistrationRequestDTO(String username, String password, String firstName, String lastName,
-			String phoneNumber, Role role, double initialBalance) {
+			String phoneNumber, String email, Role role, double initialBalance) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
+		this.email = email;
 		this.role = role;
 		this.initialBalance = initialBalance;
 	}
@@ -98,18 +102,19 @@ public class UserRegistrationRequestDTO {
 	public void setInitialBalance(double initialBalance) {
 		this.initialBalance = initialBalance;
 	}
-	
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Override
 	public String toString() {
-	    return "UserRegistrationRequestDTO{" +
-	            "username='" + username + '\'' +
-               ", password='******'" +
-	            ", firstName='" + firstName + '\'' +
-	            ", lastName='" + lastName + '\'' +
-	            ", phoneNumber='" + phoneNumber + '\'' +
-	            ", role=" + role +
-	            ", initialBalance=" + initialBalance +
-	            '}';
+		return "UserRegistrationRequestDTO [username=" + username + ", firstName=" + firstName + ", lastName="
+				+ lastName + ", role=" + role + "]";
 	}
 
 }

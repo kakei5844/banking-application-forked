@@ -32,7 +32,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1")
-public class UserManagementController {
+public class AuthController {
 
 	private final Logger LOGGER = LogManager.getLogger(BankingApplication.class);
 

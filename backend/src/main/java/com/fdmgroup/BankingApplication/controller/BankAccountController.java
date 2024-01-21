@@ -40,7 +40,7 @@ public class BankAccountController {
 	@GetMapping("/{bankAccountId}")
 	public ResponseEntity<?> getBankAccount(@PathVariable("bankAccountId") Long id, @AuthenticationPrincipal UserPrincipal currentUser) {
 		BankAccount bankAccount = bankAccountService.findBankAccountByIdAndUsername(id, currentUser.getUsername());
-		LOGGER.info("BankAccountController: Get Bank Account request received with Bank Account: {}, and UserID: {}", currentUser.getId());
+		LOGGER.info("BankAccountController: Get Bank Account request received with Bank Account: {}, and UserID: {}", id, currentUser.getId());
 		return new ResponseEntity<>(bankAccount, HttpStatus.OK);
 	}
 
