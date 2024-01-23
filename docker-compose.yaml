@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    image: "mysql:8.0.36"
+    container_name: mysqldb
+    restart: always
+    ports:
+      - 3309:3306
+    networks:
+      - springboot-mysql-net
+    environment:
+      MYSQL_DATABASE: bankingapp
+      MYSQL_USER: sa
+      MYSQL_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: 1234
+
+  backend:
+    build: ./backend
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - springboot-mysql-net
+    environment:
+      - MYSQL_HOST=mysqldb
+      - MYSQL_PORT=3306
+      - MYSQL_DB_NAME=bankingapp
+      - MYSQL_USER=sa
+      - MYSQL_PASSWORD=1234
+    depends_on:
+      - mysqldb
+
+  frontend:
+    build: ./frontend
+    container_name: frontend_c
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend:/frontend
+      - /frontend/node_modules
+
+networks:
+  springboot-mysql-net:
