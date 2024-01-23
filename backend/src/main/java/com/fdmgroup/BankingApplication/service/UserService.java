@@ -1,19 +1,14 @@
 package com.fdmgroup.BankingApplication.service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.fdmgroup.BankingApplication.dto.UserDTO;
 import com.fdmgroup.BankingApplication.dto.UserRegistrationRequestDTO;
-import com.fdmgroup.BankingApplication.exception.UserNotFoundException;
 import com.fdmgroup.BankingApplication.exception.UsernameAlreadyExistsException;
-import com.fdmgroup.BankingApplication.mapper.UserMapper;
 import com.fdmgroup.BankingApplication.model.BankAccount;
 import com.fdmgroup.BankingApplication.model.User;
 import com.fdmgroup.BankingApplication.repository.BankAccountRepository;
@@ -28,9 +23,6 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private UserMapper userMapper;
 
     @Autowired
     private BankAccountRepository bankAccountRepository;
@@ -54,9 +46,18 @@ public class UserService {
 		user.setFirstName(req.getFirstName());
 		user.setLastName(req.getLastName());
 		user.setPhoneNumber(req.getPhoneNumber());
-		user.setEmail(req.getEmail());
 		user.setRole(req.getRole());
-		user.setVerified(false);
+
+		if (user.getRole() == Role.USER) {
+			BankAccount bankAccount = new BankAccount();
+			bankAccount.setUser(user);
+			bankAccount.setBalance(req.getInitialBalance());
+			bankAccount.setAccountNumber(generateUniqueAccountNumber());
+			BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
+			user.setBankAccount(savedBankAccount);
+		} else {
+			user.setBankAccount(null);
+		}
 
 		return userRepository.save(user);
 	}
@@ -94,34 +95,5 @@ public class UserService {
 
 	public Optional<User> validUsernameAndPassword(String username, String password) {
 		return getUserByUsername(username).filter(user -> passwordEncoder.matches(password, user.getPassword()));
-	}
-
-	public List<UserDTO> getUnverifiedUsers() {
-		return userRepository
-					.findByIsVerifiedFalse()
-					.stream()
-					.map(userMapper::toUserDTO)
-                	.collect(Collectors.toList())
-		;
-	}
-
-	public UserDTO verifyUser(Long id) {
-		if (id == null) { return null; }
-		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with ID: " + id + " not found"));
-		user.setVerified(true);
-
-		if (user.getRole() == Role.USER) {
-			BankAccount bankAccount = new BankAccount();
-			bankAccount.setUser(user);
-			bankAccount.setBalance(0);
-			bankAccount.setAccountNumber(generateUniqueAccountNumber());
-			BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
-			user.setBankAccount(savedBankAccount);
-		} else {
-			user.setBankAccount(null);
-		}
-
-		User savedUser = userRepository.save(user);
-		return userMapper.toUserDTO(savedUser);
 	}
 }

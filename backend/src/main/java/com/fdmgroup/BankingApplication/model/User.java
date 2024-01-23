@@ -28,8 +28,6 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String phoneNumber;
-	private String email;
-	private boolean isVerified;
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
@@ -46,15 +44,14 @@ public class User {
 	}
 
 	public User(Long id, String username, String password, String firstName, String lastName, String phoneNumber,
-			String email, boolean isVerified, Role role, BankAccount bankAccount, List<CreditCard> creditCards) {
+			Role role, BankAccount bankAccount, List<CreditCard> creditCards) {
+		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
-		this.email = email;
-		this.isVerified = isVerified;
 		this.role = role;
 		this.bankAccount = bankAccount;
 		this.creditCards = creditCards;
@@ -130,22 +127,6 @@ public class User {
 
 	public void setCreditCards(List<CreditCard> creditCards) {
 		this.creditCards = creditCards;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public boolean isVerified() {
-		return isVerified;
-	}
-
-	public void setVerified(boolean isVerified) {
-		this.isVerified = isVerified;
 	}
 
 }

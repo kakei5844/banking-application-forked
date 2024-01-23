@@ -33,7 +33,7 @@ public class SpringSecurityConfig {
 
 		return http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-					.requestMatchers("api/v1/credit-cards/purchase", "/admin/**").permitAll()
+					.requestMatchers("api/v1/credit-cards/purchase").permitAll()
 					.requestMatchers("/", "/swagger-ui.html","/api/v1/login", "/api/v1/logout", "/api/v1/register", "/h2/**", "/css/**", "/js/**", "/images/**")
 					.permitAll()
                     .anyRequest().authenticated())
