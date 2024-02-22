@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { bankingApi } from "../misc/BankingApi";
 import { handleLogError } from "../misc/Helpers";
 
-function Withdraw({ bankAccountId, user }) {
+function Withdraw({ bankAccountId }) {
   const [amount, setAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -11,7 +11,7 @@ function Withdraw({ bankAccountId, user }) {
   const handleWithdraw = async (e) => {
     e.preventDefault();
     try {
-      const response = await bankingApi.withdraw(bankAccountId, amount, user);
+      const response = await bankingApi.withdraw(bankAccountId, amount);
       console.log(response.data);
       setErrorMessage("");
       setSuccessMessage("Successfully withdrawn money");

@@ -46,8 +46,7 @@ const Application = () => {
             // Make API call to submit the application
             const response = await bankingApi.applyCreditCard(
                 annualSalary,
-                cardType,
-                user
+                cardType
             );
             console.log(response.data)
 
@@ -72,7 +71,7 @@ const Application = () => {
 
     const loadUserDb = async () => {
         try {
-            const response = await bankingApi.getUser(user)
+            const response = await bankingApi.getUser()
             // console.log(response.data)
             setUserDb(response.data)
         } catch (error) {

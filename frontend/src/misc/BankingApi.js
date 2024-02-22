@@ -20,6 +20,7 @@ export const bankingApi = {
 // -- User Management
 function authenticate(username, password) {
   return instance.post('/api/v1/login', { username, password }, {
+    withCredentials: true,
     headers: { 'Content-type': 'application/json' }
   })
 }
@@ -37,10 +38,10 @@ function logout() {
 }
 
 // -- Get User Details (Bank Account and Credit Card Details as well)
-function getUser(user) {
+function getUser() {
   const url = "/api/v1/users/me";
   return instance.get(url, {
-    headers: { 'Authorization': basicAuth(user) }
+    withCredentials: true
   });
 }
 
@@ -49,36 +50,36 @@ function getTransactions(bankAccountId, user) {
   const url = `/api/v1/bank-accounts/${bankAccountId}/history`;
 
   return instance.get(url, {
-    headers: { 'Authorization': basicAuth(user) }
+    withCredentials: true
   });
 }
 
-function withdraw(bankAccountNumber, amount, user) {
+function withdraw(bankAccountNumber, amount) {
   return instance.post('api/v1/bank-accounts/withdraw', {
     'bankAccountNumber': bankAccountNumber,
     'amount': amount
   }, {
-    headers: { 'Authorization': basicAuth(user) }
+    withCredentials: true
   })
 
 }
 
-function deposit(bankAccountNumber, amount, user) {
+function deposit(bankAccountNumber, amount) {
   return instance.post('api/v1/bank-accounts/deposit', {
     'bankAccountNumber': bankAccountNumber,
     'amount': amount
   }, {
-    headers: { 'Authorization': basicAuth(user) }
+    withCredentials: true
   })
 }
 
-function transfer(fromBankAccountNumber, toBankAccountNumber, amount, user) {
+function transfer(fromBankAccountNumber, toBankAccountNumber, amount) {
   return instance.post('/api/v1/bank-accounts/transfer', {
     'fromBankAccountNumber': fromBankAccountNumber,
     'toBankAccountNumber': toBankAccountNumber,
     "amount": amount
   }, {
-    headers: { 'Authorization': basicAuth(user) }
+    withCredentials: true
   })
 }
 
@@ -87,7 +88,7 @@ function getCreditCardTransactions(creditCardId, user) {
   const url = `/api/v1/credit-cards/${creditCardId}/history`;
 
   return instance.get(url, {
-    headers: { 'Authorization': basicAuth(user) }
+    withCredentials: true
   });
 }
 
@@ -96,7 +97,7 @@ function applyCreditCard(annualSalary, cardType, user) {
     'annualSalary': annualSalary,
     'cardType': cardType
   }, {
-    headers: { 'Authorization': basicAuth(user) }
+    withCredentials: true
   })
 }
 
@@ -105,7 +106,7 @@ function getBill(creditCardId, user) {
   const url = `/api/v1/bills/credit-card/${creditCardId}`;
 
   return instance.get(url, {
-    headers: { 'Authorization': basicAuth(user) }
+    withCredentials: true
   });
 }
 
@@ -113,7 +114,7 @@ function getLatestBill(creditCardId, user) {
   const url = `/api/v1/bills/credit-card/${creditCardId}`;
 
   return instance.get(url, {
-    headers: { 'Authorization': basicAuth(user) }
+    withCredentials: true
   });
 }
 
@@ -121,7 +122,7 @@ function getAllBill(creditCardId, user) {
   const url = `/api/v1/bills/credit-card/${creditCardId}/latest`;
 
   return instance.get(url, {
-    headers: { 'Authorization': basicAuth(user) }
+    withCredentials: true
   });
 }
 
@@ -131,7 +132,7 @@ function payBill(creditCardId, bankAccountNumber, amount, user) {
     'bankAccountNumber': bankAccountNumber,
     'amount': amount
   }, {
-    headers: { 'Authorization': basicAuth(user) }
+    withCredentials: true
   })
 }
 

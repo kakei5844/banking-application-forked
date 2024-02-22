@@ -10,8 +10,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -30,17 +35,20 @@ public class SpringSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
 		return http
+				.securityContext((context) -> context.requireExplicitSave(false))
+				.sessionManagement(session -> session
+					.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+					.invalidSessionUrl("/api/v1/login")
+					.maximumSessions(1))
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
 					.requestMatchers("api/v1/credit-cards/purchase").permitAll()
 					.requestMatchers("/", "/swagger-ui.html","/api/v1/login", "/api/v1/logout", "/api/v1/register", "/h2/**", "/css/**", "/js/**", "/images/**")
 					.permitAll()
                     .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
-                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // *
                 .cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
+				.csrf(AbstractHttpConfigurer::disable)
                 .build();
 	}
 }

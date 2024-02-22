@@ -23,7 +23,7 @@ const Navbar = () => {
 
   const loadUserDb = async () => {
     try {
-      const response = await bankingApi.getUser(user)
+      const response = await bankingApi.getUser()
       // console.log("Navbar >>>", response.data)
       setUserDb(response.data)
     } catch (error) {

@@ -22,7 +22,7 @@ const TransferPage = () => {
 
   const loadUserDb = async () => {
     try {
-      const response = await bankingApi.getUser(user);
+      const response = await bankingApi.getUser();
       console.log(response.data);
       setUserDb(response.data);
     } catch (error) {
@@ -51,8 +51,7 @@ const TransferPage = () => {
         const response = await bankingApi.transfer(
           userDb.bankAccount.accountNumber,
           accountNumber,
-          amount,
-          user
+          amount
         );
         console.log(response.data);
         setErrorMessage("");

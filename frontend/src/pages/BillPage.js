@@ -35,13 +35,13 @@ const BillPage = (props) => {
 
   const loadUserDb = async () => {
     try {
-      const userResponse = await bankingApi.getUser(user);
+      const userResponse = await bankingApi.getUser();
       setUserDb(userResponse.data);
 
       if (userResponse.data && userResponse.data.creditCards) {
         const billDetailsPromises = userResponse.data.creditCards.map(async (creditCard) => {
           try {
-            const billResponse = await bankingApi.getLatestBill(creditCard.id, user);
+            const billResponse = await bankingApi.getLatestBill(creditCard.id);
 
             if (billResponse.data && billResponse.data.length > 0) {
               const latestBill = billResponse.data[0];

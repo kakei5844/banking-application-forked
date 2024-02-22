@@ -20,14 +20,13 @@ const HomePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userResponse = await bankingApi.getUser(user);
+        const userResponse = await bankingApi.getUser();
         console.log(userResponse.data);
         setUserDb(userResponse.data);
 
         if (userResponse.data && userResponse.data.bankAccount) {
           const bankResponse = await bankingApi.getTransactions(
-            userResponse.data.bankAccount.id,
-            user
+            userResponse.data.bankAccount.id
           );
           console.log(bankResponse.data);
 

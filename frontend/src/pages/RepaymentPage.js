@@ -74,8 +74,7 @@ const RepaymentPage = () => {
         const response = await bankingApi.payBill(
           creditCardId,
           bankAccountNumber,
-          amount,
-          user
+          amount
         );
 
         console.log("Repayment response:", response);
@@ -94,7 +93,7 @@ const RepaymentPage = () => {
 
   const loadUserDb = async () => {
     try {
-      const userResponse = await bankingApi.getUser(user);
+      const userResponse = await bankingApi.getUser();
       setUserDb(userResponse.data);
 
       if (userResponse.data && userResponse.data.bankAccount) {
@@ -106,8 +105,7 @@ const RepaymentPage = () => {
           async (creditCard) => {
             try {
               const billResponse = await bankingApi.getLatestBill(
-                creditCard.id,
-                user
+                creditCard.id
               );
               console.log("Latest Bill >", billResponse.data);
 

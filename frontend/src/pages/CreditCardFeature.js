@@ -67,14 +67,14 @@ const CreditCardFeature = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userResponse = await bankingApi.getUser(user);
+        const userResponse = await bankingApi.getUser();
         setUserDb(userResponse.data);
 
         if (userResponse.data && userResponse.data.creditCards) {
           const creditCardPromises = userResponse.data.creditCards.map(
             async (creditCard) => {
               const creditCardHistoryResponse =
-                await bankingApi.getCreditCardTransactions(creditCard.id, user);
+                await bankingApi.getCreditCardTransactions(creditCard.id);
               const formattedTransactions = creditCardHistoryResponse.data.map(
                 (transaction) => ({
                   id: transaction.id,

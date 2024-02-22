@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { handleLogError } from "../misc/Helpers";
 import { bankingApi } from "../misc/BankingApi";
 
-function Deposit({ bankAccountId, user }) {
+function Deposit({ bankAccountId }) {
   const [amount, setAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -11,7 +11,7 @@ function Deposit({ bankAccountId, user }) {
   const handleDeposit = async (e) => {
     e.preventDefault();
     try {
-      const response = await bankingApi.deposit(bankAccountId, amount, user);
+      const response = await bankingApi.deposit(bankAccountId, amount);
       console.log(response.data);
       setErrorMessage("");
       setSuccessMessage("Successfully deposited money");
