@@ -1,71 +1,78 @@
-# Banking Application Group Project
 
-Prototype site for a Banking Application which users can manage their Credit Cards.
+# E-banking Prototype
 
-## Project Objective
+This is an e-banking web application prototype which supports bank account functionalities (withdraw, deposit and transfer) and credit card functionalities (purchase with credit card, automated monthly bill generation, bill payment and cashback feature). The web application is built using ReactJS for UI, Spring Boot for Rest API as backend server, and MySQL as database. It is a group project during FDM training with 7 other developers, in order to practice Agile methodology and to apply our knowledge in Spring Boot and ReactJS.
 
-- Conducted using Agile/Scrum
-- Proper source code management using Git
-- Presentation (~1hr)
-	- Team Introduction
-	- Objective of Project/ Project Background
-	- Tech Stack (e.g. Figma, Git, Sourcetree, Eclipse, Springboot, Bootstrap, etc...)
-	- Agile/Sprint Process
-	- Demonstration
-	- Questions and Answers
 
-## Product Requirements
+## Getting Started
+Follow the steps below to set up and run the e-banking web application locally:
 
-- Spring Boot application with appropriate frameworks and modules
-- Appropriate database structures
-- Use of proper design patterns and good architecture
-- Proper input validation and error or exception management
-- Good coding practices (e.g. clean code, clean comments, no commented code, no console logs, formatting etc.)
-- Good and extensive use of logging (Log4j2)
-- Proper testing of code
-- Use of basic front-end elements (e.g. css, javascript, bootstrap)
-- Logical UI/UX
+1. Make sure Docker and Docker Compose are installed on your machine.
 
-## Suggested Features
+2. Clone the repository:
 
-### User Management
-- Login/Sign Up
-### Dashboard
-- Bank Account
-- Credit Cards
+	```
+	git clone https://github.com/kakei5844/banking-application-forked.git
+	```
 
-### Bank Account
-- Deposit/Withdraw
-- Transfer to other Account
-- Transaction History
+3. Build the Docker images:
+	```
+	docker-compose build
+	```
 
-### Credit Card
-- Credit Limit
-- Available Balance
-- Transaction History
-- Payment
-	- Current Balance
-	- Balance Due (Monthly Bill)
-	- Minimum Amount
-	- Late Payment Fees and other Charges
-- Cashback/ Reward (Based on transaction types)
+4. Start the application:
 
-### Transaction Types
-- Purchase
-	- Merchant Category Code
-- Instalment Payment
-- Foreign Currency Purchase (Use forex api)
+	```
+	docker-compose up
+	```
+	This command will start the MySQL database, backend server, and frontend server.
 
-### Additional Notes
+5. Accessing the Application:
 
-- Possible Exchange Rate API sites
-	- https://currencyapi.net/
-	- https://exchangeratesapi.io/
+	Once the application is running, you can access it in the following ways:
+	- Backend API: http://localhost:8080
+	- Frontend UI: http://localhost:3000
 
-### Enhancements
-- Sort/Filter and Search Functionality
-- Dashboard Statistics
-- REST API for credit card (demo using Postman)
-- Late Payment Fee, Interest Charge
-- Void/Refund
-- Admin - Approval Process, Generate Statistics
+6. Troubleshooting:
+
+	If you encounter any issues while setting up or running the application, you can try the following:
+
+	- Check the logs of individual containers using the docker logs <container-name> command.
+	- Verify the status of containers using the docker ps command.
+	- Ensure that there are no conflicts with ports 3309, 8080, and 3000 on your machine.
+
+7. Stop the Application:
+
+	To stop the application gracefully, use the following command:
+
+	```
+	docker-compose down
+	```
+	This command will stop and remove the running containers.
+
+
+## Demo
+
+### Bank Account Dashboard
+<img src="demo/bank_account_dashboard.png" />
+
+### Deposit and Withdraw
+<img src="demo/deposit_withdraw.gif" />
+
+### Transfer
+<img src="demo/transfer.gif" />
+
+### Credit Card Dashboard
+<img src="demo/credit_card_dashboard.gif" />
+
+### Purchase with Credit Card
+<img src="demo/credit_purchase.gif" />
+
+### View Monthly Bill (automatcally generated each month)
+<img src="demo/view_statement.gif" />
+
+### Pay Bill
+<img src="demo/pay_bill.gif" />
+
+### View Cashback value (Purchases with certain merchants give cashback)
+<img src="demo/cashback_value.png" />
